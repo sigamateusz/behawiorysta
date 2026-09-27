@@ -1,35 +1,31 @@
 # Repository Guidelines
 
-Behawiorysta is an Astro 7 server-rendered app (npm name `10x-astro-starter`) using React 19 islands, Tailwind 4, Supabase cookie sessions, and `@astrojs/cloudflare`. First-time setup and the auth route table are in @README.md. Extended agent notes are in @CLAUDE.md.
+Behawiorysta is a dog-behaviorist booking app specified in @context/foundation/prd.md. The code on disk is an Astro 7 server app (npm name `10x-astro-starter`) with React 19 islands, Tailwind 4, Supabase cookie sessions, and `@astrojs/cloudflare`. Setup and the auth route table are in @README.md.
 
 ## Hard rules
 
-`output` is `"server"` in @astro.config.mjs. API modules export uppercase `POST` or `GET` handlers, as in @src/pages/api/auth/signin.ts.
+`output` is `"server"` in @astro.config.mjs. Auth endpoints export an uppercase `POST` handler (@src/pages/api/auth/signin.ts). Read `SUPABASE_URL` and `SUPABASE_KEY` only from `astro:env/server` (@src/lib/supabase.ts). They are optional server secrets in the Astro env schema. Put local copies in `.env` and `.dev.vars` (both gitignored). Do not import `astro:env/server` from a client component.
 
-Register protected paths in `PROTECTED_ROUTES` inside @src/middleware.ts. A missing session redirects to `/auth/signin`. The session user is `context.locals.user` (@src/env.d.ts).
+Add a protected path to `PROTECTED_ROUTES` in @src/middleware.ts. A missing session redirects to `/auth/signin`. The session user is `context.locals.user` (@src/env.d.ts).
 
-Keep layout and static UI in `.astro` files. Add interactive UI as React islands under `src/components/`. Do not add a `"use client"` directive.
-
-Merge Tailwind classes with `cn()` from `@/lib/utils` (@src/lib/utils.ts). Place shadcn/ui files in `src/components/ui/`; the style is `new-york` in @components.json. Add a component with `npx shadcn@latest add <name>`.
-
-`SUPABASE_URL` and `SUPABASE_KEY` are server secrets in the Astro env schema. Local copies belong in `.env` and `.dev.vars`, both gitignored. Do not import those secrets into client components.
+Keep layout and static UI in `.astro` files. Put interactive UI in React islands under `src/components/`. Do not add a `"use client"` directive. Merge Tailwind classes with `cn()` from `@/lib/utils` (@src/lib/utils.ts). Put shadcn/ui files in `src/components/ui/`; the style is `new-york` in @components.json. Add one with `npx shadcn@latest add <name>`.
 
 ## Project structure
 
-Pages are `src/pages/`, endpoints `src/pages/api/`, layouts `src/layouts/`, UI `src/components/` (auth forms in `src/components/auth/`), helpers `src/lib/`, styles `src/styles/global.css`. `@/*` resolves to `./src/*` (@tsconfig.json). There is no migration folder; auth uses Supabase `auth.users` only (@README.md).
+Auth forms live in `src/components/auth/`. Other directories and the `@/*` alias: @README.md, @tsconfig.json.
 
 ## Build, test, and development
 
-`npm run dev` starts the Cloudflare dev server. `npm run lint` runs ESLint. `npx astro check` is the typecheck CI runs. `npm run build` produces the worker build and needs both Supabase variables. `npm run smoke` calls a live server; `BASE_URL` defaults to `http://localhost:4321`. Use Node `22.14.0` (@.nvmrc). Before each commit, @.husky/pre-commit runs lint-staged from @package.json: `eslint --fix` on `*.{ts,tsx,astro}` and Prettier on `*.{json,css,md}`.
+Dev, lint, build, smoke, the Node version, and the pre-commit hook: @package.json, @.nvmrc, @.husky/pre-commit, @README.md.
 
 ## Coding style
 
-Follow @.prettierrc.json and @eslint.config.js (`strictTypeChecked` and `stylisticTypeChecked`). Unused names must match `^_` or lint fails. `no-console` warns except under `scripts/**/*.mjs`. `astro/no-set-html-directive` is an error.
+Follow @.prettierrc.json and @eslint.config.js.
 
 ## Testing
 
-No unit-test or Playwright config is checked in. The automated check is `npm run smoke`. @README.md says that script guards starter upgrades and is not an application test suite. CI job `smoke` builds, serves `npm run preview`, and runs the script against a local Supabase.
+The smoke script's role: @README.md.
 
-## Commits and pull requests
+## Commits
 
-The only commit is an imperative sentence stating why, without a Conventional Commits prefix. Open pull requests against `master`. @.github/workflows/ci.yml runs on push and pull request to `master`: job `ci` lints, runs `astro check`, and builds (repository secrets `SUPABASE_URL` and `SUPABASE_KEY`), and job `smoke` uses a local Supabase and needs no secrets.
+Recent commits are one imperative sentence and do not use a Conventional Commits prefix.
