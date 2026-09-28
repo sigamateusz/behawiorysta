@@ -4,19 +4,28 @@
 - [x] Zbudować i sprawdzić `wrangler deploy --dry-run` (nazwa `10x-astro-starter`, `Total Upload` 2038.43 KiB, binding tylko `ASSETS`)
 - [x] Wdrożyć Worker przez `npx wrangler deploy`
 - [x] Zmienić nazwę Workera z `10x-astro-starter` na `behawiorysta` w [wrangler.jsonc](../../wrangler.jsonc), zbudować i wdrożyć nowego Workera (`https://behawiorysta.sigamateusz.workers.dev`, wersja `bfa3772f-8556-4d00-b202-cbff7c226fbe`)
-- [ ] Wgrać `SUPABASE_URL` i `SUPABASE_KEY` przez `npx wrangler secret put` na Workerze `behawiorysta`
-- [ ] Otworzyć `https://behawiorysta.sigamateusz.workers.dev` i potwierdzić, że baner o braku Supabase zniknął
-- [ ] Ręcznie usunąć starego Workera `10x-astro-starter` w panelu Cloudflare (nie `10x-astro-worker`)
+- [x] Wgrać `SUPABASE_URL` i `SUPABASE_KEY` przez `npx wrangler secret put` na Workerze `behawiorysta` (wersja po sekretach `147ef464-88b4-4c54-9cec-0037a4ed5051`)
+- [x] Otworzyć `https://behawiorysta.sigamateusz.workers.dev` i potwierdzić, że baner o braku Supabase zniknął
+- [x] Ręcznie usunąć starego Workera `10x-astro-starter` w panelu Cloudflare (nie `10x-astro-worker`)
+- [x] Po sekretach zmierzyć CPU na `/`, `/auth/signin` i `/dashboard` (`outcome: ok`, brak 1102)
 
 ## Stan 2026-09-28
 
-Aktualny Worker to **behawiorysta**: [https://behawiorysta.sigamateusz.workers.dev](https://behawiorysta.sigamateusz.workers.dev), wersja `bfa3772f-8556-4d00-b202-cbff7c226fbe`. Pole `name` w [wrangler.jsonc](../../wrangler.jsonc) to `behawiorysta`. `npx wrangler` z katalogu repo trafia w tego Workera. Nazwa paczki npm zostaje `10x-astro-starter`.
+Aktualny Worker to **behawiorysta**: [https://behawiorysta.sigamateusz.workers.dev](https://behawiorysta.sigamateusz.workers.dev), wersja `147ef464-88b4-4c54-9cec-0037a4ed5051` (dwa `Secret Change` o 20:41 UTC). Wcześniejszy upload kodu to `bfa3772f-8556-4d00-b202-cbff7c226fbe`. Pole `name` w [wrangler.jsonc](../../wrangler.jsonc) to `behawiorysta`. `npx wrangler` z katalogu repo trafia w tego Workera. Nazwa paczki npm zostaje `10x-astro-starter`.
 
-Pierwszy deploy poszedł na `10x-astro-starter` (wersja `9542c9bc-dbf4-46d6-a1ed-5cc41494650e`, adres [https://10x-astro-starter.sigamateusz.workers.dev](https://10x-astro-starter.sigamateusz.workers.dev)). Ten Worker nadal istnieje. `SUPABASE_URL` wgrano tylko na niego. Usuwasz go ręcznie w panelu Cloudflare. Nie uruchamiamy `wrangler delete`.
+Pierwszy deploy poszedł na `10x-astro-starter` (wersja `9542c9bc-dbf4-46d6-a1ed-5cc41494650e`). Ten Worker już nie istnieje (API Cloudflare, code 10007). Nie uruchamialiśmy `wrangler delete`.
 
 W [astro.config.mjs](../../astro.config.mjs) jest `imageService: "passthrough"` i `session: false`, bo pierwszy build włączał binding Cloudflare Images i KV `SESSION`. Suchy przebieg pierwszego deployu: `Total Upload` 2038.43 KiB, binding tylko `ASSETS`. Wrangler przekierowuje na `dist/server/wrangler.json`, a ten plik wskazuje z powrotem na główny `wrangler.jsonc`. Osobnego `--config` nie było.
 
-`.env` i `.dev.vars` istnieją i są w `.gitignore`. Oba nadal mają `###` zamiast prawdziwych wartości. Na `behawiorysta` nie ma sekretów, więc baner „Supabase nie jest skonfigurowany” ma tam nadal być. Strona główna nowego adresu zwraca 200. Pomiar CPU (33 ms na `/auth/signin`, `outcome: ok`, brak 1102) dotyczy starego Workera, zanim doszły sekrety. Po wgraniu kluczy na `behawiorysta` pomiar trzeba powtórzyć. Plan Paid wchodzi dopiero, gdy 1102 zacznie się powtarzać.
+`.env` i `.dev.vars` są w `.gitignore` i mają prawdziwe `SUPABASE_URL` oraz publishable `SUPABASE_KEY` (`sb_publishable_...`). [`.env.example`](../../.env.example) zostaje przy `###`. Na `behawiorysta` `npx wrangler secret list` pokazuje oba sekrety. Strona główna i `/auth/signin` zwracają 200 i nie zawierają „Supabase nie jest skonfigurowany”. `/dashboard` bez sesji zwraca 302 na `/auth/signin`.
+
+Pomiar CPU po sekretach, `npx wrangler tail --format json`, wersja `147ef464-88b4-4c54-9cec-0037a4ed5051`, same `outcome: ok`, zero wyjątków, brak 1102:
+
+- `GET /` — 3 ms CPU, status 200
+- `GET /auth/signin` — 46 ms, potem 22 ms CPU, status 200
+- `GET /dashboard` — 2 ms, potem 1 ms CPU, status 302
+
+Plan Paid zostaje wyłączony, dopóki 1102 nie zacznie się powtarzać. Wcześniejszy pomiar 33 ms dotyczył starego Workera sprzed sekretów.
 
 ## Świadomie poza tym deployem
 
@@ -54,10 +63,7 @@ Własna domena nie jest potrzebna. Subdomena `workers.dev` już jest: `sigamateu
 
 ## Zostało
 
-1. W `.env` i `.dev.vars` zamień `###` na prawdziwe `SUPABASE_URL` i `SUPABASE_KEY`. Nie commituj tych plików i nie wklejaj wartości na czat.
-2. Z katalogu repo, na Workerze `behawiorysta`: `npx wrangler secret put SUPABASE_URL`, potem `npx wrangler secret put SUPABASE_KEY`. Klucz to publishable (`sb_publishable_...`). `secret put` publikuje nową wersję od razu, a `wrangler rollback` sekretów nie cofa. OpenRoutera nie wgrywamy.
-3. Otworzyć [https://behawiorysta.sigamateusz.workers.dev](https://behawiorysta.sigamateusz.workers.dev). Baner „Supabase nie jest skonfigurowany” ma zniknąć. Wejść na `/auth/signin` i `/dashboard`. Równolegle `npx wrangler tail --status error`. Przy powtarzalnym 1102 zatrzymać się przed klientami.
-4. Starego Workera `10x-astro-starter` usuwasz sam w panelu Cloudflare. To nie jest `10x-astro-worker`.
+Nic z tej listy. Sekrety są na Workerze, baner zniknął, stary Worker jest usunięty, a pomiar CPU po kluczach nie pokazał 1102.
 
 ## Skąd wziąć SUPABASE_URL i SUPABASE_KEY
 

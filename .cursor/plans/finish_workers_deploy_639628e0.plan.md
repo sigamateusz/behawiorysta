@@ -1,6 +1,6 @@
 ---
 name: Finish Workers deploy
-overview: "Worker behawiorysta jest na produkcji. Zostały sekrety Supabase, sprawdzenie banera i ręczne usunięcie starego Workera 10x-astro-starter. Źródło na nowe okno to context/deployment/deploy-plan.md."
+overview: "Worker behawiorysta jest na produkcji z sekretami Supabase. Baner zniknął, stary Worker 10x-astro-starter jest usunięty, a pomiar CPU po kluczach nie pokazał 1102. Źródło na nowe okno to context/deployment/deploy-plan.md."
 todos:
   - id: build-dry-run
     content: npm run build i wrangler deploy --dry-run (zrobione na 10x-astro-starter, Total Upload 2038.43 KiB, tylko ASSETS)
@@ -13,13 +13,13 @@ todos:
     status: completed
   - id: secrets
     content: Uzupełnić .env i .dev.vars, potem wrangler secret put SUPABASE_URL i SUPABASE_KEY na behawiorysta
-    status: pending
+    status: completed
   - id: verify-url
     content: Otworzyć URL behawiorysta, sprawdzić brak banera oraz wrangler tail na /auth/signin i /dashboard (1102)
-    status: pending
+    status: completed
   - id: delete-old
     content: Użytkownik ręcznie usuwa Workera 10x-astro-starter w panelu Cloudflare
-    status: pending
+    status: completed
 isProject: false
 ---
 
@@ -27,13 +27,13 @@ isProject: false
 
 Ten plik jest zrzutem sesji Cursora. W nowym oknie czytaj [context/deployment/deploy-plan.md](../../context/deployment/deploy-plan.md). Poniżej jest ten sam stan.
 
-Aktualny Worker to **behawiorysta**: [https://behawiorysta.sigamateusz.workers.dev](https://behawiorysta.sigamateusz.workers.dev), wersja `bfa3772f-8556-4d00-b202-cbff7c226fbe`. `npx wrangler` z katalogu repo trafia w niego, bo `name` w [wrangler.jsonc](../../wrangler.jsonc) to `behawiorysta`. Nazwa paczki npm zostaje `10x-astro-starter`.
+Aktualny Worker to **behawiorysta**: [https://behawiorysta.sigamateusz.workers.dev](https://behawiorysta.sigamateusz.workers.dev), wersja `147ef464-88b4-4c54-9cec-0037a4ed5051` (po sekretach). Upload kodu to `bfa3772f-8556-4d00-b202-cbff7c226fbe`. `npx wrangler` z katalogu repo trafia w niego, bo `name` w [wrangler.jsonc](../../wrangler.jsonc) to `behawiorysta`. Nazwa paczki npm zostaje `10x-astro-starter`.
 
 Wrangler jest zalogowany na **Sigamateusz@gmail.com's Account** (`sigamateusz@gmail.com`, plan Free, Wrangler 4.131.1, `workers (write)`). Cel to Workers, nie Pages. Bez `wrangler pages deploy`, bez `--config` i bez `wrangler deploy --env`. W [astro.config.mjs](../../astro.config.mjs) jest `imageService: "passthrough"` i `session: false`.
 
-Stary Worker `10x-astro-starter` (wersja `9542c9bc-dbf4-46d6-a1ed-5cc41494650e`) nadal istnieje. `SUPABASE_URL` wgrano tylko na niego. `SUPABASE_KEY` nie. Użytkownik usuwa go sam w panelu. To nie jest nazwa `10x-astro-worker`. Nie uruchamiamy `wrangler delete`.
+Stary Worker `10x-astro-starter` (wersja `9542c9bc-dbf4-46d6-a1ed-5cc41494650e`) już nie istnieje (API, code 10007). To nie jest nazwa `10x-astro-worker`. Nie uruchamialiśmy `wrangler delete`.
 
-`.env` i `.dev.vars` są w `.gitignore` i nadal mają `###`. Na `behawiorysta` nie ma sekretów. Pomiar 33 ms CPU i brak 1102 dotyczy starego Workera przed sekretami. Po kluczach na nowym Workerze pomiar trzeba powtórzyć.
+`.env` i `.dev.vars` są w `.gitignore` i mają prawdziwe wartości. Na `behawiorysta` są `SUPABASE_URL` i `SUPABASE_KEY`. Baner zniknął. Pomiar po sekretach (`outcome: ok`, brak 1102): `/` 3 ms, `/auth/signin` 46 ms i 22 ms, `/dashboard` 1–2 ms ze statusem 302. Plan Paid nie wchodzi.
 
 ```mermaid
 flowchart LR
@@ -45,10 +45,7 @@ flowchart LR
 
 ## Zostało
 
-1. W `.env` i `.dev.vars` wstaw prawdziwe wartości. Nie commituj ich i nie wklejaj na czat. Klucz to publishable (`sb_publishable_...`), nie secret i nie service role.
-2. Z katalogu repo: `npx wrangler secret put SUPABASE_URL`, potem `npx wrangler secret put SUPABASE_KEY`. `secret put` publikuje nową wersję od razu. OpenRoutera nie wgrywamy.
-3. Otworzyć nowy URL. Baner „Supabase nie jest skonfigurowany” ma zniknąć. Wejść na `/auth/signin` i `/dashboard`. `npx wrangler tail --status error`. Przy powtarzalnym 1102 zatrzymać się i rozważyć Workers Paid (5 USD).
-4. Użytkownik usuwa `10x-astro-starter` w panelu Cloudflare.
+Nic z tej listy. Sekrety, baner, usunięcie `10x-astro-starter` i pomiar CPU są zrobione. Przy powtarzalnym 1102 rozważyć Workers Paid (5 USD).
 
 ## Świadomie poza tym deployem
 
