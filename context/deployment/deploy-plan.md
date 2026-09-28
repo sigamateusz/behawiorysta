@@ -1,21 +1,41 @@
 # Pierwsze wdrożenie na Cloudflare Workers
 
 - [x] Zalogować Wranglera (OAuth w przeglądarce)
-- [ ] Zbudować i sprawdzić `wrangler deploy --dry-run` (nazwa Workera, `Total Upload`)
-- [ ] Wdrożyć Worker przez `npx wrangler deploy`
-- [ ] Otworzyć URL `workers.dev` i potwierdzić baner o braku Supabase
+- [x] Zbudować i sprawdzić `wrangler deploy --dry-run` (nazwa `10x-astro-starter`, `Total Upload` 2038.43 KiB, binding tylko `ASSETS`)
+- [x] Wdrożyć Worker przez `npx wrangler deploy`
+- [x] Zmienić nazwę Workera z `10x-astro-starter` na `behawiorysta` w [wrangler.jsonc](../../wrangler.jsonc), zbudować i wdrożyć nowego Workera (`https://behawiorysta.sigamateusz.workers.dev`, wersja `bfa3772f-8556-4d00-b202-cbff7c226fbe`)
+- [ ] Wgrać `SUPABASE_URL` i `SUPABASE_KEY` przez `npx wrangler secret put` na Workerze `behawiorysta`
+- [ ] Otworzyć `https://behawiorysta.sigamateusz.workers.dev` i potwierdzić, że baner o braku Supabase zniknął
+- [ ] Ręcznie usunąć starego Workera `10x-astro-starter` w panelu Cloudflare (nie `10x-astro-worker`)
+
+## Stan 2026-09-28
+
+Aktualny Worker to **behawiorysta**: [https://behawiorysta.sigamateusz.workers.dev](https://behawiorysta.sigamateusz.workers.dev), wersja `bfa3772f-8556-4d00-b202-cbff7c226fbe`. Pole `name` w [wrangler.jsonc](../../wrangler.jsonc) to `behawiorysta`. `npx wrangler` z katalogu repo trafia w tego Workera. Nazwa paczki npm zostaje `10x-astro-starter`.
+
+Pierwszy deploy poszedł na `10x-astro-starter` (wersja `9542c9bc-dbf4-46d6-a1ed-5cc41494650e`, adres [https://10x-astro-starter.sigamateusz.workers.dev](https://10x-astro-starter.sigamateusz.workers.dev)). Ten Worker nadal istnieje. `SUPABASE_URL` wgrano tylko na niego. Usuwasz go ręcznie w panelu Cloudflare. Nie uruchamiamy `wrangler delete`.
+
+W [astro.config.mjs](../../astro.config.mjs) jest `imageService: "passthrough"` i `session: false`, bo pierwszy build włączał binding Cloudflare Images i KV `SESSION`. Suchy przebieg pierwszego deployu: `Total Upload` 2038.43 KiB, binding tylko `ASSETS`. Wrangler przekierowuje na `dist/server/wrangler.json`, a ten plik wskazuje z powrotem na główny `wrangler.jsonc`. Osobnego `--config` nie było.
+
+`.env` i `.dev.vars` istnieją i są w `.gitignore`. Oba nadal mają `###` zamiast prawdziwych wartości. Na `behawiorysta` nie ma sekretów, więc baner „Supabase nie jest skonfigurowany” ma tam nadal być. Strona główna nowego adresu zwraca 200. Pomiar CPU (33 ms na `/auth/signin`, `outcome: ok`, brak 1102) dotyczy starego Workera, zanim doszły sekrety. Po wgraniu kluczy na `behawiorysta` pomiar trzeba powtórzyć. Plan Paid wchodzi dopiero, gdy 1102 zacznie się powtarzać.
+
+## Świadomie poza tym deployem
+
+- CI z auto-deployem po merge. [infrastructure.md](../foundation/infrastructure.md) ma pipeline poza researchu, a job według `cloudflare-pages` opublikowałby Pages. [.github/workflows/ci.yml](../../.github/workflows/ci.yml) zostaje przy lint, build i smoke.
+- Podglądy branchy, `wrangler preview` i Cloudflare Access. Na Wranglerze 4.131.1 podgląd wersji to później `wrangler versions upload`.
+- Lokalne `npm run preview` przed kolejnym deployem. Osobne `wrangler dev` i `wrangler pages dev` nie są pętlą tego startera.
+- Docker, multi-region i HA.
+- Płatności, realtime, joby w tle i AI. OpenRouter wchodzi, gdy klucz pojawi się w `astro:env/server`.
 
 Cel z [infrastructure.md](../foundation/infrastructure.md) (sekcja Getting Started) wygrywa z hintem `deployment_target: cloudflare-pages` w [tech-stack.md](../foundation/tech-stack.md). Adapter `@astrojs/cloudflare` 14 w [astro.config.mjs](../../astro.config.mjs) nie wdraża na Pages. CI zostaje bez joba deployu — pipeline jest poza zakresem tego researchu, a obecny [.github/workflows/ci.yml](../../.github/workflows/ci.yml) tylko buduje i robi smoke.
 
-Nazwa Workera zostaje `10x-astro-starter` z [wrangler.jsonc](../../wrangler.jsonc). Nie podbijamy Wranglera i nie używamy `wrangler preview` ani `wrangler pages deploy`.
+Nie podbijamy Wranglera i nie używamy `wrangler preview` ani `wrangler pages deploy`.
 
 ```mermaid
 flowchart LR
-  build[npm run build]
-  dry[wrangler deploy --dry-run]
-  deploy[wrangler deploy]
-  check[URL workers.dev]
-  build --> dry --> deploy --> check
+  fill[uzupelnij .env]
+  secrets[wrangler secret put]
+  check[URL behawiorysta]
+  fill --> secrets --> check
 ```
 
 
@@ -30,18 +50,14 @@ Konto jest założone i Wrangler jest na nim zalogowany. Sprawdzone 2026-09-28 p
 - e-mail sesji OAuth: `sigamateusz@gmail.com`
 - token ma `workers (write)`, więc `npx wrangler deploy` może iść z tego konta
 
-Własna domena nie jest potrzebna: Worker dostanie adres `*.workers.dev`. Zostajemy na planie **Free**. Płatny Workers (5 USD miesięcznie) wchodzi dopiero, gdy po deployu powtarza się błąd limitu CPU 1102. Jeśli konto nie ma jeszcze subdomeny `workers.dev`, Wrangler zapyta o nią przy pierwszym `npx wrangler deploy`.
+Własna domena nie jest potrzebna. Subdomena `workers.dev` już jest: `sigamateusz`. Zostajemy na planie **Free**. Płatny Workers (5 USD miesięcznie) wchodzi dopiero, gdy po sekretach powtarza się błąd limitu CPU 1102.
 
-## Kroki
+## Zostało
 
-Logowanie (`npx wrangler login`) jest zrobione. Zostało:
-
-1. `npm run build`.
-2. `npx wrangler deploy --dry-run` bez `--config`. W logu: nazwa `10x-astro-starter` i `Total Upload` poniżej 64 MiB. Deploy idzie dalej tylko, gdy suchy przebieg jest czysty (brak przypadkowego bindowania Cloudflare Images albo innego Workera).
-3. `npx wrangler deploy` — pierwszy deploy produkcyjny. Sekretów nie wgrywamy na tym kroku: `wrangler secret put` od razu publikuje nową wersję, a lokalnie nie ma `.env` ani `.dev.vars`.
-4. Otworzyć zwrócony URL `*.workers.dev` i sprawdzić, że strona odpowiada. Oczekiwany stan: baner z [src/lib/config-status.ts](../../src/lib/config-status.ts) — „Supabase nie jest skonfigurowany — funkcje uwierzytelniania są wyłączone.” Logowanie na tym URL nie zadziała, dopóki nie wgramy sekretów.
-
-Żadnych zmian w kodzie, o ile build albo dry-run nie pokaże konkretnego błędu konfiguracji.
+1. W `.env` i `.dev.vars` zamień `###` na prawdziwe `SUPABASE_URL` i `SUPABASE_KEY`. Nie commituj tych plików i nie wklejaj wartości na czat.
+2. Z katalogu repo, na Workerze `behawiorysta`: `npx wrangler secret put SUPABASE_URL`, potem `npx wrangler secret put SUPABASE_KEY`. Klucz to publishable (`sb_publishable_...`). `secret put` publikuje nową wersję od razu, a `wrangler rollback` sekretów nie cofa. OpenRoutera nie wgrywamy.
+3. Otworzyć [https://behawiorysta.sigamateusz.workers.dev](https://behawiorysta.sigamateusz.workers.dev). Baner „Supabase nie jest skonfigurowany” ma zniknąć. Wejść na `/auth/signin` i `/dashboard`. Równolegle `npx wrangler tail --status error`. Przy powtarzalnym 1102 zatrzymać się przed klientami.
+4. Starego Workera `10x-astro-starter` usuwasz sam w panelu Cloudflare. To nie jest `10x-astro-worker`.
 
 ## Skąd wziąć SUPABASE_URL i SUPABASE_KEY
 
@@ -75,6 +91,6 @@ To samo da się odczytać w **Project Settings → API Keys**. W starszym projek
 
 Nie wklejaj klucza **secret** (`sb_secret_...`) ani **service_role**.
 
-Gdy podasz obie wartości, wgramy je osobno przez `npx wrangler secret put`. OpenRouter nie wchodzi — nie ma go w schemacie `astro:env`.
+Wartości trafiają do `.env`, `.dev.vars` i potem na Workera `behawiorysta` przez `npx wrangler secret put`. OpenRouter nie wchodzi — nie ma go w schemacie `astro:env`.
 
 Źródło nazw kluczy: [API keys](https://supabase.com/docs/guides/getting-started/api-keys).
