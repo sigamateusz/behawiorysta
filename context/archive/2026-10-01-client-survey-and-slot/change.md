@@ -1,10 +1,10 @@
 ---
 change_id: client-survey-and-slot
 title: Klient: ankieta psa i wybór terminu konsultacji (S-01)
-status: implemented
+status: archived
 created: 2026-10-01
 updated: 2026-10-01
-archived_at: null
+archived_at: 2026-10-01T21:48:30Z
 ---
 
 ## Notes

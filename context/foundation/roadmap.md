@@ -41,7 +41,7 @@ Jeden behawiorysta traci czas, składając obraz psa przed wizytą, bo umówieni
 
 | ID   | Change ID                    | Outcome (user can …)                                              | Prerequisites | PRD refs              | Status   |
 | ---- | ---------------------------- | ----------------------------------------------------------------- | ------------- | --------------------- | -------- |
-| S-01 | client-survey-and-slot       | klient loguje się, wypełnia ankietę i wybiera termin              | —             | FR-001, FR-003, FR-004, US-01 | in-progress |
+| S-01 | client-survey-and-slot       | klient loguje się, wypełnia ankietę i wybiera termin              | —             | FR-001, FR-003, FR-004, US-01 | done |
 | S-02 | behaviorist-submission-views | behawiorysta loguje się, widzi kalendarz i listę zgłoszeń, otwiera szczegóły ankiety | S-01          | FR-002, FR-005, FR-006, US-01 | proposed |
 | S-03 | behaviorist-block-days       | behawiorysta blokuje dni lub konkretne godziny, a zablokowane terminy nie przyjmują nowych konsultacji | S-02          | FR-007, US-01         | proposed |
 | S-04 | behaviorist-decide-consultation | behawiorysta akceptuje albo odrzuca konsultację w aplikacji   | S-02          | FR-008, US-01         | proposed |
@@ -84,7 +84,7 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **Unknowns:**
   - Jaka granularność terminu (dzień vs slot godzinowy) — Owner: user. Block: no.
 - **Risk:** Wprowadza schemat danych i logowanie klienta; bez tego plasterek nic downstream nie ma sensu — dlatego idzie pierwszy.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-02: Behawiorysta — widok zgłoszeń
 
@@ -149,3 +149,5 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 ## Milestone History
 
 ## Done
+
+- **S-01: klient loguje się, wypełnia kompletną ankietę (rasa, wiek, podstawowe informacje o psie, nad czym chce pracować) i wybiera termin konsultacji.** — Archived 2026-10-01 → `context/archive/2026-10-01-client-survey-and-slot/`. Lesson: —.
