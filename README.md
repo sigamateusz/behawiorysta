@@ -199,10 +199,12 @@ Set `SUPABASE_URL` and `SUPABASE_KEY` as secrets in your Cloudflare dashboard or
 
 ## Smoke test
 
-`scripts/smoke.mjs` is a dependency-free Node script that walks the whole auth flow (sign-up, sign-in, protected page, sign-out) over HTTP. Run it against the dev server or the production preview after dependency upgrades:
+`scripts/smoke.mjs` is a dependency-free Node script that walks the auth flow (sign-up, sign-in, protected page, sign-out) and the client booking flow over HTTP. Two isolated clients (separate cookie jars) prove an incomplete survey returns 400, a second booking of the same slot returns 409, an anonymous POST returns 401, and client B does not see client A's request.
+
+Run it against the production preview after a build:
 
 ```bash
-npm run dev            # or: npm run build && npm run preview
+npm run build && npm run preview
 BASE_URL=http://localhost:4321 npm run smoke
 ```
 
@@ -214,7 +216,7 @@ It needs a reachable Supabase instance (local or cloud) with email confirmation 
 
 GitHub Actions runs two jobs on every push and PR to `master`:
 
-- **ci** — lint, `astro check` and build. Configure `SUPABASE_URL` and `SUPABASE_KEY` as repository secrets for the build step.
+- **ci** — lint, `astro check`, `npm test` and build. Configure `SUPABASE_URL` and `SUPABASE_KEY` as repository secrets for the build step.
 - **smoke** — starts a local Supabase via the Supabase CLI, builds, serves the production preview on the Cloudflare runtime and runs `npm run smoke` against it. No secrets required.
 
 ## License

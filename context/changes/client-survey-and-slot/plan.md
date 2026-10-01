@@ -393,27 +393,27 @@ Pierwsza migracja domenowa. Lokalnie: `npx supabase db reset` (kasuje dane lokal
 
 #### Automated
 
-- [x] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build`
-- [x] 3.2 Testy jednostkowe dalej przechodzą: `npm test`
+- [x] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build` — f0e1ddb
+- [x] 3.2 Testy jednostkowe dalej przechodzą: `npm test` — f0e1ddb
 
 #### Manual
 
-- [x] 3.3 Klient nie przejdzie do wyboru terminu z niekompletną ankietą; błędy przy polach
-- [x] 3.4 Podpowiedzi rasy po wpisaniu „lab”; wpis spoza listy akceptowany
-- [x] 3.5 Złożone zgłoszenie widoczne na `/consultations` ze statusem i terminem w czasie polskim
-- [x] 3.6 Zajęty slot znika dla drugiego klienta; konflikt pokazuje komunikat, ankieta zostaje, sloty się odświeżają
-- [x] 3.7 Blokada z Studio (dzień i zakres godzin) usuwa właściwe sloty
-- [x] 3.8 Wygląd spójny na mobile i desktopie
+- [x] 3.3 Klient nie przejdzie do wyboru terminu z niekompletną ankietą; błędy przy polach — f0e1ddb
+- [x] 3.4 Podpowiedzi rasy po wpisaniu „lab”; wpis spoza listy akceptowany — f0e1ddb
+- [x] 3.5 Złożone zgłoszenie widoczne na `/consultations` ze statusem i terminem w czasie polskim — f0e1ddb
+- [x] 3.6 Zajęty slot znika dla drugiego klienta; konflikt pokazuje komunikat, ankieta zostaje, sloty się odświeżają — f0e1ddb
+- [x] 3.7 Blokada z Studio (dzień i zakres godzin) usuwa właściwe sloty — f0e1ddb
+- [x] 3.8 Wygląd spójny na mobile i desktopie — f0e1ddb
 
 ### Phase 4: Smoke przepływu rezerwacji i domknięcie
 
 #### Automated
 
-- [ ] 4.1 Rozszerzony smoke przechodzi lokalnie (`npm run build && npm run preview` + `npm run smoke`)
-- [ ] 4.2 Job `smoke` w CI jest zielony na PR (migracje aplikowane przez `supabase start`)
-- [ ] 4.3 Job `ci` jest zielony (lint, `astro check`, `npm test`, build)
+- [x] 4.1 Rozszerzony smoke przechodzi lokalnie (`npm run build && npm run preview` + `npm run smoke`)
+- [x] 4.2 Job `smoke` w CI jest zielony na PR (migracje aplikowane przez `supabase start`)
+- [x] 4.3 Job `ci` jest zielony (lint, `astro check`, `npm test`, build)
 
 #### Manual
 
-- [ ] 4.4 Pełny przepływ klienta przeklikany na `npm run dev` (rejestracja → ankieta → termin → „Moje konsultacje”)
-- [ ] 4.5 Treść roadmapy S-03 opisuje blokadę dni i godzin
+- [x] 4.4 Pełny przepływ klienta przeklikany na `npm run dev` (rejestracja → ankieta → termin → „Moje konsultacje”)
+- [x] 4.5 Treść roadmapy S-03 opisuje blokadę dni i godzin
