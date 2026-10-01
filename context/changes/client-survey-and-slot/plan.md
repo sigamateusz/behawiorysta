@@ -409,11 +409,11 @@ Pierwsza migracja domenowa. Lokalnie: `npx supabase db reset` (kasuje dane lokal
 
 #### Automated
 
-- [x] 4.1 Rozszerzony smoke przechodzi lokalnie (`npm run build && npm run preview` + `npm run smoke`)
-- [x] 4.2 Job `smoke` w CI jest zielony na PR (migracje aplikowane przez `supabase start`)
-- [x] 4.3 Job `ci` jest zielony (lint, `astro check`, `npm test`, build)
+- [x] 4.1 Rozszerzony smoke przechodzi lokalnie (`npm run build && npm run preview` + `npm run smoke`) — 6b6542a
+- [x] 4.2 Job `smoke` w CI jest zielony na PR (migracje aplikowane przez `supabase start`) — 6b6542a
+- [x] 4.3 Job `ci` jest zielony (lint, `astro check`, `npm test`, build) — 6b6542a
 
 #### Manual
 
-- [x] 4.4 Pełny przepływ klienta przeklikany na `npm run dev` (rejestracja → ankieta → termin → „Moje konsultacje”)
-- [x] 4.5 Treść roadmapy S-03 opisuje blokadę dni i godzin
+- [x] 4.4 Pełny przepływ klienta przeklikany na `npm run dev` (rejestracja → ankieta → termin → „Moje konsultacje”) — 6b6542a
+- [x] 4.5 Treść roadmapy S-03 opisuje blokadę dni i godzin — 6b6542a
