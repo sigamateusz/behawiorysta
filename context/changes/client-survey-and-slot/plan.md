@@ -362,32 +362,32 @@ Pierwsza migracja domenowa. Lokalnie: `npx supabase db reset` (kasuje dane lokal
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się na czystej bazie: `npx supabase db reset`
-- [x] 1.2 Typy wygenerowane i zgodne ze schematem: `npm run db:types` nie zmienia pliku po commicie
-- [x] 1.3 Typy i lint przechodzą: `npx astro check` oraz `npm run lint`
-- [x] 1.4 Istniejący smoke dalej przechodzi: `npm run smoke`
+- [x] 1.1 Migracja aplikuje się na czystej bazie: `npx supabase db reset` — 1fa9358
+- [x] 1.2 Typy wygenerowane i zgodne ze schematem: `npm run db:types` nie zmienia pliku po commicie — 1fa9358
+- [x] 1.3 Typy i lint przechodzą: `npx astro check` oraz `npm run lint` — 1fa9358
+- [x] 1.4 Istniejący smoke dalej przechodzi: `npm run smoke` — 1fa9358
 
 #### Manual
 
-- [x] 1.5 Po rejestracji nowego konta w Studio widać wiersz w `profiles` z rolą `client`
-- [x] 1.6 Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (po wstawieniu po jednej konsultacji dla A i B przez SQL; `set role authenticated` + `request.jwt.claims` w Studio)
-- [x] 1.7 Konto z rolą `behaviorist` wchodzące na `/consultations` trafia na `/dashboard`
+- [x] 1.5 Po rejestracji nowego konta w Studio widać wiersz w `profiles` z rolą `client` — 1fa9358
+- [x] 1.6 Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (po wstawieniu po jednej konsultacji dla A i B przez SQL; `set role authenticated` + `request.jwt.claims` w Studio) — 1fa9358
+- [x] 1.7 Konto z rolą `behaviorist` wchodzące na `/consultations` trafia na `/dashboard` — 1fa9358
 
 ### Phase 2: Logika terminów i walidacja ankiety
 
 #### Automated
 
-- [ ] 2.1 Testy jednostkowe przechodzą: `npm test`
-- [ ] 2.2 Test DST: pt 23.10 10:00 = `2026-10-23T08:00:00Z`, pn 26.10 10:00 = `2026-10-26T09:00:00Z`
-- [ ] 2.3 Test okna: `now` = pn 2026-10-05 23:30 → pierwszy slot wt 06.10 10:00, ostatni dzień 02.11, brak sb/nd i 18:00
-- [ ] 2.4 Test blokad: pełny dzień usuwa 8 slotów; 12:30–13:30 usuwa 12:00 i 13:00; 11:00–12:00 usuwa tylko 11:00
-- [ ] 2.5 Test zajętości: start w `taken` znika z wyniku
-- [ ] 2.6 Test schematu: odrzuca puste pola, krótkie `goals`, `age_months = 12`, wiek 0/0; akceptuje rasę spoza `BREEDS`
-- [ ] 2.7 Lint i typy: `npm run lint` oraz `npx astro check`
+- [x] 2.1 Testy jednostkowe przechodzą: `npm test`
+- [x] 2.2 Test DST: pt 23.10 10:00 = `2026-10-23T08:00:00Z`, pn 26.10 10:00 = `2026-10-26T09:00:00Z`
+- [x] 2.3 Test okna: `now` = pn 2026-10-05 23:30 → pierwszy slot wt 06.10 10:00, ostatni dzień 02.11, brak sb/nd i 18:00
+- [x] 2.4 Test blokad: pełny dzień usuwa 8 slotów; 12:30–13:30 usuwa 12:00 i 13:00; 11:00–12:00 usuwa tylko 11:00
+- [x] 2.5 Test zajętości: start w `taken` znika z wyniku
+- [x] 2.6 Test schematu: odrzuca puste pola, krótkie `goals`, `age_months = 12`, wiek 0/0; akceptuje rasę spoza `BREEDS`
+- [x] 2.7 Lint i typy: `npm run lint` oraz `npx astro check`
 
 #### Manual
 
-- [ ] 2.8 Lista `BREEDS` zawiera popularne rasy w poprawnej polskiej pisowni
+- [x] 2.8 Lista `BREEDS` zawiera popularne rasy w poprawnej polskiej pisowni
 
 ### Phase 3: Endpointy i ekrany klienta
 
