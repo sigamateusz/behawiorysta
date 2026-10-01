@@ -48,3 +48,16 @@ export const consultationSchema = surveyShape
 
 export type SurveyInput = z.infer<typeof surveySchema>;
 export type ConsultationInput = z.infer<typeof consultationSchema>;
+
+export function firstFieldErrors(error: {
+  issues: readonly { path: readonly PropertyKey[]; message: string }[];
+}): Record<string, string> {
+  const errors: Record<string, string> = {};
+  for (const issue of error.issues) {
+    const field = issue.path.map(String).join(".") || "form";
+    if (!(field in errors)) {
+      errors[field] = issue.message;
+    }
+  }
+  return errors;
+}

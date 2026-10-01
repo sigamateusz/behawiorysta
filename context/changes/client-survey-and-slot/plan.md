@@ -377,33 +377,33 @@ Pierwsza migracja domenowa. Lokalnie: `npx supabase db reset` (kasuje dane lokal
 
 #### Automated
 
-- [x] 2.1 Testy jednostkowe przechodzą: `npm test`
-- [x] 2.2 Test DST: pt 23.10 10:00 = `2026-10-23T08:00:00Z`, pn 26.10 10:00 = `2026-10-26T09:00:00Z`
-- [x] 2.3 Test okna: `now` = pn 2026-10-05 23:30 → pierwszy slot wt 06.10 10:00, ostatni dzień 02.11, brak sb/nd i 18:00
-- [x] 2.4 Test blokad: pełny dzień usuwa 8 slotów; 12:30–13:30 usuwa 12:00 i 13:00; 11:00–12:00 usuwa tylko 11:00
-- [x] 2.5 Test zajętości: start w `taken` znika z wyniku
-- [x] 2.6 Test schematu: odrzuca puste pola, krótkie `goals`, `age_months = 12`, wiek 0/0; akceptuje rasę spoza `BREEDS`
-- [x] 2.7 Lint i typy: `npm run lint` oraz `npx astro check`
+- [x] 2.1 Testy jednostkowe przechodzą: `npm test` — 79d3524
+- [x] 2.2 Test DST: pt 23.10 10:00 = `2026-10-23T08:00:00Z`, pn 26.10 10:00 = `2026-10-26T09:00:00Z` — 79d3524
+- [x] 2.3 Test okna: `now` = pn 2026-10-05 23:30 → pierwszy slot wt 06.10 10:00, ostatni dzień 02.11, brak sb/nd i 18:00 — 79d3524
+- [x] 2.4 Test blokad: pełny dzień usuwa 8 slotów; 12:30–13:30 usuwa 12:00 i 13:00; 11:00–12:00 usuwa tylko 11:00 — 79d3524
+- [x] 2.5 Test zajętości: start w `taken` znika z wyniku — 79d3524
+- [x] 2.6 Test schematu: odrzuca puste pola, krótkie `goals`, `age_months = 12`, wiek 0/0; akceptuje rasę spoza `BREEDS` — 79d3524
+- [x] 2.7 Lint i typy: `npm run lint` oraz `npx astro check` — 79d3524
 
 #### Manual
 
-- [x] 2.8 Lista `BREEDS` zawiera popularne rasy w poprawnej polskiej pisowni
+- [x] 2.8 Lista `BREEDS` zawiera popularne rasy w poprawnej polskiej pisowni — 79d3524
 
 ### Phase 3: Endpointy i ekrany klienta
 
 #### Automated
 
-- [ ] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build`
-- [ ] 3.2 Testy jednostkowe dalej przechodzą: `npm test`
+- [x] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 3.2 Testy jednostkowe dalej przechodzą: `npm test`
 
 #### Manual
 
-- [ ] 3.3 Klient nie przejdzie do wyboru terminu z niekompletną ankietą; błędy przy polach
-- [ ] 3.4 Podpowiedzi rasy po wpisaniu „lab”; wpis spoza listy akceptowany
-- [ ] 3.5 Złożone zgłoszenie widoczne na `/consultations` ze statusem i terminem w czasie polskim
-- [ ] 3.6 Zajęty slot znika dla drugiego klienta; konflikt pokazuje komunikat, ankieta zostaje, sloty się odświeżają
-- [ ] 3.7 Blokada z Studio (dzień i zakres godzin) usuwa właściwe sloty
-- [ ] 3.8 Wygląd spójny na mobile i desktopie
+- [x] 3.3 Klient nie przejdzie do wyboru terminu z niekompletną ankietą; błędy przy polach
+- [x] 3.4 Podpowiedzi rasy po wpisaniu „lab”; wpis spoza listy akceptowany
+- [x] 3.5 Złożone zgłoszenie widoczne na `/consultations` ze statusem i terminem w czasie polskim
+- [x] 3.6 Zajęty slot znika dla drugiego klienta; konflikt pokazuje komunikat, ankieta zostaje, sloty się odświeżają
+- [x] 3.7 Blokada z Studio (dzień i zakres godzin) usuwa właściwe sloty
+- [x] 3.8 Wygląd spójny na mobile i desktopie
 
 ### Phase 4: Smoke przepływu rezerwacji i domknięcie
 

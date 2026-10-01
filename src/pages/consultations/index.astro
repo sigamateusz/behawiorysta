@@ -1,0 +1,100 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Topbar from "@/components/Topbar.astro";
+import { createClient } from "@/lib/supabase";
+import { formatSlotLabel } from "@/lib/slot-label";
+
+const created = Astro.url.searchParams.get("created") === "1";
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+const STATUS_LABELS: Record<string, string> = {
+  pending: "Oczekuje na decyzję",
+  accepted: "Zaakceptowana",
+  rejected: "Odrzucona",
+};
+
+const STATUS_CLASSES: Record<string, string> = {
+  pending: "text-amber-200",
+  accepted: "text-emerald-200",
+  rejected: "text-red-300",
+};
+
+let loadError: string | null = null;
+let consultations: { id: string; dog_name: string; breed: string; slot_start: string; status: string }[] = [];
+
+if (!supabase) {
+  loadError = "Nie udało się połączyć z bazą.";
+} else {
+  const { data, error } = await supabase
+    .from("consultations")
+    .select("id, dog_name, breed, slot_start, status")
+    .order("slot_start");
+
+  if (error) {
+    loadError = error.message;
+  } else {
+    consultations = data;
+  }
+}
+---
+
+<Layout title="Moje konsultacje">
+  <div class="bg-cosmic min-h-screen p-4 sm:p-8">
+    <div class="mx-auto max-w-3xl">
+      <Topbar />
+      <div class="rounded-2xl border border-white/10 bg-white/10 p-6 text-white backdrop-blur-xl sm:p-8">
+        <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h1 class="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-2xl font-bold text-transparent sm:text-3xl">
+            Moje zgłoszenia
+          </h1>
+          {consultations.length > 0 ? (
+            <a
+              href="/consultations/new"
+              class="inline-flex items-center justify-center rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+            >
+              Umów konsultację
+            </a>
+          ) : null}
+        </div>
+
+        {created ? (
+          <p
+            class="mb-6 rounded-lg border border-emerald-400/30 bg-emerald-900/30 px-3 py-2 text-sm text-emerald-200"
+            role="status"
+          >
+            Zgłoszenie zostało wysłane. Poczekaj na decyzję behawiorysty.
+          </p>
+        ) : null}
+
+        {loadError ? (
+          <p class="rounded-lg border border-red-500/30 bg-red-900/30 px-3 py-2 text-sm text-red-300">{loadError}</p>
+        ) : consultations.length === 0 ? (
+          <div class="rounded-xl border border-white/10 bg-white/5 p-6 text-center">
+            <p class="mb-4 text-blue-100/80">Nie masz jeszcze żadnych zgłoszeń.</p>
+            <a
+              href="/consultations/new"
+              class="inline-flex items-center justify-center rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-500"
+            >
+              Umów konsultację
+            </a>
+          </div>
+        ) : (
+          <ul class="space-y-3">
+            {consultations.map((consultation) => (
+              <li class="rounded-xl border border-white/10 bg-white/5 p-4">
+                <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                  <p class="font-semibold text-white">{consultation.dog_name}</p>
+                  <p class:list={["text-sm font-medium", STATUS_CLASSES[consultation.status] ?? "text-blue-100/80"]}>
+                    {STATUS_LABELS[consultation.status] ?? consultation.status}
+                  </p>
+                </div>
+                <p class="mt-1 text-sm text-blue-100/70">{consultation.breed}</p>
+                <p class="mt-2 text-sm text-blue-100/90">{formatSlotLabel(consultation.slot_start)}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  </div>
+</Layout>
