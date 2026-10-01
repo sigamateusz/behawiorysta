@@ -181,6 +181,7 @@ const BREED_NAMES = [
   "Sznaucer średni",
   "Terier irlandzki",
   "Terier tybetański",
+  "Thai ridgeback",
   "Tosa",
   "Welsh corgi cardigan",
   "Welsh corgi pembroke",
