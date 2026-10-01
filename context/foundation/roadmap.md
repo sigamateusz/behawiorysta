@@ -3,7 +3,7 @@ project: Behawiorysta
 version: 1
 status: draft
 created: 2026-09-29
-updated: 2026-09-29
+updated: 2026-10-01
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -41,7 +41,7 @@ Jeden behawiorysta traci czas, składając obraz psa przed wizytą, bo umówieni
 
 | ID   | Change ID                    | Outcome (user can …)                                              | Prerequisites | PRD refs              | Status   |
 | ---- | ---------------------------- | ----------------------------------------------------------------- | ------------- | --------------------- | -------- |
-| S-01 | client-survey-and-slot       | klient loguje się, wypełnia ankietę i wybiera termin              | —             | FR-001, FR-003, FR-004, US-01 | ready    |
+| S-01 | client-survey-and-slot       | klient loguje się, wypełnia ankietę i wybiera termin              | —             | FR-001, FR-003, FR-004, US-01 | planning |
 | S-02 | behaviorist-submission-views | behawiorysta loguje się, widzi kalendarz i listę zgłoszeń, otwiera szczegóły ankiety | S-01          | FR-002, FR-005, FR-006, US-01 | proposed |
 | S-03 | behaviorist-block-days       | behawiorysta blokuje dni, a zablokowane dni nie przyjmują nowych konsultacji | S-02          | FR-007, US-01         | proposed |
 | S-04 | behaviorist-decide-consultation | behawiorysta akceptuje albo odrzuca konsultację w aplikacji   | S-02          | FR-008, US-01         | proposed |
@@ -84,7 +84,7 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **Unknowns:**
   - Jaka granularność terminu (dzień vs slot godzinowy) — Owner: user. Block: no.
 - **Risk:** Wprowadza schemat danych i logowanie klienta; bez tego plasterek nic downstream nie ma sensu — dlatego idzie pierwszy.
-- **Status:** ready
+- **Status:** planning
 
 ### S-02: Behawiorysta — widok zgłoszeń
 
