@@ -33,6 +33,7 @@ Plasterek S-01 z `context/foundation/roadmap.md`. Zalogowany klient wypełnia ko
 
 - UI behawiorysty: kalendarz, lista, szczegóły (S-02), ekran blokowania dni i godzin (S-03), akceptacja/odrzucenie (S-04). Behawiorysta nie dostaje w tym plasterku żadnej polityki odczytu konsultacji.
 - Konfigurowalne godziny pracy — są stałą w kodzie (zmiana = deploy).
+- Kalendarz świąt — sloty są generowane pn–pt także w święta (np. 11.11, 24–26.12). Behawiorysta wycina je ręcznymi blokadami (README, później UI z S-03).
 - Rezerwacje na dziś i dalej niż 28 dni w przód.
 - Profile psów wielokrotnego użytku — każde zgłoszenie to nowa ankieta.
 - Edycja i anulowanie zgłoszenia przez klienta.
@@ -74,11 +75,11 @@ Pierwsza migracja domenowa, typy bazy i wczytywanie roli w middleware. Po tej fa
 
 #### 2. Typy bazy i klient Supabase
 
-**File**: `src/db/database.types.ts` (generowany), `package.json`, `src/lib/supabase.ts`
+**File**: `src/db/database.types.ts` (generowany), `package.json`, `src/lib/supabase.ts`, `eslint.config.js`, `.prettierignore` (nowy)
 
-**Intent**: Typowane zapytania do nowych tabel i RPC.
+**Intent**: Typowane zapytania do nowych tabel i RPC, a plik generowany wyłączony z lintowania i formatowania, żeby `eslint --fix` z lint-staged nie przepisywał go przy commicie.
 
-**Contract**: skrypt `"db:types": "supabase gen types typescript --local > src/db/database.types.ts"`. `createServerClient<Database>(…)` w `createClient`.
+**Contract**: skrypt `"db:types": "supabase gen types typescript --local > src/db/database.types.ts"`. `createServerClient<Database>(…)` w `createClient`. `src/db/database.types.ts` w `globalIgnores` w `eslint.config.js` i w `.prettierignore`.
 
 #### 3. Rola w middleware i `Locals`
 
@@ -86,13 +87,13 @@ Pierwsza migracja domenowa, typy bazy i wczytywanie roli w middleware. Po tej fa
 
 **Intent**: Udostępnić rolę stronom i chronić trasy klienta: niezalogowany → `/auth/signin`, zalogowany behawiorysta → `/dashboard`.
 
-**Contract**: `App.Locals.role: "client" | "behaviorist" | null`. Rola czytana z `profiles` tylko dla zalogowanego użytkownika. `PROTECTED_ROUTES` dostaje `/consultations`, a nowa lista `CLIENT_ROUTES = ["/consultations"]` sprawdza rolę. Endpointy `/api/consultations*` sprawdzają sesję i rolę same i zwracają JSON 401/403 (bez redirectu).
+**Contract**: `App.Locals.role: "client" | "behaviorist" | null`. Rola czytana z `profiles` tylko dla zalogowanego użytkownika. `PROTECTED_ROUTES` dostaje `/consultations`, a nowa lista `CLIENT_ROUTES = ["/consultations"]` sprawdza rolę: `behaviorist` → `/dashboard`, `null` (brak profilu albo błąd zapytania) → `/` (fail closed). Endpointy `/api/consultations*` sprawdzają sesję i rolę same i zwracają JSON 401/403 (bez redirectu).
 
 #### 4. Dokumentacja
 
 **File**: `README.md`
 
-**Intent**: Usunąć zdanie „No database tables or migrations are required” i opisać: `npx supabase db reset` (zastosowanie migracji), `npm run db:types`, nadanie roli behawiorysty (`update public.profiles set role = 'behaviorist' where id = (select id from auth.users where email = '…');`) oraz ręczne dodanie blokady w Studio do czasu S-03. Dopisać nowe trasy do tabeli tras.
+**Intent**: Usunąć zdanie „No database tables or migrations are required” i opisać: `npx supabase db reset` (zastosowanie migracji), `npm run db:types`, nadanie roli behawiorysty (`update public.profiles set role = 'behaviorist' where id = (select id from auth.users where email = '…');`) oraz ręczne dodanie blokady w Studio do czasu S-03, z gotowym zapytaniem dla całego dnia liczonego w czasie polskim (`insert into public.availability_blocks (starts_at, ends_at) values ('2026-11-11 00:00'::timestamp at time zone 'Europe/Warsaw', '2026-11-12 00:00'::timestamp at time zone 'Europe/Warsaw');`). Dopisać nowe trasy do tabeli tras.
 
 ### Success Criteria:
 
@@ -106,7 +107,7 @@ Pierwsza migracja domenowa, typy bazy i wczytywanie roli w middleware. Po tej fa
 #### Manual Verification:
 
 - Po rejestracji nowego konta w Studio widać wiersz w `profiles` z rolą `client`
-- Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (`set role authenticated` + `request.jwt.claims` w Studio)
+- Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (po wstawieniu po jednej konsultacji dla A i B przez SQL; `set role authenticated` + `request.jwt.claims` w Studio)
 - Konto z rolą `behaviorist` wchodzące na `/consultations` trafia na `/dashboard`
 
 **Implementation Note**: Po tej fazie i zielonej weryfikacji automatycznej zatrzymaj się na ręczne potwierdzenie przed fazą 2.
@@ -219,7 +220,8 @@ API slotów i zapisu, dwukrokowy formularz oraz lista „Moje zgłoszenia”.
 
 **Contract**:
 - Strona liczy `getAvailableSlots` na serwerze i przekazuje ISO stringi jako props (`client:load`).
-- Rasa: `FormField` z `<datalist>` z `BREEDS` (dowolny tekst dozwolony).
+- Rasa: `FormField` z `<datalist>` z `BREEDS` (dowolny tekst dozwolony). `FormField` (`src/components/auth/FormField.tsx`) dostaje opcjonalny prop `list?: string` przekazywany do `<input>`. Formularze auth się nie zmieniają.
+- „Podstawowe informacje” i „Nad czym chcesz pracować”: nowy `src/components/consultations/TextareaField.tsx` w stylu `FormField` (etykieta, błąd pod polem), z licznikiem znaków przy polu celów (min. 20).
 - Wiek: dwa pola liczbowe (lata, miesiące).
 - Etykiety slotów: `Intl.DateTimeFormat("pl-PL", { timeZone: "Europe/Warsaw" })`, np. „wt 6 paź · 10:00”.
 - Powrót do kroku 1 zachowuje wybrany slot i wartości pól.
@@ -368,7 +370,7 @@ Pierwsza migracja domenowa. Lokalnie: `npx supabase db reset` (kasuje dane lokal
 #### Manual
 
 - [ ] 1.5 Po rejestracji nowego konta w Studio widać wiersz w `profiles` z rolą `client`
-- [ ] 1.6 Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (`set role authenticated` + `request.jwt.claims` w Studio)
+- [ ] 1.6 Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (po wstawieniu po jednej konsultacji dla A i B przez SQL; `set role authenticated` + `request.jwt.claims` w Studio)
 - [ ] 1.7 Konto z rolą `behaviorist` wchodzące na `/consultations` trafia na `/dashboard`
 
 ### Phase 2: Logika terminów i walidacja ankiety

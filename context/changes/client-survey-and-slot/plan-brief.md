@@ -41,7 +41,7 @@ Klient rejestruje się (dostaje rolę `client`), na `/consultations/new` wypełn
 
 **Out of scope:**
 - UI behawiorysty (S-02), ekran blokad (S-03), akceptacja/odrzucenie (S-04)
-- Konfigurowalne godziny pracy, rezerwacje na dziś, profile psów, edycja/anulowanie zgłoszeń
+- Konfigurowalne godziny pracy, kalendarz świąt (święta wycinane ręcznymi blokadami), rezerwacje na dziś, profile psów, edycja/anulowanie zgłoszeń
 - Maile, AI, przekierowanie po logowaniu zależne od roli, egzekwowanie godzin pracy w bazie
 
 ## Architecture / Approach
@@ -55,7 +55,7 @@ Baza pilnuje własności wierszy (RLS) i unikalności aktywnego slotu. Reguły d
 | 1. Schemat danych, role i izolacja      | Migracja z RLS, typy bazy, rola w middleware, README          | Błędna polityka RLS przepuszcza cudze dane                |
 | 2. Logika terminów i walidacja ankiety  | `slots.ts`, schemat ankiety, lista ras, testy Vitest          | Zmiana czasu 25.10 przesuwa sloty o godzinę               |
 | 3. Endpointy i ekrany klienta           | API slotów i zapisu, formularz dwukrokowy, „Moje konsultacje” | Utrata ankiety przy konflikcie slotu                      |
-| 4. Smoke przepływu i domknięcie         | Smoke z dwoma klientami, konfliktem i izolacją; roadmapa      | Niestabilny smoke lokalnie, gdy sloty się wyczerpią       |
+| 4. Smoke przepływu rezerwacji i domknięcie | Smoke z dwoma klientami, konfliktem i izolacją; roadmapa      | Niestabilny smoke lokalnie, gdy sloty się wyczerpią       |
 
 **Prerequisites:** Docker + lokalny Supabase (`npx supabase start`), `.env` i `.dev.vars` z kluczami.
 **Estimated effort:** ~4–5 sesji po godzinach (po jednej na fazę, faza 3 może zająć dwie).
