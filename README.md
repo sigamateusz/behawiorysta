@@ -112,7 +112,35 @@ npx supabase stop
 
 The local Studio UI is available at `http://localhost:54323`.
 
-No database tables or migrations are required — this project uses Supabase Auth's built-in `auth.users` table only.
+### Database schema and types
+
+The schema lives in `supabase/migrations/`. `npx supabase start` applies pending migrations on a fresh stack. To re-apply all migrations from scratch (this wipes local data):
+
+```bash
+npx supabase db reset
+```
+
+After changing the schema, regenerate the TypeScript types in `src/db/database.types.ts` (requires the local stack to be running) and commit the result:
+
+```bash
+npm run db:types
+```
+
+### Roles
+
+Every new account gets a `client` profile in `public.profiles`. To make an account the behaviorist, run in Studio's SQL editor:
+
+```sql
+update public.profiles set role = 'behaviorist' where id = (select id from auth.users where email = 'behaviorist@example.com');
+```
+
+### Availability blocks
+
+Until the blocking UI ships, add blocks manually in Studio. Times are stored as `timestamptz`; a whole-day block covers 00:00–24:00 Polish time. Example blocking 11 November 2026:
+
+```sql
+insert into public.availability_blocks (starts_at, ends_at) values ('2026-11-11 00:00'::timestamp at time zone 'Europe/Warsaw', '2026-11-12 00:00'::timestamp at time zone 'Europe/Warsaw');
+```
 
 ### Using a cloud Supabase project instead
 
@@ -146,8 +174,10 @@ Users can then sign in immediately after sign-up without clicking a confirmation
 | `/auth/signup`        | Email/password sign-up form                                             |
 | `/auth/confirm-email` | Post-signup "check your inbox" page                                     |
 | `/dashboard`          | Example protected page (redirects to `/auth/signin` if unauthenticated) |
+| `/consultations`      | Client's own consultation requests (clients only)                       |
+| `/consultations/new`  | Dog survey and time slot picker (clients only)                          |
 
-Route protection is handled in `src/middleware.ts`. Add paths to the `PROTECTED_ROUTES` array there to require authentication.
+Route protection is handled in `src/middleware.ts`. Add paths to the `PROTECTED_ROUTES` array there to require authentication. Paths in `CLIENT_ROUTES` additionally require the `client` role: a behaviorist is redirected to `/dashboard`, and an account without a profile to `/`. The `/api/consultations*` endpoints check the session and role themselves and return JSON 401/403.
 
 ## Deployment
 

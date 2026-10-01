@@ -362,16 +362,16 @@ Pierwsza migracja domenowa. Lokalnie: `npx supabase db reset` (kasuje dane lokal
 
 #### Automated
 
-- [ ] 1.1 Migracja aplikuje się na czystej bazie: `npx supabase db reset`
-- [ ] 1.2 Typy wygenerowane i zgodne ze schematem: `npm run db:types` nie zmienia pliku po commicie
-- [ ] 1.3 Typy i lint przechodzą: `npx astro check` oraz `npm run lint`
-- [ ] 1.4 Istniejący smoke dalej przechodzi: `npm run smoke`
+- [x] 1.1 Migracja aplikuje się na czystej bazie: `npx supabase db reset`
+- [x] 1.2 Typy wygenerowane i zgodne ze schematem: `npm run db:types` nie zmienia pliku po commicie
+- [x] 1.3 Typy i lint przechodzą: `npx astro check` oraz `npm run lint`
+- [x] 1.4 Istniejący smoke dalej przechodzi: `npm run smoke`
 
 #### Manual
 
-- [ ] 1.5 Po rejestracji nowego konta w Studio widać wiersz w `profiles` z rolą `client`
-- [ ] 1.6 Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (po wstawieniu po jednej konsultacji dla A i B przez SQL; `set role authenticated` + `request.jwt.claims` w Studio)
-- [ ] 1.7 Konto z rolą `behaviorist` wchodzące na `/consultations` trafia na `/dashboard`
+- [x] 1.5 Po rejestracji nowego konta w Studio widać wiersz w `profiles` z rolą `client`
+- [x] 1.6 Zapytanie SQL jako klient A nie zwraca konsultacji klienta B (po wstawieniu po jednej konsultacji dla A i B przez SQL; `set role authenticated` + `request.jwt.claims` w Studio)
+- [x] 1.7 Konto z rolą `behaviorist` wchodzące na `/consultations` trafia na `/dashboard`
 
 ### Phase 2: Logika terminów i walidacja ankiety
 
