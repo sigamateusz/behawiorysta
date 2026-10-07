@@ -347,31 +347,31 @@ Brak migracji danych. Po wdrożeniu `/dashboard` od razu jest jasny, a pasek na 
 
 #### Automated
 
-- [x] 3.1 Skan palety (wzorzec z Implementation Approach) na `src/pages/dashboard.astro`, `src/components/Topbar.astro` i `src/components/dashboard/DashboardCard.tsx` zwraca zero trafień, a żaden z tych plików nie zawiera `bg-cosmic`
-- [x] 3.2 `npm run lint` kończy się kodem 0
-- [x] 3.3 `npx astro check` kończy się kodem 0
+- [x] 3.1 Skan palety (wzorzec z Implementation Approach) na `src/pages/dashboard.astro`, `src/components/Topbar.astro` i `src/components/dashboard/DashboardCard.tsx` zwraca zero trafień, a żaden z tych plików nie zawiera `bg-cosmic` — f086bad
+- [x] 3.2 `npm run lint` kończy się kodem 0 — f086bad
+- [x] 3.3 `npx astro check` kończy się kodem 0 — f086bad
 
 #### Manual
 
-- [x] 3.4 Zalogowana osoba na `/dashboard` widzi jasną kartę (białe tło strony, karta `bg-card`, przycisk primary) oraz dwa napisy Sign out
-- [x] 3.5 Tabulator pokazuje pierścień na Sign out w karcie, na Sign out w pasku i na linkach paska
-- [x] 3.6 Welcome (`/`, z sesją i bez) oraz klient na `/consultations` i `/consultations/new` mają jasny pasek na granatowym tle strony
-- [x] 3.7 Sign out z karty i Sign out z paska kończą sesję przez POST
+- [x] 3.4 Zalogowana osoba na `/dashboard` widzi jasną kartę (białe tło strony, karta `bg-card`, przycisk primary) oraz dwa napisy Sign out — f086bad
+- [x] 3.5 Tabulator pokazuje pierścień na Sign out w karcie, na Sign out w pasku i na linkach paska — f086bad
+- [x] 3.6 Welcome (`/`, z sesją i bez) oraz klient na `/consultations` i `/consultations/new` mają jasny pasek na granatowym tle strony — f086bad
+- [x] 3.7 Sign out z karty i Sign out z paska kończą sesję przez POST — f086bad
 
 ### Phase 4: Stany
 
 #### Automated
 
-- [ ] 4.1 `src/pages/dev/dashboard-states.astro` istnieje
-- [ ] 4.2 `/dev/dashboard-states` nie występuje w `PROTECTED_ROUTES` i `Topbar.astro` nie linkuje tej trasy
-- [ ] 4.3 Skan palety na `src/pages/dev/dashboard-states.astro` zwraca zero trafień i plik nie zawiera `bg-cosmic`
-- [ ] 4.4 `npx astro check` kończy się kodem 0
+- [x] 4.1 `src/pages/dev/dashboard-states.astro` istnieje
+- [x] 4.2 `/dev/dashboard-states` nie występuje w `PROTECTED_ROUTES` i `Topbar.astro` nie linkuje tej trasy
+- [x] 4.3 Skan palety na `src/pages/dev/dashboard-states.astro` zwraca zero trafień i plik nie zawiera `bg-cosmic`
+- [x] 4.4 `npx astro check` kończy się kodem 0
 
 #### Manual
 
-- [ ] 4.5 Wejście na `/dev/dashboard-states` bez sesji pokazuje kartę z `ada@example.com` oraz cztery powody N/A z kontraktu tej fazy
-- [ ] 4.6 Hover na Sign out w sinku zmienia tło przycisku, a Tab pokazuje pierścień `ring`
-- [ ] 4.7 Jest zrzut pulpitu i zrzut jednej szerokości mobilnej (około 390px) tej samej strony
+- [x] 4.5 Wejście na `/dev/dashboard-states` bez sesji pokazuje kartę z `ada@example.com` oraz cztery powody N/A z kontraktu tej fazy
+- [x] 4.6 Hover na Sign out w sinku zmienia tło przycisku, a Tab pokazuje pierścień `ring`
+- [x] 4.7 Jest zrzut pulpitu i zrzut jednej szerokości mobilnej (około 390px) tej samej strony
 
 ### Phase 5: Straż
 

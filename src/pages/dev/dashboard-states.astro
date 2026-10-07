@@ -1,0 +1,56 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import DashboardCard from "@/components/dashboard/DashboardCard";
+---
+
+<Layout title="Dashboard states">
+  <div class="bg-background min-h-screen p-4">
+    <div class="mx-auto grid max-w-3xl gap-4">
+      <section class="rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <p class="text-sm font-medium">default</p>
+        <div class="mt-4 flex justify-center">
+          <DashboardCard email="ada@example.com" client:load />
+        </div>
+      </section>
+
+      <section class="rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <p class="text-sm font-medium">hover</p>
+        <p class="mt-2 text-sm text-muted-foreground">
+          Ten sam przycisk Sign out. Hover ma pokazać hover:bg-primary/90 z wariantu default.
+        </p>
+      </section>
+
+      <section class="rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <p class="text-sm font-medium">focus-visible</p>
+        <p class="mt-2 text-sm text-muted-foreground">Ten sam przycisk Sign out. Tab ma pokazać pierścień ring.</p>
+      </section>
+
+      <section class="rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <p class="text-sm font-medium">disabled</p>
+        <p class="mt-2 text-sm text-muted-foreground">
+          N/A: na tym widoku żaden przycisk nie przechodzi w stan disabled; wylogowanie jest dostępne, gdy strona się
+          wyrenderuje.
+        </p>
+      </section>
+
+      <section class="rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <p class="text-sm font-medium">error</p>
+        <p class="mt-2 text-sm text-muted-foreground">
+          N/A: karta nie ma gałęzi błędu; baner braku konfiguracji Supabase w Layout.astro nie jest stanem tej karty.
+        </p>
+      </section>
+
+      <section class="rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <p class="text-sm font-medium">empty</p>
+        <p class="mt-2 text-sm text-muted-foreground">
+          N/A: karta nie listuje danych; brak e-maila i tak zostawia linię Welcome,
+        </p>
+      </section>
+
+      <section class="rounded-xl border border-border bg-card p-4 text-card-foreground">
+        <p class="text-sm font-medium">loading</p>
+        <p class="mt-2 text-sm text-muted-foreground">N/A: strona nie pobiera danych i nie ma stanu oczekiwania.</p>
+      </section>
+    </div>
+  </div>
+</Layout>
