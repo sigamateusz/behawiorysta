@@ -377,11 +377,11 @@ Brak migracji danych. Po wdrożeniu `/dashboard` od razu jest jasny, a pasek na 
 
 #### Automated
 
-- [x] 5.1 `npm run lint` uruchamia skan czterech plików widoku i na czystym drzewie kończy się kodem 0
-- [x] 5.2 `npm test` kończy się kodem 0
-- [x] 5.3 `npx astro check` kończy się kodem 0
+- [x] 5.1 `npm run lint` uruchamia skan czterech plików widoku i na czystym drzewie kończy się kodem 0 — 58e5d47
+- [x] 5.2 `npm test` kończy się kodem 0 — 58e5d47
+- [x] 5.3 `npx astro check` kończy się kodem 0 — 58e5d47
 
 #### Manual
 
-- [x] 5.4 Tymczasowe `text-purple-300` w `src/pages/dashboard.astro` sprawia, że `npm run lint` kończy się kodem innym niż 0, po czym ta klasa jest cofnięta
-- [x] 5.5 Sekcja `## UI` w `AGENTS.md` wskazuje tokeny, katalog komponentów, polecenie `npx shadcn@latest add` i ścieżkę kitchen sinka
+- [x] 5.4 Tymczasowe `text-purple-300` w `src/pages/dashboard.astro` sprawia, że `npm run lint` kończy się kodem innym niż 0, po czym ta klasa jest cofnięta — 58e5d47
+- [x] 5.5 Sekcja `## UI` w `AGENTS.md` wskazuje tokeny, katalog komponentów, polecenie `npx shadcn@latest add` i ścieżkę kitchen sinka — 58e5d47
