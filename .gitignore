@@ -17,6 +17,9 @@ pnpm-debug.log*
 .env
 .env.production
 
+# local credentials
+local-test-accounts.md
+
 # cloudflare
 .dev.vars
 .wrangler/
