@@ -10,6 +10,10 @@ Add a protected path to `PROTECTED_ROUTES` in @src/middleware.ts. A missing sess
 
 Keep layout and static UI in `.astro` files. Put interactive UI in React islands under `src/components/`. Do not add a `"use client"` directive. Merge Tailwind classes with `cn()` from `@/lib/utils` (@src/lib/utils.ts). Put shadcn/ui files in `src/components/ui/`; the style is `new-york` in @components.json. Add one with `npx shadcn@latest add <name>`.
 
+## UI
+
+Tokens live in `src/styles/global.css` (`:root` / `.dark`, published through `@theme inline`). Components live in `src/components/ui/`. Before adding a component, check that directory and add a missing one with `npx shadcn@latest add <name>`. Views do not use literal colors, palette classes, or square-bracket values. The kitchen sink is `src/pages/dev/dashboard-states.astro`.
+
 ## Project structure
 
 Auth forms live in `src/components/auth/`. Other directories and the `@/*` alias: @README.md, @tsconfig.json.

@@ -362,26 +362,26 @@ Brak migracji danych. Po wdrożeniu `/dashboard` od razu jest jasny, a pasek na 
 
 #### Automated
 
-- [x] 4.1 `src/pages/dev/dashboard-states.astro` istnieje
-- [x] 4.2 `/dev/dashboard-states` nie występuje w `PROTECTED_ROUTES` i `Topbar.astro` nie linkuje tej trasy
-- [x] 4.3 Skan palety na `src/pages/dev/dashboard-states.astro` zwraca zero trafień i plik nie zawiera `bg-cosmic`
-- [x] 4.4 `npx astro check` kończy się kodem 0
+- [x] 4.1 `src/pages/dev/dashboard-states.astro` istnieje — 1bcaa40
+- [x] 4.2 `/dev/dashboard-states` nie występuje w `PROTECTED_ROUTES` i `Topbar.astro` nie linkuje tej trasy — 1bcaa40
+- [x] 4.3 Skan palety na `src/pages/dev/dashboard-states.astro` zwraca zero trafień i plik nie zawiera `bg-cosmic` — 1bcaa40
+- [x] 4.4 `npx astro check` kończy się kodem 0 — 1bcaa40
 
 #### Manual
 
-- [x] 4.5 Wejście na `/dev/dashboard-states` bez sesji pokazuje kartę z `ada@example.com` oraz cztery powody N/A z kontraktu tej fazy
-- [x] 4.6 Hover na Sign out w sinku zmienia tło przycisku, a Tab pokazuje pierścień `ring`
-- [x] 4.7 Jest zrzut pulpitu i zrzut jednej szerokości mobilnej (około 390px) tej samej strony
+- [x] 4.5 Wejście na `/dev/dashboard-states` bez sesji pokazuje kartę z `ada@example.com` oraz cztery powody N/A z kontraktu tej fazy — 1bcaa40
+- [x] 4.6 Hover na Sign out w sinku zmienia tło przycisku, a Tab pokazuje pierścień `ring` — 1bcaa40
+- [x] 4.7 Jest zrzut pulpitu i zrzut jednej szerokości mobilnej (około 390px) tej samej strony — 1bcaa40
 
 ### Phase 5: Straż
 
 #### Automated
 
-- [ ] 5.1 `npm run lint` uruchamia skan czterech plików widoku i na czystym drzewie kończy się kodem 0
-- [ ] 5.2 `npm test` kończy się kodem 0
-- [ ] 5.3 `npx astro check` kończy się kodem 0
+- [x] 5.1 `npm run lint` uruchamia skan czterech plików widoku i na czystym drzewie kończy się kodem 0
+- [x] 5.2 `npm test` kończy się kodem 0
+- [x] 5.3 `npx astro check` kończy się kodem 0
 
 #### Manual
 
-- [ ] 5.4 Tymczasowe `text-purple-300` w `src/pages/dashboard.astro` sprawia, że `npm run lint` kończy się kodem innym niż 0, po czym ta klasa jest cofnięta
-- [ ] 5.5 Sekcja `## UI` w `AGENTS.md` wskazuje tokeny, katalog komponentów, polecenie `npx shadcn@latest add` i ścieżkę kitchen sinka
+- [x] 5.4 Tymczasowe `text-purple-300` w `src/pages/dashboard.astro` sprawia, że `npm run lint` kończy się kodem innym niż 0, po czym ta klasa jest cofnięta
+- [x] 5.5 Sekcja `## UI` w `AGENTS.md` wskazuje tokeny, katalog komponentów, polecenie `npx shadcn@latest add` i ścieżkę kitchen sinka
