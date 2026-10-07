@@ -323,25 +323,25 @@ Brak migracji danych. Po wdrożeniu `/dashboard` od razu jest jasny, a pasek na 
 
 #### Automated
 
-- [x] 1.1 `src/components/ui/card.tsx` istnieje i pochodzi z `npx shadcn@latest add card`
-- [x] 1.2 `git diff -- src/styles/global.css` jest pusty
-- [x] 1.3 `npm run lint` kończy się kodem 0
-- [x] 1.4 `npx astro check` kończy się kodem 0
+- [x] 1.1 `src/components/ui/card.tsx` istnieje i pochodzi z `npx shadcn@latest add card` — f78f723
+- [x] 1.2 `git diff -- src/styles/global.css` jest pusty — f78f723
+- [x] 1.3 `npm run lint` kończy się kodem 0 — f78f723
+- [x] 1.4 `npx astro check` kończy się kodem 0 — f78f723
 
 #### Manual
 
-- [x] 1.5 W `src/components/ui/` nie ma drugiej, ręcznie napisanej karty obok pliku z CLI
+- [x] 1.5 W `src/components/ui/` nie ma drugiej, ręcznie napisanej karty obok pliku z CLI — f78f723
 
 ### Phase 2: Kontrakt tokenów
 
 #### Automated
 
-- [ ] 2.1 `context/changes/ui-tokens-onboarding/tokens.md` istnieje i wskazuje `src/styles/global.css` jako źródło wartości
-- [ ] 2.2 `git diff -- src/styles/global.css` jest pusty
+- [x] 2.1 `context/changes/ui-tokens-onboarding/tokens.md` istnieje i wskazuje `src/styles/global.css` jako źródło wartości
+- [x] 2.2 `git diff -- src/styles/global.css` jest pusty
 
 #### Manual
 
-- [ ] 2.3 Ze spisu da się odczytać dozwolone role i zakaz zmiany oklch bez wracania do czatu
+- [x] 2.3 Ze spisu da się odczytać dozwolone role i zakaz zmiany oklch bez wracania do czatu
 
 ### Phase 3: Widok
 
