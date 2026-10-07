@@ -1,36 +1,50 @@
 ---
+import { Button } from "@/components/ui/button";
+
 const { user, role } = Astro.locals;
 ---
 
-<div class="mb-4 flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/80">
+<div class="mb-4 flex items-center justify-between rounded-xl border border-border bg-card px-4 py-2 text-sm text-card-foreground">
   {user ? (
     <>
-      <span class="text-blue-100/70">{user.email}</span>
+      <span class="text-muted-foreground">{user.email}</span>
       <div class="flex items-center gap-3">
         {role === "client" ? (
-          <a href="/consultations" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          <a
+            href="/consultations"
+            class="text-primary hover:underline focus-visible:outline-none focus-visible:ring-ring focus-visible:ring"
+          >
             Moje konsultacje
           </a>
         ) : (
-          <a href="/dashboard" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          <a
+            href="/dashboard"
+            class="text-primary hover:underline focus-visible:outline-none focus-visible:ring-ring focus-visible:ring"
+          >
             Dashboard
           </a>
         )}
         <form method="POST" action="/api/auth/signout">
-          <button type="submit" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+          <Button variant="link" type="submit" client:load>
             Sign out
-          </button>
+          </Button>
         </form>
       </div>
     </>
   ) : (
     <>
-      <span class="text-blue-100/70">Not signed in</span>
+      <span class="text-muted-foreground">Not signed in</span>
       <div class="flex gap-3">
-        <a href="/auth/signin" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+        <a
+          href="/auth/signin"
+          class="text-primary hover:underline focus-visible:outline-none focus-visible:ring-ring focus-visible:ring"
+        >
           Sign in
         </a>
-        <a href="/auth/signup" class="text-purple-300 transition-colors hover:text-purple-100 hover:underline">
+        <a
+          href="/auth/signup"
+          class="text-primary hover:underline focus-visible:outline-none focus-visible:ring-ring focus-visible:ring"
+        >
           Sign up
         </a>
       </div>

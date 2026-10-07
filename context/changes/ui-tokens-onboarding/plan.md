@@ -336,27 +336,27 @@ Brak migracji danych. Po wdrożeniu `/dashboard` od razu jest jasny, a pasek na 
 
 #### Automated
 
-- [x] 2.1 `context/changes/ui-tokens-onboarding/tokens.md` istnieje i wskazuje `src/styles/global.css` jako źródło wartości
-- [x] 2.2 `git diff -- src/styles/global.css` jest pusty
+- [x] 2.1 `context/changes/ui-tokens-onboarding/tokens.md` istnieje i wskazuje `src/styles/global.css` jako źródło wartości — 32fc0a6
+- [x] 2.2 `git diff -- src/styles/global.css` jest pusty — 32fc0a6
 
 #### Manual
 
-- [x] 2.3 Ze spisu da się odczytać dozwolone role i zakaz zmiany oklch bez wracania do czatu
+- [x] 2.3 Ze spisu da się odczytać dozwolone role i zakaz zmiany oklch bez wracania do czatu — 32fc0a6
 
 ### Phase 3: Widok
 
 #### Automated
 
-- [ ] 3.1 Skan palety (wzorzec z Implementation Approach) na `src/pages/dashboard.astro`, `src/components/Topbar.astro` i `src/components/dashboard/DashboardCard.tsx` zwraca zero trafień, a żaden z tych plików nie zawiera `bg-cosmic`
-- [ ] 3.2 `npm run lint` kończy się kodem 0
-- [ ] 3.3 `npx astro check` kończy się kodem 0
+- [x] 3.1 Skan palety (wzorzec z Implementation Approach) na `src/pages/dashboard.astro`, `src/components/Topbar.astro` i `src/components/dashboard/DashboardCard.tsx` zwraca zero trafień, a żaden z tych plików nie zawiera `bg-cosmic`
+- [x] 3.2 `npm run lint` kończy się kodem 0
+- [x] 3.3 `npx astro check` kończy się kodem 0
 
 #### Manual
 
-- [ ] 3.4 Zalogowana osoba na `/dashboard` widzi jasną kartę (białe tło strony, karta `bg-card`, przycisk primary) oraz dwa napisy Sign out
-- [ ] 3.5 Tabulator pokazuje pierścień na Sign out w karcie, na Sign out w pasku i na linkach paska
-- [ ] 3.6 Welcome (`/`, z sesją i bez) oraz klient na `/consultations` i `/consultations/new` mają jasny pasek na granatowym tle strony
-- [ ] 3.7 Sign out z karty i Sign out z paska kończą sesję przez POST
+- [x] 3.4 Zalogowana osoba na `/dashboard` widzi jasną kartę (białe tło strony, karta `bg-card`, przycisk primary) oraz dwa napisy Sign out
+- [x] 3.5 Tabulator pokazuje pierścień na Sign out w karcie, na Sign out w pasku i na linkach paska
+- [x] 3.6 Welcome (`/`, z sesją i bez) oraz klient na `/consultations` i `/consultations/new` mają jasny pasek na granatowym tle strony
+- [x] 3.7 Sign out z karty i Sign out z paska kończą sesję przez POST
 
 ### Phase 4: Stany
 
