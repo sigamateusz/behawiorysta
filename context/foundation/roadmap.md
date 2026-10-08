@@ -3,7 +3,7 @@ project: Behawiorysta
 version: 1
 status: draft
 created: 2026-09-29
-updated: 2026-10-01
+updated: 2026-10-08
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -42,7 +42,7 @@ Jeden behawiorysta traci czas, składając obraz psa przed wizytą, bo umówieni
 | ID   | Change ID                    | Outcome (user can …)                                              | Prerequisites | PRD refs              | Status   |
 | ---- | ---------------------------- | ----------------------------------------------------------------- | ------------- | --------------------- | -------- |
 | S-01 | client-survey-and-slot       | klient loguje się, wypełnia ankietę i wybiera termin              | —             | FR-001, FR-003, FR-004, US-01 | done |
-| S-02 | behaviorist-submission-views | behawiorysta loguje się, widzi kalendarz i listę zgłoszeń, otwiera szczegóły ankiety | S-01          | FR-002, FR-005, FR-006, US-01 | proposed |
+| S-02 | behaviorist-submission-views | behawiorysta loguje się, widzi kalendarz i listę zgłoszeń, otwiera szczegóły ankiety | S-01          | FR-002, FR-005, FR-006, US-01 | in-progress |
 | S-03 | behaviorist-block-days       | behawiorysta blokuje dni lub konkretne godziny, a zablokowane terminy nie przyjmują nowych konsultacji | S-02          | FR-007, US-01         | proposed |
 | S-04 | behaviorist-decide-consultation | behawiorysta akceptuje albo odrzuca konsultację w aplikacji   | S-02          | FR-008, US-01         | proposed |
 
@@ -96,7 +96,7 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** To gwiazda przewodnia — dowodzi, że ankieta i termin trafiają do behawiorysty; wymaga rozróżnienia ról i izolacji danych klientów.
-- **Status:** proposed
+- **Status:** in-progress
 
 ### S-03: Behawiorysta — blokada dni
 
