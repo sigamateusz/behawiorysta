@@ -323,13 +323,13 @@ Nowa migracja dokłada tylko politykę `select`. Danych nie przepisujemy. Migrac
 
 #### Automated
 
-- [x] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build`
-- [x] 3.2 Testy jednostkowe dalej przechodzą: `npm test`
-- [x] 3.3 `scripts/check-view-tokens.mjs` wymienia nowe pliki widoku behawiorysty, a `npm run lint` kończy się kodem 0
+- [x] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build` — a885ced
+- [x] 3.2 Testy jednostkowe dalej przechodzą: `npm test` — a885ced
+- [x] 3.3 `scripts/check-view-tokens.mjs` wymienia nowe pliki widoku behawiorysty, a `npm run lint` kończy się kodem 0 — a885ced
 
 #### Manual
 
-- [x] 3.4 Przy „teraz” 8.10.2026 15:00 Warszawa lista pokazuje Fafika, Burka i Azora w tej kolejności; siatka października nie zawiera Azora, siatka listopada zawiera
-- [x] 3.5 Szczegóły Burka pokazują imię, rasę, wiek, basic_info, goals, termin i status, bez e-maila
-- [x] 3.6 `/dashboard/<id>` Luny i Reksa odpowiada 404 i nie pokazuje pól ankiety
-- [x] 3.7 Pusty zbiór pokazuje polski stan pusty; błąd odczytu pokazuje polski komunikat bez treści błędu z bazy
+- [x] 3.4 Przy „teraz” 8.10.2026 15:00 Warszawa lista pokazuje Fafika, Burka i Azora w tej kolejności; siatka października nie zawiera Azora, siatka listopada zawiera — a885ced
+- [x] 3.5 Szczegóły Burka pokazują imię, rasę, wiek, basic_info, goals, termin i status, bez e-maila — a885ced
+- [x] 3.6 `/dashboard/<id>` Luny i Reksa odpowiada 404 i nie pokazuje pól ankiety — a885ced
+- [x] 3.7 Pusty zbiór pokazuje polski stan pusty; błąd odczytu pokazuje polski komunikat bez treści błędu z bazy — a885ced
