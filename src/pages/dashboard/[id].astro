@@ -1,0 +1,93 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Topbar from "@/components/Topbar.astro";
+import { visibleSubmissions } from "@/lib/behaviorist-submissions";
+import { formatSlotLabel } from "@/lib/slot-label";
+import { createClient } from "@/lib/supabase";
+
+const STATUS_LABELS: Record<string, string> = {
+  pending: "Oczekuje na decyzję",
+  accepted: "Zaakceptowana",
+};
+
+function statusLabel(status: string): string {
+  return STATUS_LABELS[status] ?? status;
+}
+
+const now = new Date();
+const id = Astro.params.id;
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+let loadFailed = false;
+let submission: {
+  dog_name: string;
+  breed: string;
+  age_years: number;
+  age_months: number;
+  basic_info: string;
+  goals: string;
+  slot_start: string;
+  status: string;
+} | null = null;
+
+if (!supabase) {
+  loadFailed = true;
+} else if (id) {
+  const { data, error } = await supabase
+    .from("consultations")
+    .select("id, dog_name, breed, age_years, age_months, basic_info, goals, slot_start, status, created_at")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    loadFailed = true;
+  } else if (data) {
+    submission = visibleSubmissions([data], now)[0] ?? null;
+  }
+}
+
+if (!loadFailed && !submission) {
+  Astro.response.status = 404;
+}
+
+const title = submission?.dog_name ?? "Zgłoszenie";
+---
+
+<Layout title={title}>
+  <div class="bg-background min-h-screen p-4">
+    <div class="mx-auto max-w-6xl">
+      <Topbar />
+      {loadFailed ? (
+        <p class="rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="alert">
+          Nie udało się wczytać zgłoszeń.
+        </p>
+      ) : submission ? (
+        <article class="rounded-xl border border-border bg-card p-6 text-card-foreground">
+          <h1 class="text-2xl font-semibold">{submission.dog_name}</h1>
+          <p class="text-muted-foreground mt-4 text-sm">Rasa</p>
+          <p class="mt-1">{submission.breed}</p>
+          <p class="text-muted-foreground mt-4 text-sm">Wiek</p>
+          <p class="mt-1">{`${submission.age_years} lat, ${submission.age_months} mies.`}</p>
+          <h2 class="text-muted-foreground mt-6 text-sm font-medium">Podstawowe informacje</h2>
+          <p class="mt-1 whitespace-pre-wrap">{submission.basic_info}</p>
+          <h2 class="text-muted-foreground mt-6 text-sm font-medium">Nad czym chcesz pracować</h2>
+          <p class="mt-1 whitespace-pre-wrap">{submission.goals}</p>
+          <p class="text-muted-foreground mt-6 text-sm">Termin</p>
+          <p class="mt-1">{formatSlotLabel(submission.slot_start)}</p>
+          <p class="text-muted-foreground mt-4 text-sm">Status</p>
+          <p class="mt-1">{statusLabel(submission.status)}</p>
+          <a
+            href="/dashboard"
+            class="text-primary mt-6 inline-block hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+          >
+            Wróć do listy
+          </a>
+        </article>
+      ) : (
+        <p class="rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="status">
+          Nie ma takiego zgłoszenia.
+        </p>
+      )}
+    </div>
+  </div>
+</Layout>

@@ -1,18 +1,233 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
-import DashboardCard from "@/components/dashboard/DashboardCard";
+import { visibleSubmissions } from "@/lib/behaviorist-submissions";
+import { formatSlotLabel, warsawDayKey } from "@/lib/slot-label";
+import { createClient } from "@/lib/supabase";
 
-const { user } = Astro.locals;
+const STATUS_LABELS: Record<string, string> = {
+  pending: "Oczekuje na decyzję",
+  accepted: "Zaakceptowana",
+};
+
+const WEEKDAYS = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
+const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
+
+interface SubmissionRow {
+  id: string;
+  dog_name: string;
+  breed: string;
+  slot_start: string;
+  status: string;
+  created_at: string;
+}
+
+interface DayItem {
+  id: string;
+  dogName: string;
+  time: string;
+}
+
+interface DayCell {
+  day: number | null;
+  items: DayItem[];
+}
+
+function statusLabel(status: string): string {
+  return STATUS_LABELS[status] ?? status;
+}
+
+function shiftMonth(month: string, delta: number): string {
+  const year = Number(month.slice(0, 4));
+  const monthIndex = Number(month.slice(5, 7)) - 1;
+  const shifted = new Date(Date.UTC(year, monthIndex + delta, 1));
+  const nextYear = shifted.getUTCFullYear();
+  const nextMonth = String(shifted.getUTCMonth() + 1).padStart(2, "0");
+  return `${nextYear}-${nextMonth}`;
+}
+
+/** Column 0 is Monday. 2024-01-01 is a Monday. */
+function mondayColumn(dayKey: string): number {
+  const [year, month, day] = dayKey.split("-").map(Number);
+  const target = Date.UTC(year, month - 1, day);
+  const knownMonday = Date.UTC(2024, 0, 1);
+  const diffDays = Math.round((target - knownMonday) / 86_400_000);
+  return ((diffDays % 7) + 7) % 7;
+}
+
+function warsawHourMinute(instant: string): string {
+  const parts = new Intl.DateTimeFormat("pl-PL", {
+    timeZone: "Europe/Warsaw",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(instant));
+  const hour = (parts.find((part) => part.type === "hour")?.value ?? "").replace(/\D/g, "");
+  const minute = (parts.find((part) => part.type === "minute")?.value ?? "").replace(/\D/g, "");
+  return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+}
+
+const now = new Date();
+const defaultMonth = warsawDayKey(now).slice(0, 7);
+const requestedMonth = Astro.url.searchParams.get("month");
+const month = requestedMonth !== null && MONTH_PATTERN.test(requestedMonth) ? requestedMonth : defaultMonth;
+const year = Number(month.slice(0, 4));
+const monthIndex = Number(month.slice(5, 7)) - 1;
+const previousMonth = shiftMonth(month, -1);
+const nextMonth = shiftMonth(month, 1);
+const formattedMonth = new Intl.DateTimeFormat("pl-PL", {
+  timeZone: "Europe/Warsaw",
+  month: "long",
+  year: "numeric",
+}).format(new Date(Date.UTC(year, monthIndex, 15, 12)));
+const monthLabel = formattedMonth.charAt(0).toLocaleUpperCase("pl-PL") + formattedMonth.slice(1);
+
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+
+let loadFailed = false;
+let submissions: SubmissionRow[] = [];
+
+if (!supabase) {
+  loadFailed = true;
+} else {
+  const { data, error } = await supabase
+    .from("consultations")
+    .select("id, dog_name, breed, slot_start, status, created_at");
+
+  if (error) {
+    loadFailed = true;
+  } else {
+    submissions = visibleSubmissions(data, now);
+  }
+}
+
+const cells: DayCell[] = [];
+
+if (!loadFailed && submissions.length > 0) {
+  const itemsByDay = new Map<string, DayItem[]>();
+  for (const row of submissions) {
+    const key = warsawDayKey(row.slot_start);
+    const items = itemsByDay.get(key) ?? [];
+    items.push({
+      id: row.id,
+      dogName: row.dog_name,
+      time: warsawHourMinute(row.slot_start),
+    });
+    itemsByDay.set(key, items);
+  }
+
+  const dayCount = new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+  const firstKey = warsawDayKey(new Date(Date.UTC(year, monthIndex, 1, 12)));
+
+  for (let index = 0; index < mondayColumn(firstKey); index += 1) {
+    cells.push({ day: null, items: [] });
+  }
+
+  for (let day = 1; day <= dayCount; day += 1) {
+    const key = warsawDayKey(new Date(Date.UTC(year, monthIndex, day, 12)));
+    cells.push({ day, items: itemsByDay.get(key) ?? [] });
+  }
+
+  const trailingBlankCount = (7 - (cells.length % 7)) % 7;
+  for (let index = 0; index < trailingBlankCount; index += 1) {
+    cells.push({ day: null, items: [] });
+  }
+}
 ---
 
-<Layout title="Dashboard">
+<Layout title="Zgłoszenia">
   <div class="bg-background min-h-screen p-4">
-    <div class="mx-auto max-w-3xl">
+    <div class="mx-auto max-w-6xl">
       <Topbar />
-    </div>
-    <div class="flex items-center justify-center p-4">
-      <DashboardCard email={user?.email ?? null} client:load />
+      <h1 class="mb-4 text-2xl font-semibold text-foreground">Zgłoszenia</h1>
+
+      {loadFailed ? (
+        <p class="rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="alert">
+          Nie udało się wczytać zgłoszeń.
+        </p>
+      ) : submissions.length === 0 ? (
+        <p class="rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="status">
+          Nie ma zgłoszeń do pokazania.
+        </p>
+      ) : (
+        <>
+          <nav class="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label="Miesiąc">
+            <a
+              href={`/dashboard?month=${previousMonth}`}
+              class="text-primary hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+            >
+              Poprzedni miesiąc
+            </a>
+            <p class="text-lg font-semibold text-foreground">{monthLabel}</p>
+            <a
+              href={`/dashboard?month=${nextMonth}`}
+              class="text-primary hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+            >
+              Następny miesiąc
+            </a>
+          </nav>
+
+          <div class="grid grid-cols-7 gap-2 text-center text-sm text-muted-foreground">
+            {WEEKDAYS.map((weekday) => (
+              <div class="font-medium">{weekday}</div>
+            ))}
+          </div>
+
+          <div class="mt-2 grid grid-cols-7 gap-2">
+            {cells.map((cell) => (
+              <div
+                class:list={[
+                  "min-h-24 min-w-0 overflow-hidden rounded-lg p-2",
+                  cell.day === null
+                    ? ""
+                    : cell.items.length > 0
+                      ? "border border-border bg-accent text-accent-foreground"
+                      : "border border-border bg-card text-card-foreground",
+                ]}
+              >
+                {cell.day !== null ? (
+                  <>
+                    <p class="text-sm font-medium">{cell.day}</p>
+                    {cell.items.length > 0 ? (
+                      <ul class="mt-1 space-y-1">
+                        {cell.items.map((item) => (
+                          <li>
+                            <a
+                              href={`/dashboard/${item.id}`}
+                              class="text-primary block min-w-0 text-sm break-all hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+                            >
+                              {item.dogName} {item.time}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+                  </>
+                ) : null}
+              </div>
+            ))}
+          </div>
+
+          <h2 class="mt-8 text-lg font-semibold text-foreground">Wszystkie zgłoszenia</h2>
+          <ul class="mt-3 space-y-3">
+            {submissions.map((submission) => (
+              <li>
+                <a
+                  href={`/dashboard/${submission.id}`}
+                  class="bg-card text-card-foreground block rounded-xl border border-border p-4 hover:bg-accent focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+                >
+                  <span class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                    <span class="font-semibold">{submission.dog_name}</span>
+                    <span class="text-sm font-medium">{statusLabel(submission.status)}</span>
+                  </span>
+                  <span class="text-muted-foreground mt-1 block text-sm">{submission.breed}</span>
+                  <span class="mt-2 block text-sm">{formatSlotLabel(submission.slot_start)}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </div>
   </div>
 </Layout>

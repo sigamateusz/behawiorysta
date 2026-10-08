@@ -310,26 +310,26 @@ Nowa migracja dokłada tylko politykę `select`. Danych nie przepisujemy. Migrac
 
 #### Automated
 
-- [x] 2.1 Reguły tras przechodzą w `npm test`: behaviorist zostaje, klient idzie na `/consultations`, rola null na `/`, po logowaniu tylko behaviorist ląduje na `/dashboard`
-- [x] 2.2 Typy i lint: `npx astro check` oraz `npm run lint`
-- [x] 2.3 Smoke klienta: `npm run smoke` — sign-in klienta kończy się na `/`, a jego `/dashboard` daje 302 na `/consultations`
+- [x] 2.1 Reguły tras przechodzą w `npm test`: behaviorist zostaje, klient idzie na `/consultations`, rola null na `/`, po logowaniu tylko behaviorist ląduje na `/dashboard` — b001485
+- [x] 2.2 Typy i lint: `npx astro check` oraz `npm run lint` — b001485
+- [x] 2.3 Smoke klienta: `npm run smoke` — sign-in klienta kończy się na `/`, a jego `/dashboard` daje 302 na `/consultations` — b001485
 
 #### Manual
 
-- [x] 2.4 Behawiorysta po udanym sign-in ląduje na `/dashboard`; klient po udanym sign-in ląduje na `/`
-- [x] 2.5 Klient wchodzący na `/dashboard` i `/dashboard/<id>` ląduje na `/consultations`; brak sesji ląduje na `/auth/signin`; rola null ląduje na `/`
+- [x] 2.4 Behawiorysta po udanym sign-in ląduje na `/dashboard`; klient po udanym sign-in ląduje na `/` — b001485
+- [x] 2.5 Klient wchodzący na `/dashboard` i `/dashboard/<id>` ląduje na `/consultations`; brak sesji ląduje na `/auth/signin`; rola null ląduje na `/` — b001485
 
 ### Phase 3: Widoki
 
 #### Automated
 
-- [ ] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build`
-- [ ] 3.2 Testy jednostkowe dalej przechodzą: `npm test`
-- [ ] 3.3 `scripts/check-view-tokens.mjs` wymienia nowe pliki widoku behawiorysty, a `npm run lint` kończy się kodem 0
+- [x] 3.1 Lint, typy i build: `npm run lint`, `npx astro check`, `npm run build`
+- [x] 3.2 Testy jednostkowe dalej przechodzą: `npm test`
+- [x] 3.3 `scripts/check-view-tokens.mjs` wymienia nowe pliki widoku behawiorysty, a `npm run lint` kończy się kodem 0
 
 #### Manual
 
-- [ ] 3.4 Przy „teraz” 8.10.2026 15:00 Warszawa lista pokazuje Fafika, Burka i Azora w tej kolejności; siatka października nie zawiera Azora, siatka listopada zawiera
-- [ ] 3.5 Szczegóły Burka pokazują imię, rasę, wiek, basic_info, goals, termin i status, bez e-maila
-- [ ] 3.6 `/dashboard/<id>` Luny i Reksa odpowiada 404 i nie pokazuje pól ankiety
-- [ ] 3.7 Pusty zbiór pokazuje polski stan pusty; błąd odczytu pokazuje polski komunikat bez treści błędu z bazy
+- [x] 3.4 Przy „teraz” 8.10.2026 15:00 Warszawa lista pokazuje Fafika, Burka i Azora w tej kolejności; siatka października nie zawiera Azora, siatka listopada zawiera
+- [x] 3.5 Szczegóły Burka pokazują imię, rasę, wiek, basic_info, goals, termin i status, bez e-maila
+- [x] 3.6 `/dashboard/<id>` Luny i Reksa odpowiada 404 i nie pokazuje pól ankiety
+- [x] 3.7 Pusty zbiór pokazuje polski stan pusty; błąd odczytu pokazuje polski komunikat bez treści błędu z bazy

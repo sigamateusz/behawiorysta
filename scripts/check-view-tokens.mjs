@@ -8,6 +8,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 const viewFiles = [
   "src/pages/dashboard.astro",
+  "src/pages/dashboard/[id].astro",
   "src/components/Topbar.astro",
   "src/components/dashboard/DashboardCard.tsx",
   "src/pages/dev/dashboard-states.astro",
