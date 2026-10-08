@@ -299,25 +299,25 @@ Nowa migracja dokłada tylko politykę `select`. Danych nie przepisujemy. Migrac
 
 #### Automated
 
-- [x] 1.1 Testy zbioru przechodzą: `npm test` obejmuje pięć psów (Fafik, Burek, Azor; bez Reksa i Luny) oraz granicę `slot_start + 60 min > now`
-- [x] 1.2 Lint przechodzi: `npm run lint`
+- [x] 1.1 Testy zbioru przechodzą: `npm test` obejmuje pięć psów (Fafik, Burek, Azor; bez Reksa i Luny) oraz granicę `slot_start + 60 min > now` — b56aab4
+- [x] 1.2 Lint przechodzi: `npm run lint` — b56aab4
 
 #### Manual
 
-- [x] 1.3 Migracja nakłada `consultations_select_behaviorist`: sesja behawiorysty czyta cudzy wiersz, sesja klienta nadal nie
+- [x] 1.3 Migracja nakłada `consultations_select_behaviorist`: sesja behawiorysty czyta cudzy wiersz, sesja klienta nadal nie — b56aab4
 
 ### Phase 2: Wejście
 
 #### Automated
 
-- [ ] 2.1 Reguły tras przechodzą w `npm test`: behaviorist zostaje, klient idzie na `/consultations`, rola null na `/`, po logowaniu tylko behaviorist ląduje na `/dashboard`
-- [ ] 2.2 Typy i lint: `npx astro check` oraz `npm run lint`
-- [ ] 2.3 Smoke klienta: `npm run smoke` — sign-in klienta kończy się na `/`, a jego `/dashboard` daje 302 na `/consultations`
+- [x] 2.1 Reguły tras przechodzą w `npm test`: behaviorist zostaje, klient idzie na `/consultations`, rola null na `/`, po logowaniu tylko behaviorist ląduje na `/dashboard`
+- [x] 2.2 Typy i lint: `npx astro check` oraz `npm run lint`
+- [x] 2.3 Smoke klienta: `npm run smoke` — sign-in klienta kończy się na `/`, a jego `/dashboard` daje 302 na `/consultations`
 
 #### Manual
 
-- [ ] 2.4 Behawiorysta po udanym sign-in ląduje na `/dashboard`; klient po udanym sign-in ląduje na `/`
-- [ ] 2.5 Klient wchodzący na `/dashboard` i `/dashboard/<id>` ląduje na `/consultations`; brak sesji ląduje na `/auth/signin`; rola null ląduje na `/`
+- [x] 2.4 Behawiorysta po udanym sign-in ląduje na `/dashboard`; klient po udanym sign-in ląduje na `/`
+- [x] 2.5 Klient wchodzący na `/dashboard` i `/dashboard/<id>` ląduje na `/consultations`; brak sesji ląduje na `/auth/signin`; rola null ląduje na `/`
 
 ### Phase 3: Widoki
 

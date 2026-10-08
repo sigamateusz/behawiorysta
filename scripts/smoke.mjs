@@ -89,7 +89,7 @@ const steps = [
     () => request("/api/auth/signin", { method: "POST", form: { email, password } }),
     { status: 302, location: "/" },
   ],
-  ["dashboard renders for signed-in user", () => request("/dashboard"), { status: 200 }],
+  ["dashboard renders for signed-in user", () => request("/dashboard"), { status: 302, location: "/consultations" }],
   ["signout clears session", () => request("/api/auth/signout", { method: "POST" }), { status: 302, location: "/" }],
   ["dashboard redirects after signout", () => request("/dashboard"), { status: 302, location: "/auth/signin" }],
   [

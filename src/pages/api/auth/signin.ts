@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { redirectAfterSignIn } from "@/lib/role-routes";
 import { createClient } from "@/lib/supabase";
 
 export const POST: APIRoute = async (context) => {
@@ -10,11 +11,24 @@ export const POST: APIRoute = async (context) => {
   if (!supabase) {
     return context.redirect(`/auth/signin?error=${encodeURIComponent("Supabase is not configured")}`);
   }
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
   if (error) {
     return context.redirect(`/auth/signin?error=${encodeURIComponent(error.message)}`);
   }
 
-  return context.redirect("/");
+  const userId = data.user.id;
+  let role: "behaviorist" | null = null;
+  if (userId) {
+    const { data: profile, error: profileError } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", userId)
+      .maybeSingle();
+    if (!profileError && profile?.role === "behaviorist") {
+      role = "behaviorist";
+    }
+  }
+
+  return context.redirect(redirectAfterSignIn(role));
 };

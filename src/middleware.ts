@@ -1,4 +1,5 @@
 import { defineMiddleware } from "astro:middleware";
+import { dashboardRedirect } from "@/lib/role-routes";
 import { createClient } from "@/lib/supabase";
 
 const PROTECTED_ROUTES = ["/dashboard", "/consultations"];
@@ -31,6 +32,13 @@ export const onRequest = defineMiddleware(async (context, next) => {
   if (PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) {
     if (!context.locals.user) {
       return context.redirect("/auth/signin");
+    }
+  }
+
+  if (context.locals.user && pathname.startsWith("/dashboard")) {
+    const destination = dashboardRedirect(context.locals.role);
+    if (destination !== null) {
+      return context.redirect(destination);
     }
   }
 
