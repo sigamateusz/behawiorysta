@@ -42,9 +42,9 @@ Jeden behawiorysta traci czas, składając obraz psa przed wizytą, bo umówieni
 | ID   | Change ID                    | Outcome (user can …)                                              | Prerequisites | PRD refs              | Status   |
 | ---- | ---------------------------- | ----------------------------------------------------------------- | ------------- | --------------------- | -------- |
 | S-01 | client-survey-and-slot       | klient loguje się, wypełnia ankietę i wybiera termin              | —             | FR-001, FR-003, FR-004, US-01 | done |
-| S-02 | behaviorist-submission-views | behawiorysta loguje się, widzi kalendarz i listę zgłoszeń, otwiera szczegóły ankiety | S-01          | FR-002, FR-005, FR-006, US-01 | in-progress |
-| S-03 | behaviorist-block-days       | behawiorysta blokuje dni lub konkretne godziny, a zablokowane terminy nie przyjmują nowych konsultacji | S-02          | FR-007, US-01         | proposed |
-| S-04 | behaviorist-decide-consultation | behawiorysta akceptuje albo odrzuca konsultację w aplikacji   | S-02          | FR-008, US-01         | proposed |
+| S-02 | behaviorist-submission-views | behawiorysta loguje się, widzi kalendarz i listę zgłoszeń, otwiera szczegóły ankiety | S-01          | FR-002, FR-005, FR-006, US-01 | done |
+| S-03 | behaviorist-block-days       | behawiorysta blokuje dni lub konkretne godziny, a zablokowane terminy nie przyjmują nowych konsultacji | S-02          | FR-007, US-01         | ready |
+| S-04 | behaviorist-decide-consultation | behawiorysta akceptuje albo odrzuca konsultację w aplikacji   | S-02          | FR-008, US-01         | ready |
 
 ## Streams
 
@@ -96,7 +96,7 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** To gwiazda przewodnia — dowodzi, że ankieta i termin trafiają do behawiorysty; wymaga rozróżnienia ról i izolacji danych klientów.
-- **Status:** in-progress
+- **Status:** done
 
 ### S-03: Behawiorysta — blokada dni
 
@@ -108,7 +108,7 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Model blokad i filtrowanie istnieją od S-01, a S-03 dokłada UI i politykę zapisu. Reguła biznesowa z PRD musi działać w obu kierunkach — blokada po stronie behawiorysty i filtrowanie terminów po stronie klienta.
-- **Status:** proposed
+- **Status:** ready
 
 ### S-04: Behawiorysta — akceptacja i odrzucenie
 
@@ -120,16 +120,16 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Zamyka pętlę US-01; maile są poza zakresem — decyzja musi być widoczna w aplikacji, nie w skrzynce.
-- **Status:** proposed
+- **Status:** ready
 
 ## Backlog Handoff
 
 | Roadmap ID | Change ID                    | Suggested issue title                              | Ready for `/10x-plan` | Notes |
 | ---------- | ---------------------------- | -------------------------------------------------- | --------------------- | ----- |
-| S-01       | client-survey-and-slot       | Klient: ankieta psa i wybór terminu konsultacji  | yes                   | Gwiazda przewodnia zaczyna się tutaj — bez zgłoszenia klienta S-02 nie ma czego pokazać. |
-| S-02       | behaviorist-submission-views | Behawiorysta: kalendarz, lista i szczegóły zgłoszeń | no                 | Wymaga S-01. |
-| S-03       | behaviorist-block-days       | Behawiorysta: blokada dni i godzin w kalendarzu    | no                    | Wymaga S-02. |
-| S-04       | behaviorist-decide-consultation | Behawiorysta: akceptacja i odrzucenie konsultacji | no                 | Wymaga S-02; równoległy z S-03. |
+| S-01       | client-survey-and-slot       | Klient: ankieta psa i wybór terminu konsultacji  | no                    | Zarchiwizowane 2026-10-01. |
+| S-02       | behaviorist-submission-views | Behawiorysta: kalendarz, lista i szczegóły zgłoszeń | no                 | Zaimplementowane i wypchnięte 2026-10-08. |
+| S-03       | behaviorist-block-days       | Behawiorysta: blokada dni i godzin w kalendarzu    | yes                   | S-02 jest done. Równoległy z S-04. |
+| S-04       | behaviorist-decide-consultation | Behawiorysta: akceptacja i odrzucenie konsultacji | yes                | S-02 jest done. Równoległy z S-03. |
 
 ## Open Roadmap Questions
 
@@ -151,3 +151,4 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 ## Done
 
 - **S-01: klient loguje się, wypełnia kompletną ankietę (rasa, wiek, podstawowe informacje o psie, nad czym chce pracować) i wybiera termin konsultacji.** — Archived 2026-10-01 → `context/archive/2026-10-01-client-survey-and-slot/`. Lesson: —.
+- **S-02: behawiorysta loguje się, widzi kalendarz i listę zgłoszeń oraz otwiera szczegóły z kompletną ankietą i wybranym terminem.** — Archived 2026-10-08 → `context/archive/2026-10-08-behaviorist-submission-views/`. Lesson: —.
