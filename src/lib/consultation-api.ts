@@ -1,6 +1,7 @@
 import type { APIContext } from "astro";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "@/db/database.types";
+import { dashboardRedirect } from "@/lib/role-routes";
 import { createClient } from "@/lib/supabase";
 
 export const SLOT_CONFLICT_MESSAGE = "Ten termin został właśnie zajęty albo jest niedostępny — wybierz inny.";
@@ -24,6 +25,20 @@ export function requireClientApi(context: APIContext): ClientApiSession {
   }
   return { ok: true, supabase };
 }
+
+export function requireBehavioristForm(context: APIContext): SupabaseClient<Database> | Response {
+  const supabase = createClient(context.request.headers, context.cookies);
+  if (!supabase) {
+    return context.redirect("/dashboard?decided=error");
+  }
+  if (!context.locals.user) {
+    return context.redirect("/auth/signin");
+  }
+  const destination = dashboardRedirect(context.locals.role);
+  if (destination !== null) {
+    return context.redirect(destination);
+  }
+  return supabase;
 
 export function requireBehavioristApi(context: APIContext): ClientApiSession {
   const supabase = createClient(context.request.headers, context.cookies);

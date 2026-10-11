@@ -238,39 +238,39 @@ Równoległy S-03 (`behaviorist-block-days`) może edytować `src/pages/dashboar
 
 #### Automated
 
-- [ ] 1.1 Nowa migracja nakłada się przy `npx supabase db reset` (kod 0)
-- [ ] 1.2 `npm run lint` przechodzi
+- [x] 1.1 Nowa migracja nakłada się przy `npx supabase db reset` (kod 0) — e9f0276
+- [x] 1.2 `npm run lint` przechodzi — e9f0276
 
 #### Manual
 
-- [ ] 1.3 Behawiorysta aktualizuje wiersz `pending` na `accepted` oraz inny wiersz `pending` na `rejected`
-- [ ] 1.4 Ponowny zapis, zapis klienta i zmiana kolumny ankiety są odrzucone
+- [x] 1.3 Behawiorysta aktualizuje wiersz `pending` na `accepted` oraz inny wiersz `pending` na `rejected` — e9f0276
+- [x] 1.4 Ponowny zapis, zapis klienta i zmiana kolumny ankiety są odrzucone — e9f0276
 
 ### Phase 2: Zapis decyzji
 
 #### Automated
 
-- [ ] 2.1 `npm run test` przechodzi, w tym `parseDecision` dla `accepted`, `rejected`, pustego stringa i obcej wartości
-- [ ] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npm run test` przechodzi, w tym `parseDecision` dla `accepted`, `rejected`, pustego stringa i obcej wartości — bb91ac1
+- [x] 2.2 `npm run lint` przechodzi — bb91ac1
 
 #### Manual
 
-- [ ] 2.3 POST bez sesji przekierowuje na `/auth/signin` i nie zmienia statusu
-- [ ] 2.4 POST klienta przekierowuje na `/consultations` i nie zmienia statusu
-- [ ] 2.5 POST behawiorysty `accepted` na `pending` przekierowuje na `/dashboard?decided=accepted`, a lista klienta pokazuje „Zaakceptowana”
-- [ ] 2.6 Drugi POST na to samo id przekierowuje na `/dashboard?decided=unavailable` i status zostaje `accepted`
-- [ ] 2.7 POST `rejected` na innym `pending` przekierowuje na `/dashboard?decided=rejected`, klient widzi „Odrzucona”, a ten sam `slot_start` przyjmuje nowe zgłoszenie
+- [x] 2.3 POST bez sesji przekierowuje na `/auth/signin` i nie zmienia statusu — bb91ac1
+- [x] 2.4 POST klienta przekierowuje na `/consultations` i nie zmienia statusu — bb91ac1
+- [x] 2.5 POST behawiorysty `accepted` na `pending` przekierowuje na `/dashboard?decided=accepted`, a lista klienta pokazuje „Zaakceptowana” — bb91ac1
+- [x] 2.6 Drugi POST na to samo id przekierowuje na `/dashboard?decided=unavailable` i status zostaje `accepted` — bb91ac1
+- [x] 2.7 POST `rejected` na innym `pending` przekierowuje na `/dashboard?decided=rejected`, klient widzi „Odrzucona”, a ten sam `slot_start` przyjmuje nowe zgłoszenie — bb91ac1
 
 ### Phase 3: Panel decyzji
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` przechodzi
-- [ ] 3.2 `npm run test` przechodzi
+- [x] 3.1 `npm run lint` przechodzi — fe632ed
+- [x] 3.2 `npm run test` przechodzi — fe632ed
 
 #### Manual
 
-- [ ] 3.3 Szczegóły `pending` mają „Akceptuj” i „Odrzuć”; szczegóły przyszłego `accepted` nie mają tych przycisków
-- [ ] 3.4 Po odrzuceniu widać „Konsultacja została odrzucona.”, a wiersza nie ma na liście, w siatce ani pod starym adresem (404)
-- [ ] 3.5 Zaległe `pending` ma oba przyciski; po akceptacji karta znika z panelu, komunikat to „Konsultacja została zaakceptowana.”, a klient widzi „Zaakceptowana”
-- [ ] 3.6 Komunikat decyzji widać także wtedy, gdy lista po zapisie jest pusta
+- [x] 3.3 Szczegóły `pending` mają „Akceptuj” i „Odrzuć”; szczegóły przyszłego `accepted` nie mają tych przycisków — fe632ed
+- [x] 3.4 Po odrzuceniu widać „Konsultacja została odrzucona.”, a wiersza nie ma na liście, w siatce ani pod starym adresem (404) — fe632ed
+- [x] 3.5 Zaległe `pending` ma oba przyciski; po akceptacji karta znika z panelu, komunikat to „Konsultacja została zaakceptowana.”, a klient widzi „Zaakceptowana” — fe632ed
+- [x] 3.6 Komunikat decyzji widać także wtedy, gdy lista po zapisie jest pusta — fe632ed
