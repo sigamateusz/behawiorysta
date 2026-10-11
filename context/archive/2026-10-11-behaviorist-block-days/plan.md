@@ -270,35 +270,35 @@ Danych nie przepisujemy. Wiersze wpisane wcześniej w Studio zostają i zaczynaj
 
 #### Automated
 
-- [ ] 1.1 `npm test` obejmuje cały dzień 12.10.2026 jako `2026-10-11T22:00:00.000Z`–`2026-10-12T22:00:00.000Z` oraz dzień zmiany czasu 25.10.2026 jako `2026-10-24T22:00:00.000Z`–`2026-10-25T23:00:00.000Z`
-- [ ] 1.2 `npm test` obejmuje godziny 10 i 14 w dniu 12.10.2026 jako dwa zakresy `2026-10-12T08:00:00.000Z`–`09:00:00.000Z` i `2026-10-12T12:00:00.000Z`–`13:00:00.000Z`, a wybór całego dnia ignoruje zaznaczone godziny
-- [ ] 1.3 `npm test` obejmuje niedzielę 11.10.2026 12:00 Warszawa: 12.10 i 9.11 da się zablokować, a 9.10, 11.10 i 17.10 nie; pusty wybór i godzina 18 są odrzucone
-- [ ] 1.4 `npm test` obejmuje pokrycie: godzina 10:00 wewnątrz całego dnia jest pokryta, sam wiersz 10:00–11:00 nie pokrywa całego dnia, a zakres 12:30–13:30 nachodzi na sloty 12 i 13
-- [ ] 1.5 `npm run lint` przechodzi
+- [x] 1.1 `npm test` obejmuje cały dzień 12.10.2026 jako `2026-10-11T22:00:00.000Z`–`2026-10-12T22:00:00.000Z` oraz dzień zmiany czasu 25.10.2026 jako `2026-10-24T22:00:00.000Z`–`2026-10-25T23:00:00.000Z` — 45dd3be
+- [x] 1.2 `npm test` obejmuje godziny 10 i 14 w dniu 12.10.2026 jako dwa zakresy `2026-10-12T08:00:00.000Z`–`09:00:00.000Z` i `2026-10-12T12:00:00.000Z`–`13:00:00.000Z`, a wybór całego dnia ignoruje zaznaczone godziny — 45dd3be
+- [x] 1.3 `npm test` obejmuje niedzielę 11.10.2026 12:00 Warszawa: 12.10 i 9.11 da się zablokować, a 9.10, 11.10 i 17.10 nie; pusty wybór i godzina 18 są odrzucone — 45dd3be
+- [x] 1.4 `npm test` obejmuje pokrycie: godzina 10:00 wewnątrz całego dnia jest pokryta, sam wiersz 10:00–11:00 nie pokrywa całego dnia, a zakres 12:30–13:30 nachodzi na sloty 12 i 13 — 45dd3be
+- [x] 1.5 `npm run lint` przechodzi — 45dd3be
 
 ### Phase 2: Zapis behawiorysty
 
 #### Automated
 
-- [ ] 2.1 `npm test` przechodzi
-- [ ] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npm test` przechodzi — 9d744ff
+- [x] 2.2 `npm run lint` przechodzi — 9d744ff
 
 #### Manual
 
-- [ ] 2.3 Nowa migracja nakłada się na lokalny Supabase, a `supabase/migrations/20261001182110_client_survey_and_slot.sql` pozostaje bez zmian
-- [ ] 2.4 Sesja behawiorysty wstawia i usuwa wiersz `availability_blocks`; sesja klienta dostaje odmowę insertu i delete
+- [x] 2.3 Nowa migracja nakłada się na lokalny Supabase, a `supabase/migrations/20261001182110_client_survey_and_slot.sql` pozostaje bez zmian — 9d744ff
+- [x] 2.4 Sesja behawiorysty wstawia i usuwa wiersz `availability_blocks`; sesja klienta dostaje odmowę insertu i delete — 9d744ff
 
 ### Phase 3: Kalendarz
 
 #### Automated
 
-- [ ] 3.1 `npm test` przechodzi
-- [ ] 3.2 `npm run lint` przechodzi
+- [x] 3.1 `npm test` przechodzi — 5faef5c
+- [x] 3.2 `npm run lint` przechodzi — 5faef5c
 
 #### Manual
 
-- [ ] 3.3 Przy zerze zgłoszeń widać siatkę miesiąca, a pod nią „Nie ma zgłoszeń do pokazania.”
-- [ ] 3.4 Blokada całego przyszłego dnia roboczego usuwa jego 8 slotów z wyboru klienta; wizyta pending na tym dniu zostaje na kalendarzu i w bazie ze swoim statusem
-- [ ] 3.5 Blokada 10:00 i 14:00 usuwa tylko te dwie godziny; 11:00 zostaje w wyborze klienta
-- [ ] 3.6 Sobota, dziś i dzień wstecz nie mają akcji blokady; poniedziałek 9.11.2026 zapisany przy `now` w niedzielę 11.10.2026 nie zmienia listy slotów klienta, dopóki ten dzień nie wejdzie w okno 28 dni
-- [ ] 3.7 Usunięcie blokady przywraca termin w wyborze klienta
+- [x] 3.3 Przy zerze zgłoszeń widać siatkę miesiąca, a pod nią „Nie ma zgłoszeń do pokazania.” — 5faef5c
+- [x] 3.4 Blokada całego przyszłego dnia roboczego usuwa jego 8 slotów z wyboru klienta; wizyta pending na tym dniu zostaje na kalendarzu i w bazie ze swoim statusem — 5faef5c
+- [x] 3.5 Blokada 10:00 i 14:00 usuwa tylko te dwie godziny; 11:00 zostaje w wyborze klienta — 5faef5c
+- [x] 3.6 Sobota, dziś i dzień wstecz nie mają akcji blokady; poniedziałek 9.11.2026 zapisany przy `now` w niedzielę 11.10.2026 nie zmienia listy slotów klienta, dopóki ten dzień nie wejdzie w okno 28 dni — 5faef5c
+- [x] 3.7 Usunięcie blokady przywraca termin w wyborze klienta — 5faef5c
