@@ -2,7 +2,9 @@
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { visibleSubmissions } from "@/lib/behaviorist-submissions";
-import { formatSlotLabel, warsawDayKey } from "@/lib/slot-label";
+import { blockSelection, coversWarsawDay, isRangeInside, overlappingSlotHours } from "@/lib/blocks";
+import { formatSlotLabel, warsawDayHeading, warsawDayKey } from "@/lib/slot-label";
+import { SLOT_MINUTES, SLOT_STARTS, warsawDayBounds, warsawWallTime } from "@/lib/slots";
 import { createClient } from "@/lib/supabase";
 
 const STATUS_LABELS: Record<string, string> = {
@@ -10,8 +12,19 @@ const STATUS_LABELS: Record<string, string> = {
   accepted: "Zaakceptowana",
 };
 
+const BLOCK_ERROR_SAVE = "Nie udało się zapisać blokady.";
+const BLOCK_ERRORS: Record<string, string> = {
+  date: "Tej daty nie da się zablokować.",
+  empty: "Wybierz cały dzień albo godzinę.",
+  hour: "Tej godziny nie ma w grafiku.",
+  duplicate: "Ta blokada już jest zapisana.",
+  save: BLOCK_ERROR_SAVE,
+  delete: "Nie udało się usunąć blokady.",
+};
+
 const WEEKDAYS = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
 const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
+const SLOT_MS = SLOT_MINUTES * 60_000;
 
 interface SubmissionRow {
   id: string;
@@ -22,6 +35,12 @@ interface SubmissionRow {
   created_at: string;
 }
 
+interface BlockRow {
+  id: string;
+  starts_at: string;
+  ends_at: string;
+}
+
 interface DayItem {
   id: string;
   dogName: string;
@@ -30,7 +49,11 @@ interface DayItem {
 
 interface DayCell {
   day: number | null;
+  dayKey: string | null;
   items: DayItem[];
+  wholeDayBlocked: boolean;
+  blockedHours: string[];
+  canBlock: boolean;
 }
 
 function statusLabel(status: string): string {
@@ -67,6 +90,48 @@ function warsawHourMinute(instant: string): string {
   return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
 }
 
+function formatHour(hour: number): string {
+  return `${String(hour).padStart(2, "0")}:00`;
+}
+
+function blankCell(): DayCell {
+  return {
+    day: null,
+    dayKey: null,
+    items: [],
+    wholeDayBlocked: false,
+    blockedHours: [],
+    canBlock: false,
+  };
+}
+
+function overlapsDay(row: BlockRow, day: string): boolean {
+  const bounds = warsawDayBounds(day);
+  return (
+    new Date(row.starts_at).getTime() < bounds.ends_at.getTime() &&
+    new Date(row.ends_at).getTime() > bounds.starts_at.getTime()
+  );
+}
+
+function blockRowLabel(row: BlockRow, day: string): string {
+  if (coversWarsawDay(row, day)) {
+    return "Cały dzień";
+  }
+  const startMs = new Date(row.starts_at).getTime();
+  const endMs = new Date(row.ends_at).getTime();
+  const slotHour = SLOT_STARTS.find((hour) => warsawWallTime(day, hour, 0).getTime() === startMs);
+  if (slotHour !== undefined && endMs - startMs === SLOT_MS) {
+    return formatHour(slotHour);
+  }
+  return `${warsawHourMinute(row.starts_at)}–${warsawHourMinute(row.ends_at)}`;
+}
+
+function hourFullyCovered(day: string, hour: number, rows: readonly BlockRow[]): boolean {
+  const starts_at = warsawWallTime(day, hour, 0);
+  const ends_at = new Date(starts_at.getTime() + SLOT_MS);
+  return rows.some((row) => isRangeInside({ starts_at, ends_at }, row));
+}
+
 const now = new Date();
 const defaultMonth = warsawDayKey(now).slice(0, 7);
 const requestedMonth = Astro.url.searchParams.get("month");
@@ -82,28 +147,87 @@ const formattedMonth = new Intl.DateTimeFormat("pl-PL", {
 }).format(new Date(Date.UTC(year, monthIndex, 15, 12)));
 const monthLabel = formattedMonth.charAt(0).toLocaleUpperCase("pl-PL") + formattedMonth.slice(1);
 
+const requestedDay = Astro.url.searchParams.get("day");
+let selectedDay = "";
+let showPanel = false;
+if (requestedDay !== null && requestedDay.slice(0, 7) === month) {
+  const selection = blockSelection({ day: requestedDay, wholeDay: true, hours: [] }, now);
+  if (selection.ok) {
+    selectedDay = requestedDay;
+    showPanel = true;
+  }
+}
+
+let panelHeading = "";
+if (showPanel) {
+  const heading = warsawDayHeading(warsawDayBounds(selectedDay).starts_at);
+  panelHeading = heading.charAt(0).toLocaleUpperCase("pl-PL") + heading.slice(1);
+}
+
+const blockErrorCode = Astro.url.searchParams.get("block_error");
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 
 let loadFailed = false;
 let submissions: SubmissionRow[] = [];
+let blocks: BlockRow[] = [];
 
 if (!supabase) {
   loadFailed = true;
 } else {
-  const { data, error } = await supabase
-    .from("consultations")
-    .select("id, dog_name, breed, slot_start, status, created_at");
+  const monthStart = warsawDayBounds(`${month}-01`).starts_at.toISOString();
+  const nextMonthStart = warsawDayBounds(`${nextMonth}-01`).starts_at.toISOString();
+  const [consultationsResult, blocksResult] = await Promise.all([
+    supabase.from("consultations").select("id, dog_name, breed, slot_start, status, created_at"),
+    supabase
+      .from("availability_blocks")
+      .select("id, starts_at, ends_at")
+      .lt("starts_at", nextMonthStart)
+      .gt("ends_at", monthStart),
+  ]);
 
-  if (error) {
+  if (consultationsResult.error) {
+    loadFailed = true;
+  } else if (blocksResult.error) {
     loadFailed = true;
   } else {
-    submissions = visibleSubmissions(data, now);
+    submissions = visibleSubmissions(consultationsResult.data, now);
+    blocks = blocksResult.data;
+  }
+}
+
+const blockErrorMessage =
+  blockErrorCode === null || loadFailed ? null : (BLOCK_ERRORS[blockErrorCode] ?? BLOCK_ERROR_SAVE);
+
+const panelBlocks: BlockRow[] = [];
+const openHours: number[] = [];
+let panelCovered = false;
+
+if (!loadFailed && showPanel) {
+  for (const row of blocks) {
+    if (overlapsDay(row, selectedDay)) {
+      panelBlocks.push(row);
+    }
+  }
+  panelBlocks.sort((left, right) => {
+    const byStart = left.starts_at.localeCompare(right.starts_at);
+    if (byStart !== 0) {
+      return byStart;
+    }
+    return left.id.localeCompare(right.id);
+  });
+  panelCovered = panelBlocks.some((row) => coversWarsawDay(row, selectedDay));
+  if (!panelCovered) {
+    for (const hour of SLOT_STARTS) {
+      if (!hourFullyCovered(selectedDay, hour, panelBlocks)) {
+        openHours.push(hour);
+      }
+    }
   }
 }
 
 const cells: DayCell[] = [];
 
-if (!loadFailed && submissions.length > 0) {
+if (!loadFailed) {
   const itemsByDay = new Map<string, DayItem[]>();
   for (const row of submissions) {
     const key = warsawDayKey(row.slot_start);
@@ -120,17 +244,25 @@ if (!loadFailed && submissions.length > 0) {
   const firstKey = warsawDayKey(new Date(Date.UTC(year, monthIndex, 1, 12)));
 
   for (let index = 0; index < mondayColumn(firstKey); index += 1) {
-    cells.push({ day: null, items: [] });
+    cells.push(blankCell());
   }
 
   for (let day = 1; day <= dayCount; day += 1) {
     const key = warsawDayKey(new Date(Date.UTC(year, monthIndex, day, 12)));
-    cells.push({ day, items: itemsByDay.get(key) ?? [] });
+    const wholeDayBlocked = blocks.some((row) => coversWarsawDay(row, key));
+    cells.push({
+      day,
+      dayKey: key,
+      items: itemsByDay.get(key) ?? [],
+      wholeDayBlocked,
+      blockedHours: wholeDayBlocked ? [] : overlappingSlotHours(key, blocks).map((hour) => formatHour(hour)),
+      canBlock: blockSelection({ day: key, wholeDay: true, hours: [] }, now).ok,
+    });
   }
 
   const trailingBlankCount = (7 - (cells.length % 7)) % 7;
   for (let index = 0; index < trailingBlankCount; index += 1) {
-    cells.push({ day: null, items: [] });
+    cells.push(blankCell());
   }
 }
 ---
@@ -143,14 +275,16 @@ if (!loadFailed && submissions.length > 0) {
 
       {loadFailed ? (
         <p class="rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="alert">
-          Nie udało się wczytać zgłoszeń.
-        </p>
-      ) : submissions.length === 0 ? (
-        <p class="rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="status">
-          Nie ma zgłoszeń do pokazania.
+          Nie udało się wczytać kalendarza.
         </p>
       ) : (
         <>
+          {blockErrorMessage ? (
+            <p class="mb-4 rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="alert">
+              {blockErrorMessage}
+            </p>
+          ) : null}
+
           <nav class="mb-4 flex flex-wrap items-center justify-between gap-3" aria-label="Miesiąc">
             <a
               href={`/dashboard?month=${previousMonth}`}
@@ -187,7 +321,25 @@ if (!loadFailed && submissions.length > 0) {
               >
                 {cell.day !== null ? (
                   <>
-                    <p class="text-sm font-medium">{cell.day}</p>
+                    {cell.canBlock && cell.dayKey !== null ? (
+                      <a
+                        href={`/dashboard?month=${month}&day=${cell.dayKey}`}
+                        class="text-primary text-sm font-medium hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+                      >
+                        {cell.day}
+                      </a>
+                    ) : (
+                      <p class="text-sm font-medium">{cell.day}</p>
+                    )}
+                    {cell.wholeDayBlocked ? (
+                      <p class="mt-1 text-sm">Dzień zablokowany</p>
+                    ) : cell.blockedHours.length > 0 ? (
+                      <ul class="mt-1 space-y-1">
+                        {cell.blockedHours.map((label) => (
+                          <li class="text-sm">{label}</li>
+                        ))}
+                      </ul>
+                    ) : null}
                     {cell.items.length > 0 ? (
                       <ul class="mt-1 space-y-1">
                         {cell.items.map((item) => (
@@ -208,24 +360,84 @@ if (!loadFailed && submissions.length > 0) {
             ))}
           </div>
 
-          <h2 class="mt-8 text-lg font-semibold text-foreground">Wszystkie zgłoszenia</h2>
-          <ul class="mt-3 space-y-3">
-            {submissions.map((submission) => (
-              <li>
-                <a
-                  href={`/dashboard/${submission.id}`}
-                  class="bg-card text-card-foreground block rounded-xl border border-border p-4 hover:bg-accent focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
-                >
-                  <span class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-                    <span class="font-semibold">{submission.dog_name}</span>
-                    <span class="text-sm font-medium">{statusLabel(submission.status)}</span>
-                  </span>
-                  <span class="text-muted-foreground mt-1 block text-sm">{submission.breed}</span>
-                  <span class="mt-2 block text-sm">{formatSlotLabel(submission.slot_start)}</span>
-                </a>
-              </li>
-            ))}
-          </ul>
+          {showPanel ? (
+            <section class="mt-8 rounded-xl border border-border bg-card p-4 text-card-foreground">
+              <h2 class="text-lg font-semibold text-foreground">{panelHeading}</h2>
+              {panelCovered ? null : (
+                <form method="POST" action="/api/availability-blocks" class="mt-3 space-y-3">
+                  <input type="hidden" name="day" value={selectedDay} />
+                  <div class="flex flex-wrap gap-3">
+                    <label class="flex items-center gap-3 text-sm">
+                      <input type="checkbox" name="whole_day" value="1" />
+                      Cały dzień
+                    </label>
+                    {openHours.map((hour) => (
+                      <label class="flex items-center gap-3 text-sm">
+                        <input type="checkbox" name="hour" value={hour} />
+                        {formatHour(hour)}
+                      </label>
+                    ))}
+                  </div>
+                  <button
+                    type="submit"
+                    class="text-primary text-sm font-medium hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+                  >
+                    Zapisz
+                  </button>
+                </form>
+              )}
+              {panelBlocks.length > 0 ? (
+                <ul class="mt-3 space-y-3">
+                  {panelBlocks.map((row) => (
+                    <li>
+                      <form
+                        method="POST"
+                        action="/api/availability-blocks/delete"
+                        class="flex flex-wrap items-center justify-between gap-3"
+                      >
+                        <input type="hidden" name="id" value={row.id} />
+                        <input type="hidden" name="day" value={selectedDay} />
+                        <span class="text-sm">{blockRowLabel(row, selectedDay)}</span>
+                        <button
+                          type="submit"
+                          class="text-primary text-sm font-medium hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+                        >
+                          Usuń
+                        </button>
+                      </form>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
+            </section>
+          ) : null}
+
+          {submissions.length === 0 ? (
+            <p class="mt-8 rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="status">
+              Nie ma zgłoszeń do pokazania.
+            </p>
+          ) : (
+            <>
+              <h2 class="mt-8 text-lg font-semibold text-foreground">Wszystkie zgłoszenia</h2>
+              <ul class="mt-3 space-y-3">
+                {submissions.map((submission) => (
+                  <li>
+                    <a
+                      href={`/dashboard/${submission.id}`}
+                      class="bg-card text-card-foreground block rounded-xl border border-border p-4 hover:bg-accent focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"
+                    >
+                      <span class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+                        <span class="font-semibold">{submission.dog_name}</span>
+                        <span class="text-sm font-medium">{statusLabel(submission.status)}</span>
+                      </span>
+                      <span class="text-muted-foreground mt-1 block text-sm">{submission.breed}</span>
+                      <span class="mt-2 block text-sm">{formatSlotLabel(submission.slot_start)}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </>
       )}
     </div>

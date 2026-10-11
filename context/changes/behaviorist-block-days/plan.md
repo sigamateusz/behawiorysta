@@ -280,25 +280,25 @@ Danych nie przepisujemy. Wiersze wpisane wcześniej w Studio zostają i zaczynaj
 
 #### Automated
 
-- [x] 2.1 `npm test` przechodzi
-- [x] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npm test` przechodzi — 9d744ff
+- [x] 2.2 `npm run lint` przechodzi — 9d744ff
 
 #### Manual
 
-- [x] 2.3 Nowa migracja nakłada się na lokalny Supabase, a `supabase/migrations/20261001182110_client_survey_and_slot.sql` pozostaje bez zmian
-- [x] 2.4 Sesja behawiorysty wstawia i usuwa wiersz `availability_blocks`; sesja klienta dostaje odmowę insertu i delete
+- [x] 2.3 Nowa migracja nakłada się na lokalny Supabase, a `supabase/migrations/20261001182110_client_survey_and_slot.sql` pozostaje bez zmian — 9d744ff
+- [x] 2.4 Sesja behawiorysty wstawia i usuwa wiersz `availability_blocks`; sesja klienta dostaje odmowę insertu i delete — 9d744ff
 
 ### Phase 3: Kalendarz
 
 #### Automated
 
-- [ ] 3.1 `npm test` przechodzi
-- [ ] 3.2 `npm run lint` przechodzi
+- [x] 3.1 `npm test` przechodzi
+- [x] 3.2 `npm run lint` przechodzi
 
 #### Manual
 
-- [ ] 3.3 Przy zerze zgłoszeń widać siatkę miesiąca, a pod nią „Nie ma zgłoszeń do pokazania.”
-- [ ] 3.4 Blokada całego przyszłego dnia roboczego usuwa jego 8 slotów z wyboru klienta; wizyta pending na tym dniu zostaje na kalendarzu i w bazie ze swoim statusem
-- [ ] 3.5 Blokada 10:00 i 14:00 usuwa tylko te dwie godziny; 11:00 zostaje w wyborze klienta
-- [ ] 3.6 Sobota, dziś i dzień wstecz nie mają akcji blokady; poniedziałek 9.11.2026 zapisany przy `now` w niedzielę 11.10.2026 nie zmienia listy slotów klienta, dopóki ten dzień nie wejdzie w okno 28 dni
-- [ ] 3.7 Usunięcie blokady przywraca termin w wyborze klienta
+- [x] 3.3 Przy zerze zgłoszeń widać siatkę miesiąca, a pod nią „Nie ma zgłoszeń do pokazania.”
+- [x] 3.4 Blokada całego przyszłego dnia roboczego usuwa jego 8 slotów z wyboru klienta; wizyta pending na tym dniu zostaje na kalendarzu i w bazie ze swoim statusem
+- [x] 3.5 Blokada 10:00 i 14:00 usuwa tylko te dwie godziny; 11:00 zostaje w wyborze klienta
+- [x] 3.6 Sobota, dziś i dzień wstecz nie mają akcji blokady; poniedziałek 9.11.2026 zapisany przy `now` w niedzielę 11.10.2026 nie zmienia listy slotów klienta, dopóki ten dzień nie wejdzie w okno 28 dni
+- [x] 3.7 Usunięcie blokady przywraca termin w wyborze klienta
