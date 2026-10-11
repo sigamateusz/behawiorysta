@@ -265,12 +265,12 @@ Równoległy S-03 (`behaviorist-block-days`) może edytować `src/pages/dashboar
 
 #### Automated
 
-- [x] 3.1 `npm run lint` przechodzi
-- [x] 3.2 `npm run test` przechodzi
+- [x] 3.1 `npm run lint` przechodzi — fe632ed
+- [x] 3.2 `npm run test` przechodzi — fe632ed
 
 #### Manual
 
-- [x] 3.3 Szczegóły `pending` mają „Akceptuj” i „Odrzuć”; szczegóły przyszłego `accepted` nie mają tych przycisków
-- [x] 3.4 Po odrzuceniu widać „Konsultacja została odrzucona.”, a wiersza nie ma na liście, w siatce ani pod starym adresem (404)
-- [x] 3.5 Zaległe `pending` ma oba przyciski; po akceptacji karta znika z panelu, komunikat to „Konsultacja została zaakceptowana.”, a klient widzi „Zaakceptowana”
-- [x] 3.6 Komunikat decyzji widać także wtedy, gdy lista po zapisie jest pusta
+- [x] 3.3 Szczegóły `pending` mają „Akceptuj” i „Odrzuć”; szczegóły przyszłego `accepted` nie mają tych przycisków — fe632ed
+- [x] 3.4 Po odrzuceniu widać „Konsultacja została odrzucona.”, a wiersza nie ma na liście, w siatce ani pod starym adresem (404) — fe632ed
+- [x] 3.5 Zaległe `pending` ma oba przyciski; po akceptacji karta znika z panelu, komunikat to „Konsultacja została zaakceptowana.”, a klient widzi „Zaakceptowana” — fe632ed
+- [x] 3.6 Komunikat decyzji widać także wtedy, gdy lista po zapisie jest pusta — fe632ed
