@@ -1,6 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
+import { Button } from "@/components/ui/button";
 import { visibleSubmissions } from "@/lib/behaviorist-submissions";
 import { formatSlotLabel } from "@/lib/slot-label";
 import { createClient } from "@/lib/supabase";
@@ -76,6 +77,16 @@ const title = submission?.dog_name ?? "Zgłoszenie";
           <p class="mt-1">{formatSlotLabel(submission.slot_start)}</p>
           <p class="text-muted-foreground mt-4 text-sm">Status</p>
           <p class="mt-1">{statusLabel(submission.status)}</p>
+          {submission.status === "pending" && id ? (
+            <form method="POST" action={`/api/consultations/${id}/decision`} class="mt-6 flex gap-3">
+              <Button type="submit" name="decision" value="accepted" variant="default" client:load>
+                Akceptuj
+              </Button>
+              <Button type="submit" name="decision" value="rejected" variant="destructive" client:load>
+                Odrzuć
+              </Button>
+            </form>
+          ) : null}
           <a
             href="/dashboard"
             class="text-primary mt-6 inline-block hover:underline focus-visible:ring-ring focus-visible:ring focus-visible:outline-none"

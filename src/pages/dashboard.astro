@@ -10,6 +10,16 @@ const STATUS_LABELS: Record<string, string> = {
   accepted: "Zaakceptowana",
 };
 
+const DECISION_NOTICES: Record<string, { text: string; role: "status" | "alert" }> = {
+  accepted: { text: "Konsultacja została zaakceptowana.", role: "status" },
+  rejected: { text: "Konsultacja została odrzucona.", role: "status" },
+  unavailable: {
+    text: "To zgłoszenie zostało już rozstrzygnięte albo jest niedostępne.",
+    role: "alert",
+  },
+  error: { text: "Nie udało się zapisać decyzji.", role: "alert" },
+};
+
 const WEEKDAYS = ["Pn", "Wt", "Śr", "Cz", "Pt", "So", "Nd"];
 const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
 
@@ -68,6 +78,8 @@ function warsawHourMinute(instant: string): string {
 }
 
 const now = new Date();
+const decided = Astro.url.searchParams.get("decided");
+const decisionNotice = decided ? DECISION_NOTICES[decided] : undefined;
 const defaultMonth = warsawDayKey(now).slice(0, 7);
 const requestedMonth = Astro.url.searchParams.get("month");
 const month = requestedMonth !== null && MONTH_PATTERN.test(requestedMonth) ? requestedMonth : defaultMonth;
@@ -140,6 +152,15 @@ if (!loadFailed && submissions.length > 0) {
     <div class="mx-auto max-w-6xl">
       <Topbar />
       <h1 class="mb-4 text-2xl font-semibold text-foreground">Zgłoszenia</h1>
+
+      {decisionNotice ? (
+        <p
+          class="mb-4 rounded-xl border border-border bg-card px-4 py-3 text-card-foreground"
+          role={decisionNotice.role}
+        >
+          {decisionNotice.text}
+        </p>
+      ) : null}
 
       {loadFailed ? (
         <p class="rounded-xl border border-border bg-card px-4 py-3 text-card-foreground" role="alert">
