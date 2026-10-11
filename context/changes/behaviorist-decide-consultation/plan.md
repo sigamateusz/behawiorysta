@@ -238,28 +238,28 @@ Równoległy S-03 (`behaviorist-block-days`) może edytować `src/pages/dashboar
 
 #### Automated
 
-- [x] 1.1 Nowa migracja nakłada się przy `npx supabase db reset` (kod 0)
-- [x] 1.2 `npm run lint` przechodzi
+- [x] 1.1 Nowa migracja nakłada się przy `npx supabase db reset` (kod 0) — e9f0276
+- [x] 1.2 `npm run lint` przechodzi — e9f0276
 
 #### Manual
 
-- [x] 1.3 Behawiorysta aktualizuje wiersz `pending` na `accepted` oraz inny wiersz `pending` na `rejected`
-- [x] 1.4 Ponowny zapis, zapis klienta i zmiana kolumny ankiety są odrzucone
+- [x] 1.3 Behawiorysta aktualizuje wiersz `pending` na `accepted` oraz inny wiersz `pending` na `rejected` — e9f0276
+- [x] 1.4 Ponowny zapis, zapis klienta i zmiana kolumny ankiety są odrzucone — e9f0276
 
 ### Phase 2: Zapis decyzji
 
 #### Automated
 
-- [ ] 2.1 `npm run test` przechodzi, w tym `parseDecision` dla `accepted`, `rejected`, pustego stringa i obcej wartości
-- [ ] 2.2 `npm run lint` przechodzi
+- [x] 2.1 `npm run test` przechodzi, w tym `parseDecision` dla `accepted`, `rejected`, pustego stringa i obcej wartości
+- [x] 2.2 `npm run lint` przechodzi
 
 #### Manual
 
-- [ ] 2.3 POST bez sesji przekierowuje na `/auth/signin` i nie zmienia statusu
-- [ ] 2.4 POST klienta przekierowuje na `/consultations` i nie zmienia statusu
-- [ ] 2.5 POST behawiorysty `accepted` na `pending` przekierowuje na `/dashboard?decided=accepted`, a lista klienta pokazuje „Zaakceptowana”
-- [ ] 2.6 Drugi POST na to samo id przekierowuje na `/dashboard?decided=unavailable` i status zostaje `accepted`
-- [ ] 2.7 POST `rejected` na innym `pending` przekierowuje na `/dashboard?decided=rejected`, klient widzi „Odrzucona”, a ten sam `slot_start` przyjmuje nowe zgłoszenie
+- [x] 2.3 POST bez sesji przekierowuje na `/auth/signin` i nie zmienia statusu
+- [x] 2.4 POST klienta przekierowuje na `/consultations` i nie zmienia statusu
+- [x] 2.5 POST behawiorysty `accepted` na `pending` przekierowuje na `/dashboard?decided=accepted`, a lista klienta pokazuje „Zaakceptowana”
+- [x] 2.6 Drugi POST na to samo id przekierowuje na `/dashboard?decided=unavailable` i status zostaje `accepted`
+- [x] 2.7 POST `rejected` na innym `pending` przekierowuje na `/dashboard?decided=rejected`, klient widzi „Odrzucona”, a ten sam `slot_start` przyjmuje nowe zgłoszenie
 
 ### Phase 3: Panel decyzji
 
