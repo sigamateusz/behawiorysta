@@ -238,13 +238,13 @@ Równoległy S-03 (`behaviorist-block-days`) może edytować `src/pages/dashboar
 
 #### Automated
 
-- [ ] 1.1 Nowa migracja nakłada się przy `npx supabase db reset` (kod 0)
-- [ ] 1.2 `npm run lint` przechodzi
+- [x] 1.1 Nowa migracja nakłada się przy `npx supabase db reset` (kod 0)
+- [x] 1.2 `npm run lint` przechodzi
 
 #### Manual
 
-- [ ] 1.3 Behawiorysta aktualizuje wiersz `pending` na `accepted` oraz inny wiersz `pending` na `rejected`
-- [ ] 1.4 Ponowny zapis, zapis klienta i zmiana kolumny ankiety są odrzucone
+- [x] 1.3 Behawiorysta aktualizuje wiersz `pending` na `accepted` oraz inny wiersz `pending` na `rejected`
+- [x] 1.4 Ponowny zapis, zapis klienta i zmiana kolumny ankiety są odrzucone
 
 ### Phase 2: Zapis decyzji
 
