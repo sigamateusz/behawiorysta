@@ -25,7 +25,31 @@ export function requireClientApi(context: APIContext): ClientApiSession {
   return { ok: true, supabase };
 }
 
+export function requireBehavioristApi(context: APIContext): ClientApiSession {
+  const supabase = createClient(context.request.headers, context.cookies);
+  if (!supabase) {
+    return { ok: false, response: jsonError(500, "Supabase is not configured") };
+  }
+  if (!context.locals.user) {
+    return { ok: false, response: jsonError(401, "Unauthorized") };
+  }
+  if (context.locals.role !== "behaviorist") {
+    return { ok: false, response: jsonError(403, "Forbidden") };
+  }
+  return { ok: true, supabase };
+}
+
 export function readFormString(form: FormData, name: string): string {
   const value = form.get(name);
   return typeof value === "string" ? value : "";
+}
+
+export type BlockErrorCode = "date" | "empty" | "hour" | "duplicate" | "save" | "delete";
+
+export function blockDayLocation(day: string, blockError?: BlockErrorCode): string {
+  const params = new URLSearchParams({ month: day.slice(0, 7), day });
+  if (blockError) {
+    params.set("block_error", blockError);
+  }
+  return `/dashboard?${params.toString()}`;
 }
