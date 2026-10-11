@@ -55,7 +55,7 @@ function warsawOffsetMs(instantMs: number): number {
 }
 
 /** Calendar date in Warsaw, represented as a UTC midnight timestamp so day arithmetic ignores the runtime zone. */
-function warsawDay(instant: Date): number {
+export function warsawDay(instant: Date): number {
   const p = warsawParts(instant.getTime());
   return Date.UTC(p.year, p.month - 1, p.day);
 }
@@ -65,6 +65,44 @@ function warsawWallTimeToInstant(dayMs: number, hour: number, minute = 0): Date 
   // The offset at the wall time read as UTC can differ from the real one near a DST switch; re-read it at the guess.
   const guess = wallAsUtc - warsawOffsetMs(wallAsUtc);
   return new Date(wallAsUtc - warsawOffsetMs(guess));
+}
+
+/** Real `YYYY-MM-DD` day as the same UTC-midnight carrier as `warsawDay`, or `null` when it is not one. */
+export function parseCalendarDay(day: string): number | null {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(day)) {
+    return null;
+  }
+  const year = Number(day.slice(0, 4));
+  const month = Number(day.slice(5, 7));
+  const date = Number(day.slice(8, 10));
+  const dayMs = Date.UTC(year, month - 1, date);
+  const check = new Date(dayMs);
+  if (check.getUTCFullYear() !== year || check.getUTCMonth() !== month - 1 || check.getUTCDate() !== date) {
+    return null;
+  }
+  return dayMs;
+}
+
+function requireCalendarDay(day: string): number {
+  const dayMs = parseCalendarDay(day);
+  if (dayMs === null) {
+    throw new RangeError(`Invalid calendar day: ${day}`);
+  }
+  return dayMs;
+}
+
+/** Instant of a Warsaw wall clock on a `YYYY-MM-DD` day. Same conversion as `availableSlots`. */
+export function warsawWallTime(day: string, hour: number, minute = 0): Date {
+  return warsawWallTimeToInstant(requireCalendarDay(day), hour, minute);
+}
+
+/** 00:00 on that Warsaw date through 00:00 on the next one. The October fallback day lasts 25 hours. */
+export function warsawDayBounds(day: string): { starts_at: Date; ends_at: Date } {
+  const dayMs = requireCalendarDay(day);
+  return {
+    starts_at: warsawWallTimeToInstant(dayMs, 0),
+    ends_at: warsawWallTimeToInstant(dayMs + DAY_MS, 0),
+  };
 }
 
 export function bookingWindow(now: Date): { from: Date; to: Date } {

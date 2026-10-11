@@ -43,7 +43,7 @@ Jeden behawiorysta traci czas, składając obraz psa przed wizytą, bo umówieni
 | ---- | ---------------------------- | ----------------------------------------------------------------- | ------------- | --------------------- | -------- |
 | S-01 | client-survey-and-slot       | klient loguje się, wypełnia ankietę i wybiera termin              | —             | FR-001, FR-003, FR-004, US-01 | done |
 | S-02 | behaviorist-submission-views | behawiorysta loguje się, widzi kalendarz i listę zgłoszeń, otwiera szczegóły ankiety | S-01          | FR-002, FR-005, FR-006, US-01 | done |
-| S-03 | behaviorist-block-days       | behawiorysta blokuje dni lub konkretne godziny, a zablokowane terminy nie przyjmują nowych konsultacji | S-02          | FR-007, US-01         | planning |
+| S-03 | behaviorist-block-days       | behawiorysta blokuje dni lub konkretne godziny, a zablokowane terminy nie przyjmują nowych konsultacji | S-02          | FR-007, US-01         | done |
 | S-04 | behaviorist-decide-consultation | behawiorysta akceptuje albo odrzuca konsultację w aplikacji   | S-02          | FR-008, US-01         | done |
 
 ## Streams
@@ -108,7 +108,7 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Model blokad i filtrowanie istnieją od S-01, a S-03 dokłada UI i politykę zapisu. Reguła biznesowa z PRD musi działać w obu kierunkach — blokada po stronie behawiorysty i filtrowanie terminów po stronie klienta.
-- **Status:** planning
+- **Status:** done
 
 ### S-04: Behawiorysta — akceptacja i odrzucenie
 
@@ -153,3 +153,4 @@ Brak osobnych fundamentów — przy celu `speed` warstwy techniczne (role, schem
 - **S-01: klient loguje się, wypełnia kompletną ankietę (rasa, wiek, podstawowe informacje o psie, nad czym chce pracować) i wybiera termin konsultacji.** — Archived 2026-10-01 → `context/archive/2026-10-01-client-survey-and-slot/`. Lesson: —.
 - **S-02: behawiorysta loguje się, widzi kalendarz i listę zgłoszeń oraz otwiera szczegóły z kompletną ankietą i wybranym terminem.** — Archived 2026-10-08 → `context/archive/2026-10-08-behaviorist-submission-views/`. Lesson: —.
 - **S-04: behawiorysta akceptuje albo odrzuca konsultację w aplikacji.** — Archived 2026-10-11 → `context/archive/2026-10-11-behaviorist-decide-consultation/`. Lesson: —.
+- **S-03: behawiorysta blokuje dni lub konkretne godziny, a zablokowane terminy nie przyjmują nowych konsultacji.** — Archived 2026-10-11 → `context/archive/2026-10-11-behaviorist-block-days/`. Lesson: —.
