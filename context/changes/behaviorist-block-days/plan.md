@@ -270,11 +270,11 @@ Danych nie przepisujemy. Wiersze wpisane wcześniej w Studio zostają i zaczynaj
 
 #### Automated
 
-- [ ] 1.1 `npm test` obejmuje cały dzień 12.10.2026 jako `2026-10-11T22:00:00.000Z`–`2026-10-12T22:00:00.000Z` oraz dzień zmiany czasu 25.10.2026 jako `2026-10-24T22:00:00.000Z`–`2026-10-25T23:00:00.000Z`
-- [ ] 1.2 `npm test` obejmuje godziny 10 i 14 w dniu 12.10.2026 jako dwa zakresy `2026-10-12T08:00:00.000Z`–`09:00:00.000Z` i `2026-10-12T12:00:00.000Z`–`13:00:00.000Z`, a wybór całego dnia ignoruje zaznaczone godziny
-- [ ] 1.3 `npm test` obejmuje niedzielę 11.10.2026 12:00 Warszawa: 12.10 i 9.11 da się zablokować, a 9.10, 11.10 i 17.10 nie; pusty wybór i godzina 18 są odrzucone
-- [ ] 1.4 `npm test` obejmuje pokrycie: godzina 10:00 wewnątrz całego dnia jest pokryta, sam wiersz 10:00–11:00 nie pokrywa całego dnia, a zakres 12:30–13:30 nachodzi na sloty 12 i 13
-- [ ] 1.5 `npm run lint` przechodzi
+- [x] 1.1 `npm test` obejmuje cały dzień 12.10.2026 jako `2026-10-11T22:00:00.000Z`–`2026-10-12T22:00:00.000Z` oraz dzień zmiany czasu 25.10.2026 jako `2026-10-24T22:00:00.000Z`–`2026-10-25T23:00:00.000Z`
+- [x] 1.2 `npm test` obejmuje godziny 10 i 14 w dniu 12.10.2026 jako dwa zakresy `2026-10-12T08:00:00.000Z`–`09:00:00.000Z` i `2026-10-12T12:00:00.000Z`–`13:00:00.000Z`, a wybór całego dnia ignoruje zaznaczone godziny
+- [x] 1.3 `npm test` obejmuje niedzielę 11.10.2026 12:00 Warszawa: 12.10 i 9.11 da się zablokować, a 9.10, 11.10 i 17.10 nie; pusty wybór i godzina 18 są odrzucone
+- [x] 1.4 `npm test` obejmuje pokrycie: godzina 10:00 wewnątrz całego dnia jest pokryta, sam wiersz 10:00–11:00 nie pokrywa całego dnia, a zakres 12:30–13:30 nachodzi na sloty 12 i 13
+- [x] 1.5 `npm run lint` przechodzi
 
 ### Phase 2: Zapis behawiorysty
 
