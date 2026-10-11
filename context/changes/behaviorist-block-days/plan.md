@@ -292,13 +292,13 @@ Danych nie przepisujemy. Wiersze wpisane wcześniej w Studio zostają i zaczynaj
 
 #### Automated
 
-- [x] 3.1 `npm test` przechodzi
-- [x] 3.2 `npm run lint` przechodzi
+- [x] 3.1 `npm test` przechodzi — 5faef5c
+- [x] 3.2 `npm run lint` przechodzi — 5faef5c
 
 #### Manual
 
-- [x] 3.3 Przy zerze zgłoszeń widać siatkę miesiąca, a pod nią „Nie ma zgłoszeń do pokazania.”
-- [x] 3.4 Blokada całego przyszłego dnia roboczego usuwa jego 8 slotów z wyboru klienta; wizyta pending na tym dniu zostaje na kalendarzu i w bazie ze swoim statusem
-- [x] 3.5 Blokada 10:00 i 14:00 usuwa tylko te dwie godziny; 11:00 zostaje w wyborze klienta
-- [x] 3.6 Sobota, dziś i dzień wstecz nie mają akcji blokady; poniedziałek 9.11.2026 zapisany przy `now` w niedzielę 11.10.2026 nie zmienia listy slotów klienta, dopóki ten dzień nie wejdzie w okno 28 dni
-- [x] 3.7 Usunięcie blokady przywraca termin w wyborze klienta
+- [x] 3.3 Przy zerze zgłoszeń widać siatkę miesiąca, a pod nią „Nie ma zgłoszeń do pokazania.” — 5faef5c
+- [x] 3.4 Blokada całego przyszłego dnia roboczego usuwa jego 8 slotów z wyboru klienta; wizyta pending na tym dniu zostaje na kalendarzu i w bazie ze swoim statusem — 5faef5c
+- [x] 3.5 Blokada 10:00 i 14:00 usuwa tylko te dwie godziny; 11:00 zostaje w wyborze klienta — 5faef5c
+- [x] 3.6 Sobota, dziś i dzień wstecz nie mają akcji blokady; poniedziałek 9.11.2026 zapisany przy `now` w niedzielę 11.10.2026 nie zmienia listy slotów klienta, dopóki ten dzień nie wejdzie w okno 28 dni — 5faef5c
+- [x] 3.7 Usunięcie blokady przywraca termin w wyborze klienta — 5faef5c
