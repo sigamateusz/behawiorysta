@@ -130,7 +130,7 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.2 Adding an integration test
 
-- **TBD** — see §3 Phase 1 for the pattern „zablokowany, zajęty albo niepełny zapis nie zostawia konsultacji”.
+- **Wzorzec**: zablokowany, zajęty albo niepełny zapis nie zostawia konsultacji. Wzorzec jest w `scripts/smoke.mjs`.
 - **Mocking policy**: nie mockować sesji ani bazy. Prawdziwe cookie i lokalny Supabase, jak obecny smoke.
 
 ### 6.3 Adding an e2e test
@@ -140,7 +140,8 @@ the relevant rollout phase ships; before that, the sub-section reads
 ### 6.4 Adding a test for a new API endpoint
 
 - **Test type**: HTTP na podglądzie.
-- **TBD** — see §3 Phase 1 (zapis) i Phase 3 (cudzy odczyt). Asercja obejmuje brak wiersza albo brak cudzych danych, nie sam kod statusu.
+- **Zapis**: asercja obejmuje brak wiersza na liście klienta, nie sam kod statusu. Imię psa z odrzuconego zapisu nie występuje na `/consultations` autora.
+- **TBD** — see §3 Phase 3 (cudzy odczyt). Asercja obejmuje brak cudzych danych, nie sam kod statusu.
 - **When to add e2e instead**: gdy błąd widać tylko po hydracji wyspy, nie po odpowiedzi HTTP.
 
 ### 6.5 Adding a test for a new content-build rule
@@ -149,7 +150,7 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 ### 6.6 Per-rollout-phase notes
 
-Puste, aż fazy zaczną lądować.
+- **Faza 1**: promocja roli przez `npx supabase db query --local`. Godzina blokady liczona w `Europe/Warsaw`.
 
 ## 7. What We Deliberately Don't Test
 

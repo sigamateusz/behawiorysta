@@ -209,17 +209,17 @@ Brak migracji. Promocja roli dotyczy tylko konta utworzonego w tym przebiegu smo
 
 #### Automated
 
-- [x] 2.1 Krótki `goals` (19 znaków po trim) dostaje 400, a `Short-${stamp}` nie występuje na `/consultations` klienta A
-- [x] 2.2 Zapis na zablokowaną godzinę dostaje 409, a `Blocked-${stamp}` nie występuje na `/consultations` klienta A
-- [x] 2.3 Drugi zapis terminu `pending` dostaje 409, a `ClientB-${stamp}` nie występuje na `/consultations` klienta B
-- [x] 2.4 Po odrzuceniu ten sam termin daje klientowi B 201, a `ClientB-${stamp}` występuje na jego `/consultations`
-- [x] 2.5 `npm run smoke` przechodzi przy podglądzie i lokalnym Supabase
+- [x] 2.1 Krótki `goals` (19 znaków po trim) dostaje 400, a `Short-${stamp}` nie występuje na `/consultations` klienta A — 80cf9ea
+- [x] 2.2 Zapis na zablokowaną godzinę dostaje 409, a `Blocked-${stamp}` nie występuje na `/consultations` klienta A — 80cf9ea
+- [x] 2.3 Drugi zapis terminu `pending` dostaje 409, a `ClientB-${stamp}` nie występuje na `/consultations` klienta B — 80cf9ea
+- [x] 2.4 Po odrzuceniu ten sam termin daje klientowi B 201, a `ClientB-${stamp}` występuje na jego `/consultations` — 80cf9ea
+- [x] 2.5 `npm run smoke` przechodzi przy podglądzie i lokalnym Supabase — 80cf9ea
 
 ### Phase 3: Wzorzec w cookbooku
 
 #### Automated
 
-- [ ] 3.1 §6.2 nazywa wzorzec niedozwolonego zapisu i wskazuje `scripts/smoke.mjs`
-- [ ] 3.2 §6.4 wymaga braku wiersza, nie samego kodu statusu
-- [ ] 3.3 §6.6 opisuje promocję roli i strefę `Europe/Warsaw`
-- [ ] 3.4 §1, §2 i słownik statusów w §3 pozostają bez zmian
+- [x] 3.1 §6.2 nazywa wzorzec niedozwolonego zapisu i wskazuje `scripts/smoke.mjs`
+- [x] 3.2 §6.4 wymaga braku wiersza, nie samego kodu statusu
+- [x] 3.3 §6.6 opisuje promocję roli i strefę `Europe/Warsaw`
+- [x] 3.4 §1, §2 i słownik statusów w §3 pozostają bez zmian
