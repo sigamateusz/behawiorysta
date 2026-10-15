@@ -1,19 +1,30 @@
 // Smoke test: proves the built app, the Cloudflare adapter, Supabase auth, and the client booking flow still work together.
-// Zero dependencies on purpose. Run against a live server: BASE_URL=http://localhost:4321 node scripts/smoke.mjs
+// Zero npm dependencies on purpose. Run against a live server: BASE_URL=http://localhost:4321 node scripts/smoke.mjs
+// Behaviorist promotion runs `npx supabase db query --local` from the repository and needs the local Supabase stack.
+
+import { spawnSync } from "node:child_process";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:4321";
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const stamp = Date.now();
 const email = `smoke-${stamp}@example.com`;
 const emailA = `smoke-a-${stamp}@example.com`;
 const emailB = `smoke-b-${stamp}@example.com`;
+const emailBehaviorist = `smoke-behaviorist-${stamp}@example.com`;
 const password = "Smoke-Test-Passw0rd!";
 const dogName = `Smoke-${stamp}`;
+const shortGoals = ` ${"x".repeat(19)} `;
 const jar = new Map();
 const jarA = new Map();
 const jarB = new Map();
+const jarBehaviorist = new Map();
 const jarAnon = new Map();
 
+let blockedSlot = "";
 let bookedSlot = "";
+let bookedId = "";
 
 function cookieHeader(cookieJar) {
   return [...cookieJar.entries()].map(([k, v]) => `${k}=${v}`).join("; ");
@@ -56,9 +67,57 @@ function surveyForm(slotStart, name = dogName) {
   };
 }
 
+function warsawBlockFields(slotStart) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Warsaw",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(slotStart));
+  const part = (type) => parts.find((item) => item.type === type)?.value ?? "";
+  return {
+    day: `${part("year")}-${part("month")}-${part("day")}`,
+    hour: String(Number(part("hour"))),
+  };
+}
+
+function queryLocal(sql) {
+  if (process.platform === "win32") {
+    const command = `npx supabase db query --local "${sql.replaceAll('"', '""')}"`;
+    return spawnSync(process.env.ComSpec ?? "cmd.exe", ["/d", "/s", "/c", command], {
+      cwd: repoRoot,
+      encoding: "utf8",
+      windowsHide: true,
+      windowsVerbatimArguments: true,
+    });
+  }
+  return spawnSync("npx", ["supabase", "db", "query", "--local", sql], {
+    cwd: repoRoot,
+    encoding: "utf8",
+  });
+}
+
+function promoteBehaviorist(accountEmail) {
+  const emailLiteral = accountEmail.replaceAll("'", "''");
+  const sql =
+    "update public.profiles set role = 'behaviorist' where id = (select id from auth.users where email = '" +
+    emailLiteral +
+    "');";
+  const result = queryLocal(sql);
+  const detail = [result.stdout, result.stderr, result.error?.message].filter(Boolean).join("\n").trim();
+  return {
+    status: result.status === 0 ? 0 : (result.status ?? 1),
+    location: result.status === 0 ? "" : detail.replace(/\s+/g, " ").slice(0, 300),
+    body: detail,
+  };
+}
+
 function stepPassed(actual, expected) {
   if (actual.status !== expected.status) return false;
   if (expected.location !== undefined && !actual.location.startsWith(expected.location)) return false;
+  if (expected.locationExcludes !== undefined && actual.location.includes(expected.locationExcludes)) return false;
   if (expected.bodyIncludes !== undefined && !actual.body.includes(expected.bodyIncludes)) return false;
   if (expected.bodyExcludes !== undefined && actual.body.includes(expected.bodyExcludes)) return false;
   if (expected.json !== undefined) {
@@ -114,13 +173,19 @@ const steps = [
       const actual = await request("/api/consultations/slots", { jar: jarA });
       try {
         const slots = JSON.parse(actual.body).slots;
-        bookedSlot = Array.isArray(slots) && typeof slots[0] === "string" ? slots[0] : "";
+        blockedSlot = Array.isArray(slots) && typeof slots[0] === "string" ? slots[0] : "";
+        bookedSlot = Array.isArray(slots) && typeof slots[1] === "string" ? slots[1] : "";
       } catch {
+        blockedSlot = "";
         bookedSlot = "";
       }
       return actual;
     },
-    { status: 200, json: (data) => Array.isArray(data.slots) && data.slots.length >= 1 },
+    {
+      status: 200,
+      json: (data) =>
+        Array.isArray(data.slots) && data.slots.length >= 2 && data.slots.every((slot) => typeof slot === "string"),
+    },
   ],
   [
     "A incomplete survey is rejected",
@@ -128,9 +193,79 @@ const steps = [
     { status: 400 },
   ],
   [
-    "A books the first slot",
-    () => request("/api/consultations", { method: "POST", form: surveyForm(bookedSlot), jar: jarA }),
-    { status: 201 },
+    "A short goals are rejected",
+    () =>
+      request("/api/consultations", {
+        method: "POST",
+        form: { ...surveyForm(bookedSlot, `Short-${stamp}`), goals: shortGoals },
+        jar: jarA,
+      }),
+    { status: 400 },
+  ],
+  [
+    "A consultations list hides the short goals dog",
+    () => request("/consultations", { jar: jarA }),
+    { status: 200, bodyExcludes: `Short-${stamp}` },
+  ],
+  [
+    "behaviorist signup creates account",
+    () =>
+      request("/api/auth/signup", {
+        method: "POST",
+        form: { email: emailBehaviorist, password },
+        jar: jarBehaviorist,
+      }),
+    { status: 302, location: "/auth/confirm-email" },
+  ],
+  ["behaviorist role is promoted", () => promoteBehaviorist(emailBehaviorist), { status: 0 }],
+  [
+    "behaviorist signin reaches dashboard",
+    () =>
+      request("/api/auth/signin", {
+        method: "POST",
+        form: { email: emailBehaviorist, password },
+        jar: jarBehaviorist,
+      }),
+    { status: 302, location: "/dashboard" },
+  ],
+  [
+    "behaviorist blocks the first slot hour",
+    () =>
+      request("/api/availability-blocks", {
+        method: "POST",
+        form: warsawBlockFields(blockedSlot),
+        jar: jarBehaviorist,
+      }),
+    { status: 303, location: "/dashboard", locationExcludes: "block_error" },
+  ],
+  [
+    "A cannot book the blocked slot",
+    () =>
+      request("/api/consultations", {
+        method: "POST",
+        form: surveyForm(blockedSlot, `Blocked-${stamp}`),
+        jar: jarA,
+      }),
+    { status: 409 },
+  ],
+  [
+    "A consultations list hides the blocked dog",
+    () => request("/consultations", { jar: jarA }),
+    { status: 200, bodyExcludes: `Blocked-${stamp}` },
+  ],
+  [
+    "A books the second slot",
+    async () => {
+      const actual = await request("/api/consultations", { method: "POST", form: surveyForm(bookedSlot), jar: jarA });
+      try {
+        const data = JSON.parse(actual.body);
+        bookedId = typeof data.id === "string" ? data.id : "";
+      } catch {
+        bookedId = "";
+      }
+      return actual;
+    },
+    { status: 201, json: (data) => typeof data.id === "string" && data.id.length > 0 },
   ],
   [
     "A consultations list shows the dog",
@@ -166,6 +301,36 @@ const steps = [
     "B consultations list hides A's dog",
     () => request("/consultations", { jar: jarB }),
     { status: 200, bodyExcludes: dogName },
+  ],
+  [
+    "B consultations list hides the pending dog",
+    () => request("/consultations", { jar: jarB }),
+    { status: 200, bodyExcludes: `ClientB-${stamp}` },
+  ],
+  [
+    "behaviorist rejects A's booking",
+    () =>
+      request(`/api/consultations/${bookedId}/decision`, {
+        method: "POST",
+        form: { decision: "rejected" },
+        jar: jarBehaviorist,
+      }),
+    { status: 302, location: "/dashboard?decided=rejected" },
+  ],
+  [
+    "B books the slot after rejection",
+    () =>
+      request("/api/consultations", {
+        method: "POST",
+        form: surveyForm(bookedSlot, `ClientB-${stamp}`),
+        jar: jarB,
+      }),
+    { status: 201 },
+  ],
+  [
+    "B consultations list shows the dog",
+    () => request("/consultations", { jar: jarB }),
+    { status: 200, bodyIncludes: `ClientB-${stamp}` },
   ],
   [
     "anonymous booking is unauthorized",
