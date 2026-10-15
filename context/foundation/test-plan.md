@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-10-15
+> Last updated: 2026-10-16
 
 ## 1. Strategy
 
@@ -67,7 +67,7 @@ orchestrator updates Status as artifacts appear on disk.
 
 | # | Phase name | Goal (one line) | Risks covered | Test types | Status | Change folder |
 |---|------------|-----------------|---------------|------------|--------|---------------|
-| 1 | Zapis niedostępnego terminu | Niedozwolony termin i niepełna ankieta nie zostawiają konsultacji | #1, #5, #6 | integracja HTTP | change opened | testing-unavailable-slot-write |
+| 1 | Zapis niedostępnego terminu | Niedozwolony termin i niepełna ankieta nie zostawiają konsultacji | #1, #5, #6 | integracja HTTP | complete | testing-unavailable-slot-write |
 | 2 | Godzina warszawska przy zmianie czasu | Zapisany i pokazany instant zgadza się z niezależnym UTC po obu stronach zmiany czasu | #2 | asercja instantu + jeden zapis | not started | — |
 | 3 | Izolacja odczytów klienta | Cudze zgłoszenie jest niedostępne na każdym odczycie i zapisie | #4 | HTTP, dwa konta | not started | — |
 | 4 | Ekran po zalogowaniu na podglądzie | Rola ląduje na swoim ekranie na runtime podglądu | #3 | smoke sesji | not started | — |

@@ -29,3 +29,6 @@ local-test-accounts.md
 
 # jetbrains setting folder
 .idea/
+
+# stryker temp files
+.stryker-tmp
