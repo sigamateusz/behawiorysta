@@ -39,6 +39,7 @@ export function requireBehavioristForm(context: APIContext): SupabaseClient<Data
     return context.redirect(destination);
   }
   return supabase;
+}
 
 export function requireBehavioristApi(context: APIContext): ClientApiSession {
   const supabase = createClient(context.request.headers, context.cookies);
