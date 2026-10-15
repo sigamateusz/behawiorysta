@@ -219,7 +219,7 @@ Brak migracji. Promocja roli dotyczy tylko konta utworzonego w tym przebiegu smo
 
 #### Automated
 
-- [x] 3.1 §6.2 nazywa wzorzec niedozwolonego zapisu i wskazuje `scripts/smoke.mjs`
-- [x] 3.2 §6.4 wymaga braku wiersza, nie samego kodu statusu
-- [x] 3.3 §6.6 opisuje promocję roli i strefę `Europe/Warsaw`
-- [x] 3.4 §1, §2 i słownik statusów w §3 pozostają bez zmian
+- [x] 3.1 §6.2 nazywa wzorzec niedozwolonego zapisu i wskazuje `scripts/smoke.mjs` — 509afda
+- [x] 3.2 §6.4 wymaga braku wiersza, nie samego kodu statusu — 509afda
+- [x] 3.3 §6.6 opisuje promocję roli i strefę `Europe/Warsaw` — 509afda
+- [x] 3.4 §1, §2 i słownik statusów w §3 pozostają bez zmian — 509afda
