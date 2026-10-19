@@ -50,14 +50,14 @@ Poza top 6, bez osobnej fazy: wyciek klucza (brak śladu), maile i podsumowanie 
 
 ### Risk Response Guidance
 
-| Risk | What would prove protection                                                                                                           | Must challenge                                                           | Context `/10x-research` must ground                                            | Likely cheapest layer                          | Anti-pattern to avoid                                        |
-| ---- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------ |
-| #1   | Po blokadzie dnia lub godziny zapis na ten termin się nie udaje i nie zostawia konsultacji, także gdy lista terminów była już otwarta | Ukrycie godziny na liście oznacza, że zapis też ją odrzuca               | Jak blokada jest utrwalona i czy zapis sprawdza ją ponownie                    | Integracja HTTP z sesją i bazą                 | Kolejny test czystego filtra listy                           |
-| #2   | Godzina wybrana w Europe/Warsaw po obu stronach zmiany czasu 2026-10-25 jest tą samą godziną w zapisie i na ekranie                   | Zielony test przeliczenia dowodzi, że utrwalony instant jest dobry       | Gdzie godzina lokalna staje się instantem i skąd bierze się godzina na ekranie | Asercja instantu wobec niezależnego UTC        | Wyrocznia przepisana z kodu; tylko jedna strona zmiany czasu |
-| #3   | Sesja klienta ląduje w ankiecie, sesja behawiorysty w kalendarzu, na runtime podglądu                                                 | Test tablicy tras w pamięci opisuje przekierowanie po wdrożeniu          | Rola w sesji i różnica między serwerem deweloperskim a podglądem               | e2e Playwright na podglądzie (build + preview) | Mock sesji, którego deploy nie używa                         |
-| #4   | Klient A nie odczytuje ani nie zmienia zgłoszenia klienta B; behawiorysta swoje odczyty ma; anonim dostaje odmowę                     | Jeden smoke listy pokrywa każdy odczyt i zapis                           | Które odczyty i zapisy istnieją i które wymagają właściciela                   | Dwa konta HTTP, jak obecny smoke               | Samo „zalogowany” jako warunek dostępu                       |
-| #5   | Drugi zapis tego samego wolnego terminu się nie udaje i nie tworzy drugiej konsultacji                                                | Jeden konflikt na identycznym żądaniu pokrywa każdy stan zajęcia terminu | Które stany konsultacji zajmują termin                                         | Ten sam zapis HTTP co #1                       | Sam kod statusu, bez sprawdzenia braku drugiego wiersza      |
-| #6   | Brak wymaganego pola ankiety nie tworzy konsultacji, nawet gdy klient pominie formularz                                               | Jedno odrzucenie pustej ankiety oznacza, że serwer sprawdza każde pole   | Które pola są wymagane i gdzie serwer je sprawdza                              | Ten sam zapis HTTP co #1                       | Asercja tylko walidacji w przeglądarce                       |
+| Risk | What would prove protection                                                                                                                                     | Must challenge                                                           | Context `/10x-research` must ground                                            | Likely cheapest layer                          | Anti-pattern to avoid                                        |
+| ---- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------ |
+| #1   | Po blokadzie dnia lub godziny zapis na ten termin się nie udaje i nie zostawia konsultacji, także gdy lista terminów była już otwarta                           | Ukrycie godziny na liście oznacza, że zapis też ją odrzuca               | Jak blokada jest utrwalona i czy zapis sprawdza ją ponownie                    | Integracja HTTP z sesją i bazą                 | Kolejny test czystego filtra listy                           |
+| #2   | Godzina wybrana w Europe/Warsaw po obu stronach zmiany czasu 2026-10-25 jest tą samą godziną w zapisie i na ekranie                                             | Zielony test przeliczenia dowodzi, że utrwalony instant jest dobry       | Gdzie godzina lokalna staje się instantem i skąd bierze się godzina na ekranie | Asercja instantu wobec niezależnego UTC        | Wyrocznia przepisana z kodu; tylko jedna strona zmiany czasu |
+| #3   | Sesja klienta ląduje na liście `/consultations` („Moje zgłoszenia”), a sesja behawiorysty w kalendarzu (`/dashboard`, „Poprzedni miesiąc”), na runtime podglądu | Test tablicy tras w pamięci opisuje przekierowanie po wdrożeniu          | Rola w sesji i różnica między serwerem deweloperskim a podglądem               | e2e Playwright na podglądzie (build + preview) | Mock sesji, którego deploy nie używa                         |
+| #4   | Klient A nie odczytuje ani nie zmienia zgłoszenia klienta B; behawiorysta swoje odczyty ma; anonim dostaje odmowę                                               | Jeden smoke listy pokrywa każdy odczyt i zapis                           | Które odczyty i zapisy istnieją i które wymagają właściciela                   | Dwa konta HTTP, jak obecny smoke               | Samo „zalogowany” jako warunek dostępu                       |
+| #5   | Drugi zapis tego samego wolnego terminu się nie udaje i nie tworzy drugiej konsultacji                                                                          | Jeden konflikt na identycznym żądaniu pokrywa każdy stan zajęcia terminu | Które stany konsultacji zajmują termin                                         | Ten sam zapis HTTP co #1                       | Sam kod statusu, bez sprawdzenia braku drugiego wiersza      |
+| #6   | Brak wymaganego pola ankiety nie tworzy konsultacji, nawet gdy klient pominie formularz                                                                         | Jedno odrzucenie pustej ankiety oznacza, że serwer sprawdza każde pole   | Które pola są wymagane i gdzie serwer je sprawdza                              | Ten sam zapis HTTP co #1                       | Asercja tylko walidacji w przeglądarce                       |
 
 ## 3. Phased Rollout
 
@@ -107,15 +107,15 @@ The full set of gates that must pass before a change reaches production.
 "Required for §3 Phase <N>" means the gate is enforced once that rollout
 phase lands; before that, the gate is `planned`.
 
-| Gate                  | Where                                       | Required?         | Catches                                                                        |
-| --------------------- | ------------------------------------------- | ----------------- | ------------------------------------------------------------------------------ |
-| lint + `astro check`  | local + CI job `ci`                         | required          | Składnia, typy, kontrakt tokenów widoku                                        |
-| `npm test`            | local + CI job `ci`                         | required          | Regresje czystej logiki, w tym instant z fazy 3, gdy wyląduje jako test Vitest |
-| `npm run smoke`       | CI job `smoke` (podgląd + lokalny Supabase) | required          | Auth, rezerwacja, zapis z fazy 1 oraz izolacja z fazy 4, gdy wyląduje w smoke  |
-| `npx playwright test` | lokalnie; bramka CI po fazie 2              | planned (Phase 2) | Ekran po zalogowaniu wg roli (#3)                                              |
-| `npm run build`       | CI job `ci`                                 | required          | Bundle produkcyjny się nie składa                                              |
+| Gate                                    | Where                                       | Required? | Catches                                                                        |
+| --------------------------------------- | ------------------------------------------- | --------- | ------------------------------------------------------------------------------ |
+| lint + `astro check`                    | local + CI job `ci`                         | required  | Składnia, typy, kontrakt tokenów widoku                                        |
+| `npm test`                              | local + CI job `ci`                         | required  | Regresje czystej logiki, w tym instant z fazy 3, gdy wyląduje jako test Vitest |
+| `npm run smoke`                         | CI job `smoke` (podgląd + lokalny Supabase) | required  | Auth, rezerwacja, zapis z fazy 1 oraz izolacja z fazy 4, gdy wyląduje w smoke  |
+| `npx playwright test --project=preview` | lokalnie i job CI `e2e`                     | required  | Ekran po zalogowaniu wg roli (#3)                                              |
+| `npm run build`                         | CI job `ci`                                 | required  | Bundle produkcyjny się nie składa                                              |
 
-Bramka Playwrighta jest planned do czasu, aż faza 2 wyląduje. Fazy HTTP dokładają przypadki do bramek, które już są wymagane. Warstwy wizyjnej ani hooka po edycji nie ma.
+Bramka Playwrighta jest required i odpala `npx playwright test --project=preview`. Fazy HTTP dokładają przypadki do bramek, które już są wymagane. Warstwy wizyjnej ani hooka po edycji nie ma.
 
 ## 6. Cookbook Patterns
 
@@ -137,8 +137,8 @@ the relevant rollout phase ships; before that, the sub-section reads
 ### 6.3 Adding an e2e test
 
 - **Location**: `tests/e2e/`, obok seeda. Jeden spec na ryzyko.
-- **Run locally**: `npx playwright test tests/e2e/<name>.spec.ts`.
-- **TBD**: sesja klienta ląduje w ankiecie, sesja behawiorysty w kalendarzu, na runtime podglądu — see §3 Phase 2. Seed `auth-gate-redirect` pokrywa tylko wizytę bez sesji.
+- **Run locally**: `npx playwright test --project=preview`.
+- **Wzorzec**: `tests/e2e/post-login-screen.spec.ts` zakłada dwa świeże konta, loguje każde formularzem i sprawdza ekran. Klient ląduje na liście `/consultations` („Moje zgłoszenia”, „Nie masz jeszcze żadnych zgłoszeń.”). Behawiorysta ląduje w kalendarzu (`/dashboard`, link „Poprzedni miesiąc”). Seed `auth-gate-redirect` w tym samym projekcie sprawdza wizytę bez sesji na `/dashboard`.
 - **Mocking policy**: prawdziwa sesja i podgląd (`build` + `preview`). Nie mockować sesji, której deploy nie używa.
 
 ### 6.4 Adding a test for a new API endpoint

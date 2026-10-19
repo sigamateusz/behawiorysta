@@ -29,6 +29,11 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], storageState: "playwright/.auth/user.json" },
       dependencies: ["setup"],
     },
+    {
+      name: "preview",
+      use: { ...devices["Desktop Chrome"] },
+      testMatch: /.*\.spec\.ts/,
+    },
   ],
   webServer: {
     // Production-like build + preview, on the port above.

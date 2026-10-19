@@ -54,3 +54,29 @@ jobs:
           BASE_URL=http://localhost:4321 npm run smoke
       - if: always()
         run: supabase stop --no-backup
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - run: npm ci
+      - name: Start local Supabase
+        run: |
+          supabase start -x studio,imgproxy,mailpit,edge-runtime,logflare,vector,realtime,storage-api,postgres-meta,supavisor
+          supabase status -o env | grep -E '^(API_URL|ANON_KEY)=' > supabase.env
+      - name: Configure secrets for build and preview
+        run: |
+          source supabase.env
+          printf 'SUPABASE_URL=%s\nSUPABASE_KEY=%s\n' "$API_URL" "$ANON_KEY" > .env
+          cp .env .dev.vars
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test --project=preview
+      - if: always()
+        run: supabase stop --no-backup
