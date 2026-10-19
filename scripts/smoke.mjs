@@ -146,7 +146,7 @@ const steps = [
   [
     "signin accepts correct password",
     () => request("/api/auth/signin", { method: "POST", form: { email, password } }),
-    { status: 302, location: "/" },
+    { status: 302, location: "/consultations" },
   ],
   ["dashboard renders for signed-in user", () => request("/dashboard"), { status: 302, location: "/consultations" }],
   ["signout clears session", () => request("/api/auth/signout", { method: "POST" }), { status: 302, location: "/" }],
@@ -164,7 +164,7 @@ const steps = [
   [
     "A signin accepts correct password",
     () => request("/api/auth/signin", { method: "POST", form: { email: emailA, password }, jar: jarA }),
-    { status: 302, location: "/" },
+    { status: 302, location: "/consultations" },
   ],
   ["A consultation form renders", () => request("/consultations/new", { jar: jarA }), { status: 200 }],
   [
@@ -280,7 +280,7 @@ const steps = [
   [
     "B signin accepts correct password",
     () => request("/api/auth/signin", { method: "POST", form: { email: emailB, password }, jar: jarB }),
-    { status: 302, location: "/" },
+    { status: 302, location: "/consultations" },
   ],
   [
     "B slots omit A's booking",

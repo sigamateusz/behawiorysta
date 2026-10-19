@@ -20,8 +20,8 @@ describe("redirectAfterSignIn", () => {
     expect(redirectAfterSignIn("behaviorist")).toBe("/dashboard");
   });
 
-  it("sends a client home", () => {
-    expect(redirectAfterSignIn("client")).toBe("/");
+  it("sends a client to the consultation list", () => {
+    expect(redirectAfterSignIn("client")).toBe("/consultations");
   });
 
   it("sends a missing role home", () => {

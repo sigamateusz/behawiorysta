@@ -18,7 +18,7 @@ export const POST: APIRoute = async (context) => {
   }
 
   const userId = data.user.id;
-  let role: "behaviorist" | null = null;
+  let role: "client" | "behaviorist" | null = null;
   if (userId) {
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
@@ -27,6 +27,8 @@ export const POST: APIRoute = async (context) => {
       .maybeSingle();
     if (!profileError && profile?.role === "behaviorist") {
       role = "behaviorist";
+    } else if (!profileError && profile?.role === "client") {
+      role = "client";
     }
   }
 

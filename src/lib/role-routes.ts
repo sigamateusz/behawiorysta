@@ -8,9 +8,12 @@ export function dashboardRedirect(role: "client" | "behaviorist" | null): "/cons
   return "/";
 }
 
-export function redirectAfterSignIn(role: "client" | "behaviorist" | null): "/dashboard" | "/" {
+export function redirectAfterSignIn(role: "client" | "behaviorist" | null): "/dashboard" | "/consultations" | "/" {
   if (role === "behaviorist") {
     return "/dashboard";
+  }
+  if (role === "client") {
+    return "/consultations";
   }
   return "/";
 }
