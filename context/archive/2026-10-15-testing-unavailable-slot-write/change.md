@@ -1,10 +1,10 @@
 ---
 change_id: testing-unavailable-slot-write
 title: Reject blocked, taken, and incomplete consultation writes
-status: impl_reviewed
+status: archived
 created: 2026-10-15
-updated: 2026-10-16
-archived_at: null
+updated: 2026-10-19
+archived_at: 2026-10-19T08:55:58Z
 ---
 
 ## Notes
