@@ -12,7 +12,8 @@
     "format": "prettier --write .",
     "smoke": "node scripts/smoke.mjs",
     "test": "vitest run && node --test scripts/agent-hooks.test.mjs",
-    "db:types": "supabase gen types typescript --local > src/db/database.types.ts"
+    "db:types": "supabase gen types typescript --local > src/db/database.types.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.10",
