@@ -64,6 +64,9 @@
       "eslint --fix",
       "node scripts/check-view-tokens.mjs"
     ],
+    "*.{js,mjs,cjs}": [
+      "eslint --fix"
+    ],
     "*.{json,css,md}": [
       "prettier --write"
     ]
