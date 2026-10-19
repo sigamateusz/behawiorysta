@@ -32,3 +32,6 @@ for (const file of viewFiles) {
 if (failed) {
   process.exit(1);
 }
+
+
+
