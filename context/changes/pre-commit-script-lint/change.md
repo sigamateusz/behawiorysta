@@ -1,7 +1,7 @@
 ---
 change_id: pre-commit-script-lint
 title: Lint staged scripts in pre-commit
-status: implementing
+status: implemented
 created: 2026-10-19
 updated: 2026-10-19
 archived_at: null

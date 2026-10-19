@@ -108,10 +108,10 @@ No data migration. Existing branches pick up the entry when they contain this `p
 
 #### Automated
 
-- [x] 1.1 JavaScript lint-staged entry is only `eslint --fix`
-- [x] 1.2 View entry is unchanged
-- [x] 1.3 Pre-commit command is unchanged
+- [x] 1.1 JavaScript lint-staged entry is only `eslint --fix` — 3705410
+- [x] 1.2 View entry is unchanged — 3705410
+- [x] 1.3 Pre-commit command is unchanged — 3705410
 
 #### Manual
 
-- [x] 1.4 Stage only a whitespace edit of `scripts/check-view-tokens.mjs`, run `npx lint-staged`, confirm exit 0, confirm the task list shows `eslint --fix` and does not show `node scripts/check-view-tokens.mjs`, then restore and unstage the file.
+- [x] 1.4 Stage only a whitespace edit of `scripts/check-view-tokens.mjs`, run `npx lint-staged`, confirm exit 0, confirm the task list shows `eslint --fix` and does not show `node scripts/check-view-tokens.mjs`, then restore and unstage the file. — 3705410
