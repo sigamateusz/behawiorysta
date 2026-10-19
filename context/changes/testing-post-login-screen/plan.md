@@ -216,11 +216,11 @@ Brak migracji. Istniejące konto `client` przy następnym sign-in dostaje `/cons
 
 #### Automated
 
-- [x] 2.1 `npx playwright test --project=preview` przechodzi: świeży klient ląduje na `/consultations` z nagłówkiem „Moje zgłoszenia” i tekstem „Nie masz jeszcze żadnych zgłoszeń.”, świeży behawiorysta ląduje na `/dashboard` z linkiem „Poprzedni miesiąc”
-- [x] 2.2 Ten sam projekt przechodzi seed `auth-gate-redirect`: wizyta bez sesji na `/dashboard` kończy się na `/auth/signin`
-- [x] 2.3 `.github/workflows/ci.yml` ma job, który startuje lokalny Supabase, zapisuje `.env` i `.dev.vars`, instaluje Chromium i uruchamia `npx playwright test --project=preview`
+- [x] 2.1 `npx playwright test --project=preview` przechodzi: świeży klient ląduje na `/consultations` z nagłówkiem „Moje zgłoszenia” i tekstem „Nie masz jeszcze żadnych zgłoszeń.”, świeży behawiorysta ląduje na `/dashboard` z linkiem „Poprzedni miesiąc” — cef75bc
+- [x] 2.2 Ten sam projekt przechodzi seed `auth-gate-redirect`: wizyta bez sesji na `/dashboard` kończy się na `/auth/signin` — cef75bc
+- [x] 2.3 `.github/workflows/ci.yml` ma job, który startuje lokalny Supabase, zapisuje `.env` i `.dev.vars`, instaluje Chromium i uruchamia `npx playwright test --project=preview` — cef75bc
 
 #### Manual
 
-- [x] 2.4 Ręczne logowanie klienta i behawiorysty na podglądzie pokazuje te same ekrany co spec
-- [x] 2.5 W `context/foundation/test-plan.md` wiersz dowodu #3 i §6.3 nazywają listę `/consultations` oraz komendę `npx playwright test --project=preview`
+- [x] 2.4 Ręczne logowanie klienta i behawiorysty na podglądzie pokazuje te same ekrany co spec — cef75bc
+- [x] 2.5 W `context/foundation/test-plan.md` wiersz dowodu #3 i §6.3 nazywają listę `/consultations` oraz komendę `npx playwright test --project=preview` — cef75bc
