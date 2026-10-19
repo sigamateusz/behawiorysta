@@ -16,14 +16,14 @@ Committing a staged `.js`, `.mjs`, or `.cjs` file runs `eslint --fix` on it. Com
 
 ## Key Decisions Made
 
-| Decision | Choice | Why (1 sentence) |
-| --- | --- | --- |
-| Where the check lives | New `lint-staged` key `*.{js,mjs,cjs}` | The existing view key also runs the token script, which must not run for a script-only commit |
-| Command | `eslint --fix` only | Matches the current commit entry and `npm run lint:fix` |
-| Hook file | Leave `.husky/pre-commit` as `npx lint-staged` | The behavior change is the config, not a second hook |
-| `.cjs` | Include it | The change notes name that extension, even though no such file exists yet |
-| Heavy gates | Off this change | `astro check` and `npm test` were explicitly kept out of pre-commit |
-| Proof | Three config assertions plus one manual lint-staged run | No existing test covers lint-staged, and a new suite is out of scope |
+| Decision              | Choice                                                  | Why (1 sentence)                                                                              |
+| --------------------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| Where the check lives | New `lint-staged` key `*.{js,mjs,cjs}`                  | The existing view key also runs the token script, which must not run for a script-only commit |
+| Command               | `eslint --fix` only                                     | Matches the current commit entry and `npm run lint:fix`                                       |
+| Hook file             | Leave `.husky/pre-commit` as `npx lint-staged`          | The behavior change is the config, not a second hook                                          |
+| `.cjs`                | Include it                                              | The change notes name that extension, even though no such file exists yet                     |
+| Heavy gates           | Off this change                                         | `astro check` and `npm test` were explicitly kept out of pre-commit                           |
+| Proof                 | Three config assertions plus one manual lint-staged run | No existing test covers lint-staged, and a new suite is out of scope                          |
 
 ## Scope
 
@@ -47,8 +47,8 @@ Husky keeps calling lint-staged. lint-staged gains one glob. ESLint's existing i
 
 ## Phases at a Glance
 
-| Phase | What it delivers | Key risk |
-| --- | --- | --- |
+| Phase                 | What it delivers                                                | Key risk                                                                                        |
+| --------------------- | --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | 1. Extend lint-staged | JavaScript is ESLint-fixed on commit; view tokens stay on views | Folding the new extensions into the view glob would run the token script on every script commit |
 
 **Prerequisites:** None. The five current JavaScript sources already pass `eslint`.
