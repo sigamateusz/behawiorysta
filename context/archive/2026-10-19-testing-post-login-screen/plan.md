@@ -205,22 +205,22 @@ Brak migracji. Istniejące konto `client` przy następnym sign-in dostaje `/cons
 
 #### Automated
 
-- [x] 1.1 `npm test` przechodzi: `redirectAfterSignIn("client")` zwraca `/consultations`, `behaviorist` zwraca `/dashboard`, `null` zwraca `/` — 6109535
-- [x] 1.2 `npm run smoke` na podglądzie z lokalnym Supabase przechodzi, a kroki „signin accepts correct password”, „A signin accepts correct password” i „B signin accepts correct password” oczekują `location: "/consultations"` — 6109535
+- [x] 1.1 `npm test` przechodzi: `redirectAfterSignIn("client")` zwraca `/consultations`, `behaviorist` zwraca `/dashboard`, `null` zwraca `/` — 38d3919
+- [x] 1.2 `npm run smoke` na podglądzie z lokalnym Supabase przechodzi, a kroki „signin accepts correct password”, „A signin accepts correct password” i „B signin accepts correct password” oczekują `location: "/consultations"` — 38d3919
 
 #### Manual
 
-- [x] 1.3 Ręczne logowanie klienta na podglądzie otwiera `/consultations` z nagłówkiem „Moje zgłoszenia”; behawiorysta otwiera `/dashboard` — 6109535
+- [x] 1.3 Ręczne logowanie klienta na podglądzie otwiera `/consultations` z nagłówkiem „Moje zgłoszenia”; behawiorysta otwiera `/dashboard` — 38d3919
 
 ### Phase 2: Ekran na podglądzie
 
 #### Automated
 
-- [x] 2.1 `npx playwright test --project=preview` przechodzi: świeży klient ląduje na `/consultations` z nagłówkiem „Moje zgłoszenia” i tekstem „Nie masz jeszcze żadnych zgłoszeń.”, świeży behawiorysta ląduje na `/dashboard` z linkiem „Poprzedni miesiąc” — cef75bc
-- [x] 2.2 Ten sam projekt przechodzi seed `auth-gate-redirect`: wizyta bez sesji na `/dashboard` kończy się na `/auth/signin` — cef75bc
-- [x] 2.3 `.github/workflows/ci.yml` ma job, który startuje lokalny Supabase, zapisuje `.env` i `.dev.vars`, instaluje Chromium i uruchamia `npx playwright test --project=preview` — cef75bc
+- [x] 2.1 `npx playwright test --project=preview` przechodzi: świeży klient ląduje na `/consultations` z nagłówkiem „Moje zgłoszenia” i tekstem „Nie masz jeszcze żadnych zgłoszeń.”, świeży behawiorysta ląduje na `/dashboard` z linkiem „Poprzedni miesiąc” — 38d3919
+- [x] 2.2 Ten sam projekt przechodzi seed `auth-gate-redirect`: wizyta bez sesji na `/dashboard` kończy się na `/auth/signin` — 38d3919
+- [x] 2.3 `.github/workflows/ci.yml` ma job, który startuje lokalny Supabase, zapisuje `.env` i `.dev.vars`, instaluje Chromium i uruchamia `npx playwright test --project=preview` — 38d3919
 
 #### Manual
 
-- [x] 2.4 Ręczne logowanie klienta i behawiorysty na podglądzie pokazuje te same ekrany co spec — cef75bc
-- [x] 2.5 W `context/foundation/test-plan.md` wiersz dowodu #3 i §6.3 nazywają listę `/consultations` oraz komendę `npx playwright test --project=preview` — cef75bc
+- [x] 2.4 Ręczne logowanie klienta i behawiorysty na podglądzie pokazuje te same ekrany co spec — 38d3919
+- [x] 2.5 W `context/foundation/test-plan.md` wiersz dowodu #3 i §6.3 nazywają listę `/consultations` oraz komendę `npx playwright test --project=preview` — 38d3919
