@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-10-19
+> Last updated: 2026-10-22
 
 ## 1. Strategy
 
@@ -65,12 +65,12 @@ Each row is a discrete rollout phase that will open its own change folder
 via `/10x-new`. Status moves left-to-right through the values below; the
 orchestrator updates Status as artifacts appear on disk.
 
-| #   | Phase name                            | Goal (one line)                                                                       | Risks covered | Test types                     | Status        | Change folder                  |
-| --- | ------------------------------------- | ------------------------------------------------------------------------------------- | ------------- | ------------------------------ | ------------- | ------------------------------ |
-| 1   | Zapis niedostępnego terminu           | Niedozwolony termin i niepełna ankieta nie zostawiają konsultacji                     | #1, #5, #6    | integracja HTTP                | complete      | testing-unavailable-slot-write |
-| 2   | Ekran po zalogowaniu na podglądzie    | Rola ląduje na swoim ekranie na runtime podglądu                                      | #3            | e2e Playwright                 | change opened | testing-post-login-screen      |
-| 3   | Godzina warszawska przy zmianie czasu | Zapisany i pokazany instant zgadza się z niezależnym UTC po obu stronach zmiany czasu | #2            | asercja instantu + jeden zapis | not started   | —                              |
-| 4   | Izolacja odczytów klienta             | Cudze zgłoszenie jest niedostępne na każdym odczycie i zapisie                        | #4            | HTTP, dwa konta                | not started   | —                              |
+| #   | Phase name                            | Goal (one line)                                                                       | Risks covered | Test types                     | Status      | Change folder                  |
+| --- | ------------------------------------- | ------------------------------------------------------------------------------------- | ------------- | ------------------------------ | ----------- | ------------------------------ |
+| 1   | Zapis niedostępnego terminu           | Niedozwolony termin i niepełna ankieta nie zostawiają konsultacji                     | #1, #5, #6    | integracja HTTP                | complete    | testing-unavailable-slot-write |
+| 2   | Ekran po zalogowaniu na podglądzie    | Rola ląduje na swoim ekranie na runtime podglądu                                      | #3            | e2e Playwright                 | complete    | testing-post-login-screen      |
+| 3   | Godzina warszawska przy zmianie czasu | Zapisany i pokazany instant zgadza się z niezależnym UTC po obu stronach zmiany czasu | #2            | asercja instantu + jeden zapis | not started | —                              |
+| 4   | Izolacja odczytów klienta             | Cudze zgłoszenie jest niedostępne na każdym odczycie i zapisie                        | #4            | HTTP, dwa konta                | not started | —                              |
 
 Kolejność: faza 1 jest najwyższym strachem i dwoma sąsiednimi zapisami, których zielone testy jednostkowe nie dowodzą. Faza 2 jest jedynym Playwrightem w tym rolloutcie — ekran po zalogowaniu, decyzja 2026-10-19; seed `auth-gate-redirect` tego nie pokrywa. Faza 3 jest osobno, bo incydent Q2 zdarzył się przy zielonych testach slotów. Faza 4 rozszerza istniejący smoke. Osobnej fazy bramek nie ma — CI już odpala `npm test` i smoke.
 
