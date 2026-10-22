@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { redirectAfterSignIn } from "@/lib/role-routes";
+import { classifySession, logAuthOutage, outageResponse } from "@/lib/session-gate";
 import { createClient } from "@/lib/supabase";
 
 export const POST: APIRoute = async (context) => {
@@ -19,18 +20,31 @@ export const POST: APIRoute = async (context) => {
 
   const userId = data.user.id;
   let role: "client" | "behaviorist" | null = null;
+  let profileFailure: { code: string | null } | null = null;
   if (userId) {
     const { data: profile, error: profileError } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", userId)
       .maybeSingle();
-    if (!profileError && profile?.role === "behaviorist") {
-      role = "behaviorist";
-    } else if (!profileError && profile?.role === "client") {
-      role = "client";
+    if (profileError) {
+      profileFailure = { code: profileError.code };
+    } else if (profile?.role === "behaviorist" || profile?.role === "client") {
+      role = profile.role;
     }
   }
 
-  return context.redirect(redirectAfterSignIn(role));
+  const session = classifySession({
+    authError: null,
+    userId,
+    profileError: profileFailure,
+    role,
+  });
+
+  if (session.kind === "outage") {
+    logAuthOutage(session, context.url.pathname, userId);
+    return outageResponse(context.request.headers.get("accept"));
+  }
+
+  return context.redirect(redirectAfterSignIn(session.kind === "ready" ? session.role : null));
 };

@@ -216,24 +216,24 @@ Brak migracji i brak zmiany danych. Sesje zapisane przed tą zmianą działają 
 
 #### Automated
 
-- [x] 2.1 `npm test` przechodzi i obejmuje 503 HTML oraz 503 JSON
-- [x] 2.2 `npm run lint` przechodzi
-- [x] 2.3 `npx playwright test --project=preview` przechodzi
+- [x] 2.1 `npm test` przechodzi i obejmuje 503 HTML oraz 503 JSON — 41079a4
+- [x] 2.2 `npm run lint` przechodzi — 41079a4
+- [x] 2.3 `npx playwright test --project=preview` przechodzi — 41079a4
 
 #### Manual
 
-- [x] 2.4 Wejście anonima na `/dashboard` nadal otwiera formularz logowania
-- [x] 2.5 Zalogowany behawiorysta nadal otwiera `/dashboard`
+- [x] 2.4 Wejście anonima na `/dashboard` nadal otwiera formularz logowania — 41079a4
+- [x] 2.5 Zalogowany behawiorysta nadal otwiera `/dashboard` — 41079a4
 
 ### Phase 3: Logowanie
 
 #### Automated
 
-- [ ] 3.1 `npm test` przechodzi
-- [ ] 3.2 `npm run lint` przechodzi
-- [ ] 3.3 `npx playwright test --project=preview` przechodzi
+- [x] 3.1 `npm test` przechodzi
+- [x] 3.2 `npm run lint` przechodzi
+- [x] 3.3 `npx playwright test --project=preview` przechodzi
 
 #### Manual
 
-- [ ] 3.4 Złe hasło nadal wraca do formularza logowania z komunikatem dostawcy
-- [ ] 3.5 Konto bez wiersza profilu nadal ląduje na `/`
+- [x] 3.4 Złe hasło nadal wraca do formularza logowania z komunikatem dostawcy
+- [x] 3.5 Konto bez wiersza profilu nadal ląduje na `/`
