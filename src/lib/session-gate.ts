@@ -62,3 +62,35 @@ export function classifySession(input: ClassifySessionInput): SessionClass {
 
   return { kind: "missing-role" };
 }
+
+export const OUTAGE_MESSAGE = "Usługa jest chwilowo niedostępna. Spróbuj ponownie.";
+
+export function outageResponse(accept: string | null): Response {
+  if (accept?.toLowerCase().includes("text/html")) {
+    const body = `<!DOCTYPE html><html lang="pl"><head><meta charset="utf-8"><title>Usługa niedostępna</title></head><body><p>${OUTAGE_MESSAGE}</p></body></html>`;
+    return new Response(body, {
+      status: 503,
+      headers: { "content-type": "text/html; charset=utf-8" },
+    });
+  }
+
+  return new Response(JSON.stringify({ error: OUTAGE_MESSAGE }), {
+    status: 503,
+    headers: { "content-type": "application/json; charset=utf-8" },
+  });
+}
+
+export function logAuthOutage(
+  outage: Extract<SessionClass, { kind: "outage" }>,
+  pathname: string,
+  userId: string | null,
+): void {
+  // eslint-disable-next-line no-console
+  console.error("auth outage", {
+    name: outage.name,
+    status: outage.status,
+    code: outage.code,
+    pathname,
+    userId,
+  });
+}

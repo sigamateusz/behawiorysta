@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { classifySession, type SessionClass } from "@/lib/session-gate";
+import { classifySession, OUTAGE_MESSAGE, outageResponse, type SessionClass } from "@/lib/session-gate";
 
 const signedOut = {
   authError: null,
@@ -123,5 +123,38 @@ describe("classifySession", () => {
         role: "behaviorist",
       }),
     ).toEqual({ kind: "ready", role: "behaviorist" });
+  });
+});
+
+const OUTAGE_SENTENCE = "Usługa jest chwilowo niedostępna. Spróbuj ponownie.";
+
+describe("outageResponse", () => {
+  it("pins the exported sentence", () => {
+    expect(OUTAGE_MESSAGE).toBe(OUTAGE_SENTENCE);
+  });
+
+  it("returns an HTML document when Accept contains text/html", async () => {
+    const response = outageResponse("text/html,application/xhtml+xml");
+
+    expect(response.status).toBe(503);
+    expect(response.headers.get("content-type")).toContain("text/html");
+    const body = await response.text();
+    expect(body).toContain("<!DOCTYPE html>");
+    expect(body).toContain(OUTAGE_SENTENCE);
+  });
+
+  it("returns JSON when Accept does not ask for HTML", async () => {
+    const response = outageResponse("application/json");
+
+    expect(response.status).toBe(503);
+    expect(response.headers.get("content-type")).toContain("application/json");
+    await expect(response.json()).resolves.toEqual({ error: OUTAGE_SENTENCE });
+  });
+
+  it("returns JSON when Accept is missing", async () => {
+    const response = outageResponse(null);
+
+    expect(response.status).toBe(503);
+    await expect(response.json()).resolves.toEqual({ error: OUTAGE_SENTENCE });
   });
 });

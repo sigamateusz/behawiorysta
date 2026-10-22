@@ -209,21 +209,21 @@ Brak migracji i brak zmiany danych. Sesje zapisane przed tą zmianą działają 
 
 #### Automated
 
-- [x] 1.1 `npm test` przechodzi i obejmuje brak sesji, AuthRetryableFetchError, inny błąd auth, błąd profilu, brak roli i gotową rolę
-- [x] 1.2 `npm run lint` przechodzi
+- [x] 1.1 `npm test` przechodzi i obejmuje brak sesji, AuthRetryableFetchError, inny błąd auth, błąd profilu, brak roli i gotową rolę — f1b810b
+- [x] 1.2 `npm run lint` przechodzi — f1b810b
 
 ### Phase 2: Middleware
 
 #### Automated
 
-- [ ] 2.1 `npm test` przechodzi i obejmuje 503 HTML oraz 503 JSON
-- [ ] 2.2 `npm run lint` przechodzi
-- [ ] 2.3 `npx playwright test --project=preview` przechodzi
+- [x] 2.1 `npm test` przechodzi i obejmuje 503 HTML oraz 503 JSON
+- [x] 2.2 `npm run lint` przechodzi
+- [x] 2.3 `npx playwright test --project=preview` przechodzi
 
 #### Manual
 
-- [ ] 2.4 Wejście anonima na `/dashboard` nadal otwiera formularz logowania
-- [ ] 2.5 Zalogowany behawiorysta nadal otwiera `/dashboard`
+- [x] 2.4 Wejście anonima na `/dashboard` nadal otwiera formularz logowania
+- [x] 2.5 Zalogowany behawiorysta nadal otwiera `/dashboard`
 
 ### Phase 3: Logowanie
 
