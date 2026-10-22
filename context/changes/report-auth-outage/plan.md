@@ -209,8 +209,8 @@ Brak migracji i brak zmiany danych. Sesje zapisane przed tą zmianą działają 
 
 #### Automated
 
-- [ ] 1.1 `npm test` przechodzi i obejmuje brak sesji, AuthRetryableFetchError, inny błąd auth, błąd profilu, brak roli i gotową rolę
-- [ ] 1.2 `npm run lint` przechodzi
+- [x] 1.1 `npm test` przechodzi i obejmuje brak sesji, AuthRetryableFetchError, inny błąd auth, błąd profilu, brak roli i gotową rolę
+- [x] 1.2 `npm run lint` przechodzi
 
 ### Phase 2: Middleware
 
