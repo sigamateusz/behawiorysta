@@ -2,7 +2,7 @@
   "package": "@przeprogramowani/10x-cli",
   "version": "1.25.2",
   "manifestVersion": 3,
-  "lastApplied": "2026-10-22T20:43:54.267Z",
+  "lastApplied": "2026-10-22T22:19:42.169Z",
   "lessonId": "m3l5",
   "course": "10xdevs4",
   "tool": "cursor",
@@ -1889,7 +1889,7 @@
       "installedManifestHash": "11d85eaf9ca2fe01249cc24a43f5b6aca196b16fb79576a3d3a29bc08ba9863d"
     },
     "m3l5": {
-      "appliedAt": "2026-10-22T20:43:54.267Z",
+      "appliedAt": "2026-10-22T22:19:42.169Z",
       "skills": {
         "10x-idea-check": {
           "files": [
@@ -2082,6 +2082,6 @@
   },
   "toolkit": {
     "version": "v2.60.3",
-    "recordedAt": "2026-10-22T20:43:54.435Z"
+    "recordedAt": "2026-10-22T22:19:42.372Z"
   }
 }
