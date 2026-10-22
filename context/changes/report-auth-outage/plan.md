@@ -229,11 +229,11 @@ Brak migracji i brak zmiany danych. Sesje zapisane przed tą zmianą działają 
 
 #### Automated
 
-- [x] 3.1 `npm test` przechodzi
-- [x] 3.2 `npm run lint` przechodzi
-- [x] 3.3 `npx playwright test --project=preview` przechodzi
+- [x] 3.1 `npm test` przechodzi — 1dc8d84
+- [x] 3.2 `npm run lint` przechodzi — 1dc8d84
+- [x] 3.3 `npx playwright test --project=preview` przechodzi — 1dc8d84
 
 #### Manual
 
-- [x] 3.4 Złe hasło nadal wraca do formularza logowania z komunikatem dostawcy
-- [x] 3.5 Konto bez wiersza profilu nadal ląduje na `/`
+- [x] 3.4 Złe hasło nadal wraca do formularza logowania z komunikatem dostawcy — 1dc8d84
+- [x] 3.5 Konto bez wiersza profilu nadal ląduje na `/` — 1dc8d84
