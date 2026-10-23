@@ -1,10 +1,10 @@
 ---
 change_id: testing-warsaw-clock-change
 title: Match the Warsaw hour to independent UTC across the clock change
-status: impl_reviewed
+status: archived
 created: 2026-10-23
 updated: 2026-10-23
-archived_at: null
+archived_at: 2026-10-23T13:39:26Z
 ---
 
 ## Notes
