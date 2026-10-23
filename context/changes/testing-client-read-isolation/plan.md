@@ -157,16 +157,16 @@ Nie dotyczy. Plan nie zmienia schematu ani danych.
 
 #### Automated
 
-- [x] 1.1 Gdy wiersz A jest `pending`, `GET /dashboard` i `GET /dashboard/${bookedId}` sesji behawiorysty zawierają `dogName`
-- [x] 1.2 `POST` decyzji klienta B na to id zwraca 302 z `location` zaczynającym się od `/consultations`, a anonim 302 z `location` zaczynającym się od `/auth/signin`
-- [x] 1.3 Istniejący krok odrzucenia behawiorysty dalej oczekuje `location` zaczynającego się od `/dashboard?decided=rejected`
-- [x] 1.4 Po 201 zapisu B `GET /consultations` konta A ma status 200, zawiera `dogName` i nie zawiera `ClientB-${stamp}`
-- [x] 1.5 `npm run smoke` przechodzi przy podglądzie i lokalnym Supabase
+- [x] 1.1 Gdy wiersz A jest `pending`, `GET /dashboard` i `GET /dashboard/${bookedId}` sesji behawiorysty zawierają `dogName` — ec58786
+- [x] 1.2 `POST` decyzji klienta B na to id zwraca 302 z `location` zaczynającym się od `/consultations`, a anonim 302 z `location` zaczynającym się od `/auth/signin` — ec58786
+- [x] 1.3 Istniejący krok odrzucenia behawiorysty dalej oczekuje `location` zaczynającego się od `/dashboard?decided=rejected` — ec58786
+- [x] 1.4 Po 201 zapisu B `GET /consultations` konta A ma status 200, zawiera `dogName` i nie zawiera `ClientB-${stamp}` — ec58786
+- [x] 1.5 `npm run smoke` przechodzi przy podglądzie i lokalnym Supabase — ec58786
 
 ### Phase 2: Wzorzec w cookbooku
 
 #### Automated
 
-- [ ] 2.1 §6.4 opisuje cudzy odczyt i zapis i nie zawiera TBD fazy 4
-- [ ] 2.2 §6.6 mówi, że odczyt behawiorysty i decyzja klienta oraz anonima padają przed odrzuceniem, a lista A po zapisie B
-- [ ] 2.3 §1, §2 i słownik statusów w §3 pozostają bez zmian
+- [x] 2.1 §6.4 opisuje cudzy odczyt i zapis i nie zawiera TBD fazy 4
+- [x] 2.2 §6.6 mówi, że odczyt behawiorysty i decyzja klienta oraz anonima padają przed odrzuceniem, a lista A po zapisie B
+- [x] 2.3 §1, §2 i słownik statusów w §3 pozostają bez zmian

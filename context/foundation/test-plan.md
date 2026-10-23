@@ -70,7 +70,7 @@ orchestrator updates Status as artifacts appear on disk.
 | 1   | Zapis niedostępnego terminu           | Niedozwolony termin i niepełna ankieta nie zostawiają konsultacji                     | #1, #5, #6    | integracja HTTP                | complete      | testing-unavailable-slot-write |
 | 2   | Ekran po zalogowaniu na podglądzie    | Rola ląduje na swoim ekranie na runtime podglądu                                      | #3            | e2e Playwright                 | complete      | testing-post-login-screen      |
 | 3   | Godzina warszawska przy zmianie czasu | Zapisany i pokazany instant zgadza się z niezależnym UTC po obu stronach zmiany czasu | #2            | asercja instantu + jeden zapis | change opened | testing-warsaw-clock-change    |
-| 4   | Izolacja odczytów klienta             | Cudze zgłoszenie jest niedostępne na każdym odczycie i zapisie                        | #4            | HTTP, dwa konta                | not started   | —                              |
+| 4   | Izolacja odczytów klienta             | Cudze zgłoszenie jest niedostępne na każdym odczycie i zapisie                        | #4            | HTTP, dwa konta                | complete      | testing-client-read-isolation  |
 
 Kolejność: faza 1 jest najwyższym strachem i dwoma sąsiednimi zapisami, których zielone testy jednostkowe nie dowodzą. Faza 2 jest jedynym Playwrightem w tym rolloutcie — ekran po zalogowaniu, decyzja 2026-10-19; seed `auth-gate-redirect` tego nie pokrywa. Faza 3 jest osobno, bo incydent Q2 zdarzył się przy zielonych testach slotów. Faza 4 rozszerza istniejący smoke. Osobnej fazy bramek nie ma — CI już odpala `npm test` i smoke.
 
@@ -145,7 +145,7 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 - **Test type**: HTTP na podglądzie.
 - **Zapis**: asercja obejmuje brak wiersza na liście klienta, nie sam kod statusu. Imię psa z odrzuconego zapisu nie występuje na `/consultations` autora.
-- **TBD** — see §3 Phase 4 (cudzy odczyt). Asercja obejmuje brak cudzych danych, nie sam kod statusu.
+- **Wzorzec cudzego zgłoszenia**: lista właściciela na statusie 200 zawiera jego psa i nie zawiera imienia psa drugiego klienta (`ClientB-${stamp}` na `GET /consultations`). `POST` decyzji tego klienta i anonima nie zdejmuje `pending`, co widać po odrzuceniu behawiorysty kończącym się na `/dashboard?decided=rejected`. `GET /dashboard` i `GET /dashboard/{id}` behawiorysty zawierają imię psa z wiersza `pending`. `GET /dashboard/{id}` klienta nie jest w tym wzorcu. Wzorzec jest w `scripts/smoke.mjs`.
 - **When to add e2e instead**: gdy błąd widać tylko po hydracji wyspy, nie po odpowiedzi HTTP.
 
 ### 6.5 Adding a test for a new content-build rule
@@ -155,6 +155,7 @@ the relevant rollout phase ships; before that, the sub-section reads
 ### 6.6 Per-rollout-phase notes
 
 - **Faza 1**: promocja roli przez `npx supabase db query --local`. Godzina blokady liczona w `Europe/Warsaw`.
+- **Faza 4**: odczyt behawiorysty (`GET /dashboard` i `GET /dashboard/{id}` zawierają imię psa, póki wiersz jest `pending`) oraz decyzja klienta B (przekierowanie na `/consultations`) i anonima (przekierowanie na `/auth/signin`) padają przed odrzuceniem. Odrzucenie behawiorysty kończy się na `/dashboard?decided=rejected`. Lista A po udanym zapisie B: `GET /consultations` ma status 200, zawiera psa A i nie zawiera `ClientB-${stamp}`.
 
 ## 7. What We Deliberately Don't Test
 
