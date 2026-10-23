@@ -33,6 +33,19 @@ export function warsawDayKey(instant: Date | string): string {
   }).format(date);
 }
 
+export function warsawHourMinute(instant: Date | string): string {
+  const date = typeof instant === "string" ? new Date(instant) : instant;
+  const parts = new Intl.DateTimeFormat("pl-PL", {
+    timeZone: TIME_ZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+  const hour = (parts.find((part) => part.type === "hour")?.value ?? "").replace(/\D/g, "");
+  const minute = (parts.find((part) => part.type === "minute")?.value ?? "").replace(/\D/g, "");
+  return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
+}
+
 export function warsawDayHeading(instant: Date | string): string {
   const date = typeof instant === "string" ? new Date(instant) : instant;
   return new Intl.DateTimeFormat("pl-PL", {

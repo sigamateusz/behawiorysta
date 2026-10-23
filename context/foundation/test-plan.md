@@ -6,7 +6,7 @@
 >
 > Refresh: re-run `/10x-test-plan --refresh` when stale (see §8).
 >
-> Last updated: 2026-10-22
+> Last updated: 2026-10-23
 
 ## 1. Strategy
 
@@ -65,12 +65,12 @@ Each row is a discrete rollout phase that will open its own change folder
 via `/10x-new`. Status moves left-to-right through the values below; the
 orchestrator updates Status as artifacts appear on disk.
 
-| #   | Phase name                            | Goal (one line)                                                                       | Risks covered | Test types                     | Status      | Change folder                  |
-| --- | ------------------------------------- | ------------------------------------------------------------------------------------- | ------------- | ------------------------------ | ----------- | ------------------------------ |
-| 1   | Zapis niedostępnego terminu           | Niedozwolony termin i niepełna ankieta nie zostawiają konsultacji                     | #1, #5, #6    | integracja HTTP                | complete    | testing-unavailable-slot-write |
-| 2   | Ekran po zalogowaniu na podglądzie    | Rola ląduje na swoim ekranie na runtime podglądu                                      | #3            | e2e Playwright                 | complete    | testing-post-login-screen      |
-| 3   | Godzina warszawska przy zmianie czasu | Zapisany i pokazany instant zgadza się z niezależnym UTC po obu stronach zmiany czasu | #2            | asercja instantu + jeden zapis | not started | —                              |
-| 4   | Izolacja odczytów klienta             | Cudze zgłoszenie jest niedostępne na każdym odczycie i zapisie                        | #4            | HTTP, dwa konta                | not started | —                              |
+| #   | Phase name                            | Goal (one line)                                                                       | Risks covered | Test types                     | Status        | Change folder                  |
+| --- | ------------------------------------- | ------------------------------------------------------------------------------------- | ------------- | ------------------------------ | ------------- | ------------------------------ |
+| 1   | Zapis niedostępnego terminu           | Niedozwolony termin i niepełna ankieta nie zostawiają konsultacji                     | #1, #5, #6    | integracja HTTP                | complete      | testing-unavailable-slot-write |
+| 2   | Ekran po zalogowaniu na podglądzie    | Rola ląduje na swoim ekranie na runtime podglądu                                      | #3            | e2e Playwright                 | complete      | testing-post-login-screen      |
+| 3   | Godzina warszawska przy zmianie czasu | Zapisany i pokazany instant zgadza się z niezależnym UTC po obu stronach zmiany czasu | #2            | asercja instantu + jeden zapis | change opened | testing-warsaw-clock-change    |
+| 4   | Izolacja odczytów klienta             | Cudze zgłoszenie jest niedostępne na każdym odczycie i zapisie                        | #4            | HTTP, dwa konta                | not started   | —                              |
 
 Kolejność: faza 1 jest najwyższym strachem i dwoma sąsiednimi zapisami, których zielone testy jednostkowe nie dowodzą. Faza 2 jest jedynym Playwrightem w tym rolloutcie — ekran po zalogowaniu, decyzja 2026-10-19; seed `auth-gate-redirect` tego nie pokrywa. Faza 3 jest osobno, bo incydent Q2 zdarzył się przy zielonych testach slotów. Faza 4 rozszerza istniejący smoke. Osobnej fazy bramek nie ma — CI już odpala `npm test` i smoke.
 
@@ -127,7 +127,7 @@ the relevant rollout phase ships; before that, the sub-section reads
 
 - **Location**: `src/lib/`, obok logiki, plik `*.test.ts`.
 - **Run locally**: `npm test`.
-- **TBD**: wzorzec instantu warszawskiego wobec niezależnego UTC — see §3 Phase 3. Nie kopiować oczekiwanego wyniku z kodu.
+- **Wzorzec instantu**: oczekiwany UTC i tekst godziny są literałami w teście. `2026-10-23T08:00:00.000Z` oraz `2026-10-26T09:00:00.000Z` to 10:00. Zapis godziny 10:00 idzie przez `blockSelection` i te same dwa starty. Oczekiwanej wartości nie bierze się z wywołania funkcji pod testem.
 
 ### 6.2 Adding an integration test
 

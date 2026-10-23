@@ -54,6 +54,27 @@ describe("blockSelection", () => {
     });
   });
 
+  it("stores 10:00 on both sides of the October clock change", () => {
+    expect(selection("2026-10-23", false, [10])).toEqual({
+      ok: true,
+      ranges: [
+        {
+          starts_at: new Date("2026-10-23T08:00:00.000Z"),
+          ends_at: new Date("2026-10-23T09:00:00.000Z"),
+        },
+      ],
+    });
+    expect(selection("2026-10-26", false, [10])).toEqual({
+      ok: true,
+      ranges: [
+        {
+          starts_at: new Date("2026-10-26T09:00:00.000Z"),
+          ends_at: new Date("2026-10-26T10:00:00.000Z"),
+        },
+      ],
+    });
+  });
+
   it("allows 12 October and 9 November and refuses past, same-day and weekend dates", () => {
     expect(selection("2026-10-12", true).ok).toBe(true);
     expect(selection("2026-11-09", true).ok).toBe(true);

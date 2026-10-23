@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { visibleSubmissions } from "@/lib/behaviorist-submissions";
 import { blockSelection, coversWarsawDay, isRangeInside, overlappingSlotHours } from "@/lib/blocks";
-import { formatSlotLabel, warsawDayHeading, warsawDayKey } from "@/lib/slot-label";
+import { formatSlotLabel, warsawDayHeading, warsawDayKey, warsawHourMinute } from "@/lib/slot-label";
 import { SLOT_MINUTES, SLOT_STARTS, warsawDayBounds, warsawWallTime } from "@/lib/slots";
 import { createClient } from "@/lib/supabase";
 
@@ -85,18 +85,6 @@ function mondayColumn(dayKey: string): number {
   const knownMonday = Date.UTC(2024, 0, 1);
   const diffDays = Math.round((target - knownMonday) / 86_400_000);
   return ((diffDays % 7) + 7) % 7;
-}
-
-function warsawHourMinute(instant: string): string {
-  const parts = new Intl.DateTimeFormat("pl-PL", {
-    timeZone: "Europe/Warsaw",
-    hour: "2-digit",
-    minute: "2-digit",
-    hourCycle: "h23",
-  }).formatToParts(new Date(instant));
-  const hour = (parts.find((part) => part.type === "hour")?.value ?? "").replace(/\D/g, "");
-  const minute = (parts.find((part) => part.type === "minute")?.value ?? "").replace(/\D/g, "");
-  return `${hour.padStart(2, "0")}:${minute.padStart(2, "0")}`;
 }
 
 function formatHour(hour: number): string {
