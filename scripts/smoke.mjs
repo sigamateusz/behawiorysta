@@ -273,6 +273,16 @@ const steps = [
     { status: 200, bodyIncludes: dogName },
   ],
   [
+    "behaviorist dashboard shows A's dog",
+    () => request("/dashboard", { jar: jarBehaviorist }),
+    { status: 200, bodyIncludes: dogName },
+  ],
+  [
+    "behaviorist detail shows A's dog",
+    () => request(`/dashboard/${bookedId}`, { jar: jarBehaviorist }),
+    { status: 200, bodyIncludes: dogName },
+  ],
+  [
     "B signup creates account",
     () => request("/api/auth/signup", { method: "POST", form: { email: emailB, password }, jar: jarB }),
     { status: 302, location: "/auth/confirm-email" },
@@ -308,6 +318,26 @@ const steps = [
     { status: 200, bodyExcludes: `ClientB-${stamp}` },
   ],
   [
+    "B decision redirects to consultations",
+    () =>
+      request(`/api/consultations/${bookedId}/decision`, {
+        method: "POST",
+        form: { decision: "rejected" },
+        jar: jarB,
+      }),
+    { status: 302, location: "/consultations" },
+  ],
+  [
+    "anonymous decision redirects to signin",
+    () =>
+      request(`/api/consultations/${bookedId}/decision`, {
+        method: "POST",
+        form: { decision: "rejected" },
+        jar: jarAnon,
+      }),
+    { status: 302, location: "/auth/signin" },
+  ],
+  [
     "behaviorist rejects A's booking",
     () =>
       request(`/api/consultations/${bookedId}/decision`, {
@@ -326,6 +356,11 @@ const steps = [
         jar: jarB,
       }),
     { status: 201 },
+  ],
+  [
+    "A consultations list hides B's dog",
+    () => request("/consultations", { jar: jarA }),
+    { status: 200, bodyIncludes: dogName, bodyExcludes: `ClientB-${stamp}` },
   ],
   [
     "B consultations list shows the dog",
