@@ -167,6 +167,6 @@ Nie dotyczy. Plan nie zmienia schematu ani danych.
 
 #### Automated
 
-- [x] 2.1 §6.4 opisuje cudzy odczyt i zapis i nie zawiera TBD fazy 4
-- [x] 2.2 §6.6 mówi, że odczyt behawiorysty i decyzja klienta oraz anonima padają przed odrzuceniem, a lista A po zapisie B
-- [x] 2.3 §1, §2 i słownik statusów w §3 pozostają bez zmian
+- [x] 2.1 §6.4 opisuje cudzy odczyt i zapis i nie zawiera TBD fazy 4 — 9f54406
+- [x] 2.2 §6.6 mówi, że odczyt behawiorysty i decyzja klienta oraz anonima padają przed odrzuceniem, a lista A po zapisie B — 9f54406
+- [x] 2.3 §1, §2 i słownik statusów w §3 pozostają bez zmian — 9f54406
